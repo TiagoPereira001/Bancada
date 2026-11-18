@@ -9,7 +9,7 @@ Memória do projeto para o Claude Code. É carregado no início de cada sessão 
 ## O projeto e o autor
 
 - **Bancada**: folhas de obra digitais para oficinas, multi-oficina (cada oficina só vê os seus dados). O primeiro cliente é a **Duarte & Raposo** (Canhoso, Covilhã), oficina de mecânica, eletricidade e autocaravanas.
-- Autor: **Tiago Dias Pereira**, n.º 55019, Universidade da Beira Interior. É o projeto da UC de Projeto de Software Web, Móvel e na Nuvem, da licenciatura em Informática Web, Móvel e na Nuvem. O Tiago trabalha na Duarte & Raposo: os requisitos vêm das folhas de obra reais.
+- Autor: **Tiago Dias Pereira**, n.º 55019, Universidade da Beira Interior. **Desde 18/11/2026 é um projeto pessoal** (nasceu na UC de Projeto de Software Web, Móvel e na Nuvem, da licenciatura em Informática Web, Móvel e na Nuvem). A arquitetura para o futuro está no [ADR 0001](docs/adr/0001-arquitetura-para-durar.md). O Tiago trabalha na Duarte & Raposo: os requisitos vêm das folhas de obra reais.
 - Descrição completa do produto: [`PRODUCT.md`](PRODUCT.md).
 
 ## Preferências do autor
@@ -34,6 +34,7 @@ Memória do projeto para o Claude Code. É carregado no início de cada sessão 
 | Faturação | a Bancada não emite faturas (é preciso software certificado pela AT); calcula totais e IVA |
 | Documentos para agentes | `AI.md` (mapa), `CLAUDE.md` (esta memória), `AGENTS.md` (aponta para o `AI.md`) |
 | Direitos | todos os direitos reservados ao autor (`LICENSE`); repositório público só para consulta e avaliação. O README abre com um aviso grande de "em desenvolvimento" (`docs/imagens/aviso-em-desenvolvimento.svg`, gerado por `gerar-aviso.mjs`) até a Bancada estar pronta |
+| Arquitetura (18/11/2026) | [ADR 0001](docs/adr/0001-arquitetura-para-durar.md): PostgreSQL com RLS por oficina (sai o SQL Server), TypeScript, camada de serviços, auditoria, migrações, login próprio (nunca pelo Authentik do servidor), PWA, produção no Coolify. Aceite; por fazer |
 
 ## Como trabalhar neste repositório
 
@@ -173,3 +174,4 @@ Memória do projeto para o Claude Code. É carregado no início de cada sessão 
   - terceiro passo, o `adapt`: o tablier do quadro maior no tablet partilhado, para se ler a 1 ou 2 m (ver o Estado atual);
   - quarto passo, o `quieter`: "Sair do tablet" neutro, um só botão âmbar no quadro vazio e o `DESIGN.md` sem as incoerências (ver o Estado atual).
   - quinto e último passo, o `polish`: a mensagem do PIN que empurrava as teclas, o quadro sem ligação, o filtro que sobrevive à folha, os títulos das páginas, alvos de toque e os 320 px (ver o Estado atual).
+- **18/11/2026**: ADR 0001, a arquitetura para durar e crescer (PostgreSQL com RLS, TypeScript, camadas, auditoria, migrações, Coolify). Só documentação; o código não mudou. A Bancada passa a ser um projeto pessoal: README, AI.md e esta memória atualizados.

@@ -12,7 +12,7 @@ Este ficheiro é o ponto de partida para qualquer agente de IA (Claude, Codex, C
 
 **Bancada**: gestão digital de folhas de obra para oficinas. Substitui as folhas em papel: entrada do veículo, peças e horas registadas à medida que se trabalha, estado da reparação, totais com IVA e histórico por veículo e cliente. É **multi-oficina** (cada oficina só vê os seus dados). O primeiro cliente é a oficina Duarte & Raposo (Canhoso, Covilhã), especializada em autocaravanas.
 
-Projeto final de licenciatura (Informática Web, Móvel e na Nuvem, UBI) do Tiago Dias Pereira (nº 55019). O código, os comentários e a interface estão em português de Portugal.
+Projeto pessoal do Tiago Dias Pereira (nº 55019), que nasceu como projeto final de licenciatura (Informática Web, Móvel e na Nuvem, UBI). Arquitetura alvo: [ADR 0001](docs/adr/0001-arquitetura-para-durar.md). O código, os comentários e a interface estão em português de Portugal.
 
 ## Mapa do repositório
 
@@ -72,6 +72,8 @@ Projeto final de licenciatura (Informática Web, Móvel e na Nuvem, UBI) do Tiag
 ```
 
 ## Arquitetura em 30 segundos
+
+> **Arquitetura alvo:** [ADR 0001](docs/adr/0001-arquitetura-para-durar.md) (18/11/2026, aceite, por fazer): monólito modular em TypeScript, PostgreSQL com Row-Level Security por oficina, camada de serviços, auditoria, migrações versionadas, login próprio, produção no Coolify do meu servidor. O que está abaixo descreve o código de hoje.
 
 ```text
 browser ──> /api/*  ──> helmet (CSP) ─> rate limit ─> JSON ─> cookies ─> verificarOrigem

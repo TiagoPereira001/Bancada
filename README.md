@@ -33,7 +33,7 @@ A Bancada substitui as folhas de obra em papel das oficinas. Cada entrada de um 
 
 O projeto nasceu na oficina **Duarte & Raposo** (Canhoso, Covilhã), especializada em mecânica, eletricidade e autocaravanas, onde as folhas de papel se perdiam, se sujavam e obrigavam a fazer as contas à mão. Começou como um sistema só para essa oficina e passou a servir **qualquer oficina**: cada uma regista-se sozinha e só vê os seus dados. A Duarte & Raposo é o primeiro cliente.
 
-A descrição completa do produto (utilizadores, percurso de um carro pela oficina, o que existe e o que ainda não existe) está no [`PRODUCT.md`](PRODUCT.md).
+A descrição completa do produto (utilizadores, percurso de um carro pela oficina, o que existe e o que ainda não existe) está no [`PRODUCT.md`](PRODUCT.md). A arquitetura para a Bancada durar e crescer (PostgreSQL com isolamento por oficina, TypeScript, auditoria, produção no meu servidor) está decidida no [ADR 0001](docs/adr/0001-arquitetura-para-durar.md) e ainda **não** está feita.
 
 **Para a experimentares:** num Mac, faz duplo clique em [`Iniciar Bancada.command`](#no-mac-com-um-duplo-clique) (só precisas do Docker Desktop). No Windows, ou se queres mexer no código, segue o guia [Como pôr a Bancada a funcionar](#como-pôr-a-bancada-a-funcionar).
 
@@ -514,7 +514,7 @@ Dica: procura nesta página (`Cmd + F` no Mac, `Ctrl + F` no Windows) um pedaço
 ## Autor
 
 **Tiago Dias Pereira** (nº 55019)
-Projeto da UC de Projeto de Software Web, Móvel e na Nuvem, licenciatura em Informática Web, Móvel e na Nuvem, **Universidade da Beira Interior**, Covilhã.
+Projeto pessoal. Nasceu como projeto da UC de Projeto de Software Web, Móvel e na Nuvem, licenciatura em Informática Web, Móvel e na Nuvem, **Universidade da Beira Interior**, Covilhã.
 
 ## Direitos de autor
 

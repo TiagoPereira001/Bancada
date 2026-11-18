@@ -24,7 +24,7 @@ export function EscolherCliente({ valor, aoMudar, erro }) {
         <div>
           <span className="campo__etiqueta">Cliente</span>
           <p className="escolher-cliente__nome">{valor.nome}</p>
-          <p className="escolher-cliente__detalhe num">{valor.telefone}{valor.nif ? ` · NIF ${valor.nif}` : ''}</p>
+          <p className="escolher-cliente__detalhe num">{valor.telefone}{valor.nif ? `, NIF ${valor.nif}` : ''}</p>
         </div>
         <Botao variante="fantasma" onClick={() => aoMudar(null)}>Trocar</Botao>
       </div>
@@ -81,9 +81,11 @@ export function EscolherCliente({ valor, aoMudar, erro }) {
           onChange={(e) => setPesquisa(e.target.value)}
           placeholder="Nome, telefone ou NIF"
           autoComplete="off"
+          aria-invalid={erro ? true : undefined}
+          aria-describedby={erro ? 'procurar-cliente-erro' : undefined}
         />
       </div>
-      {erro && <p className="campo__mensagem">{erro}</p>}
+      {erro && <p className="campo__mensagem" id="procurar-cliente-erro">{erro}</p>}
       {q.length >= 2 && (
         <ul className="lista escolher-cliente__resultados">
           {lista.map((c) => (

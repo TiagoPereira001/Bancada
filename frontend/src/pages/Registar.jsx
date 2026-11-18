@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useSessao } from '../context/SessaoContext';
 import { useAvisos } from '../context/AvisosContext';
+import { useTitulo } from '../lib/useTitulo';
 import { Botao } from '../components/Botao';
 import { Texto } from '../components/Campo';
 import { ErroFormulario } from '../components/Situacoes';
@@ -10,6 +11,7 @@ import '../styles/entrada.css';
 
 // registo público: qualquer oficina cria a sua conta sozinha
 export default function Registar() {
+  useTitulo('Registar a oficina');
   const { colaborador, registar } = useSessao();
   const { mostrar } = useAvisos();
   const navegar = useNavigate();
@@ -44,18 +46,16 @@ export default function Registar() {
 
   return (
     <div className="entrada entrada--registo">
-      <PainelMarca>
-        <p className="entrada__lema">Registar a oficina.</p>
-        <ol className="entrada__passos">
-          <li><strong>Cria a conta</strong> da oficina e a tua, de gestor.</li>
-          <li><strong>Junta a equipa:</strong> cada mecânico recebe um PIN.</li>
-          <li><strong>Liga o tablet</strong> da oficina em modo bancada.</li>
-        </ol>
-      </PainelMarca>
+      <PainelMarca />
 
       <section className="entrada__lado">
-        <form className="entrada__formulario entrada__formulario--largo formulario" onSubmit={submeter} noValidate>
+        <form className="entrada__coluna entrada__formulario entrada__formulario--largo formulario" onSubmit={submeter} noValidate>
           <h1 className="entrada__titulo">Registar a oficina</h1>
+          <ol className="entrada__passos">
+            <li>Crias aqui a conta da oficina e a tua, de gestor.</li>
+            <li>Em Equipa, dás um PIN a cada mecânico.</li>
+            <li>Em Definições, ligas o tablet da oficina em modo bancada.</li>
+          </ol>
 
           <fieldset className="entrada__grupo">
             <legend>A oficina</legend>

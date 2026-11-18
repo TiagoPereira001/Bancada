@@ -62,7 +62,12 @@
   border-bottom: 1px solid var(--painel-linha);
 }
 
+/* a marca é o caminho de volta ao quadro: com 48 px de altura como os
+   botões ao lado (a barra já tem 64, por isso nada se mexe) */
 .topo__marca {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--toque);
   text-decoration: none;
   border-radius: 8px;
 }
@@ -126,10 +131,17 @@
     border-color: var(--painel-aro);
   }
 }
-.topo__sair--tablet {
-  padding: 0 var(--e-5);
-  border-color: var(--ambar);
-  color: var(--ambar);
+/* sair é neutro, no computador e no tablet: o âmbar é da ação principal do
+   ecrã (Regra da Voz Única) e um botão de sair a competir com ela era o que
+   mais ruído fazia. No tablet não há hover: também responde ao dedo */
+.topo__sair {
+  padding: 0 var(--e-4);
+  white-space: nowrap;
+}
+.topo__icone:active,
+.topo__sair:active {
+  background: var(--painel-2);
+  border-color: var(--painel-aro);
 }
 .topo__icone:focus-visible,
 .topo__sair:focus-visible {
@@ -157,7 +169,10 @@
   min-height: 52px;
   padding: 0 var(--e-4);
   color: var(--tinta-2);
+  font-family: var(--letra-estreita);
+  font-size: var(--t-corpo-g);
   font-weight: 600;
+  letter-spacing: 0.01em;
   text-decoration: none;
   white-space: nowrap;
   transition: color var(--dur-rapida) var(--curva);
@@ -602,10 +617,14 @@
    Tablier: as luzes de aviso da oficina (sempre escuro, como num carro)
    ============================================================ */
 .tablier {
+  /* as medidas que mudam de tamanho para tamanho (normal, grande, estreito) */
+  --tablier-simbolo: 60px;
+  --tablier-nome: var(--t-corpo);
+  --tablier-numero: 1.5rem;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   background: var(--painel);
-  border-radius: var(--r-painel);
+  border-radius: var(--r-tablier);
   border: 1px solid var(--painel-linha);
   overflow: hidden;
 }
@@ -623,7 +642,7 @@
   background: transparent;
   color: var(--painel-tinta-2);
   text-align: left;
-  transition: background var(--dur) var(--curva);
+  transition: background var(--dur) var(--curva), opacity var(--dur) var(--curva);
   -webkit-tap-highlight-color: transparent;
 }
 .tablier__luz:first-child {
@@ -641,8 +660,8 @@
 /* a luz: o símbolo desenhado diretamente no painel. Apagada fica em sombra;
    acesa brilha na cor do estado (é uma lâmpada, a luz é o próprio sinal) */
 .tablier__simbolo {
-  width: 60px;
-  height: 60px;
+  width: var(--tablier-simbolo);
+  height: var(--tablier-simbolo);
   color: var(--luz-apagada);
   transition: color var(--dur) var(--curva), filter var(--dur) var(--curva);
 }
@@ -681,16 +700,25 @@
   min-width: 0;
 }
 .tablier__nome {
-  font-size: var(--t-corpo);
+  font-size: var(--tablier-nome);
   font-weight: 600;
   line-height: 1.2;
 }
-/* o número é uma leitura, como o conta-quilómetros: nunca maior do que a luz */
+/* o número é uma leitura, como o conta-quilómetros: nunca maior do que a luz.
+   Aparece num visor fundo no painel, como o do computador de bordo */
 .tablier__numero {
+  align-self: flex-start;
+  min-width: 3.25rem;
+  margin-top: var(--e-1);
+  padding: 5px 9px 4px;
+  border-radius: 3px;
+  background: var(--painel-visor);
+  box-shadow: inset 0 0 0 1px var(--painel-linha);
   font-family: var(--letra-estreita);
   font-weight: 600;
-  font-size: 1.625rem;
+  font-size: var(--tablier-numero);
   line-height: 1;
+  text-align: right;
   color: var(--painel-tinta-2);
 }
 .tablier__luz[data-acesa='true'] .tablier__nome,
@@ -729,6 +757,126 @@
   }
   .tablier__luz[aria-pressed='true']:hover {
     background: #1b1e22;
+  }
+}
+/* o toque também responde enquanto o dedo está no ecrã (no tablet não há hover) */
+button.tablier__luz:active {
+  background: #15171a;
+}
+button.tablier__luz[aria-pressed='true']:active {
+  background: #1b1e22;
+}
+
+/* ecrã de descanso do tablet: o tablier lê-se de longe e não se toca.
+   As luzes não são botões, por isso não há mão nem realce ao passar */
+.tablier--leitura .tablier__luz {
+  cursor: default;
+}
+@media (hover: hover) {
+  .tablier--leitura .tablier__luz:hover {
+    background: transparent;
+  }
+}
+/* números que já não são de agora (sem ligação ao servidor): esbatem-se em
+   vez de continuarem a afirmar o que já ninguém confirma */
+.tablier[data-antigo='true'] .tablier__luz {
+  opacity: 0.5;
+}
+
+/* o tablier grande: a luz, o nome e a leitura sobem um degrau. Os nomes
+   reservam duas linhas ("Aguardam peças" parte-se) e ficam encostados em
+   baixo, para os quatro números ficarem na mesma linha de base */
+.tablier--grande {
+  --tablier-simbolo: 88px;
+  --tablier-nome: var(--t-titulo);
+  --tablier-numero: 3.25rem;
+}
+.tablier--grande .tablier__luz {
+  min-height: 168px;
+  padding: var(--e-6) var(--e-6);
+  gap: var(--e-6);
+}
+.tablier--grande .tablier__nome {
+  display: flex;
+  align-items: flex-end;
+  min-height: 2.4em;
+}
+.tablier--grande .tablier__numero {
+  min-width: 5.5rem;
+  margin-top: var(--e-2);
+  padding: 8px 14px 6px;
+  border-radius: 4px;
+}
+/* tablet ao alto: duas luzes por linha, para o tablier grande continuar grande */
+@media (max-width: 1099px) {
+  .tablier--grande {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    --tablier-simbolo: 72px;
+    --tablier-numero: 2.75rem;
+  }
+  .tablier--grande .tablier__luz:nth-child(3) {
+    border-left: 0;
+  }
+  .tablier--grande .tablier__luz:nth-child(n + 3) {
+    border-top: 1px solid var(--painel-linha);
+  }
+}
+
+/* o tablier a distância: no tablet partilhado (modo bancada) o quadro lê-se de
+   pé, a 1 ou 2 m, e a lista de baixo tem de continuar a caber. A luz, o nome e
+   a leitura sobem um degrau, menos do que na `grande`.
+   A conta faz-se para um tablet de 10,9": 1 px CSS são 0,19 mm, por isso o
+   número de 52 px tem 36 px de altura de maiúscula, 7 mm, que a 1,5 m são 16
+   minutos de arco (o de 24 px eram 7). O símbolo de 80 px são 35 minutos.
+   Não vale para o telemóvel: nunca está a 1 m */
+@media (min-width: 761px) {
+  /* ao alto: duas luzes por linha */
+  .tablier--distancia {
+    --tablier-simbolo: 72px;
+    --tablier-nome: 1.25rem;
+    --tablier-numero: 2.75rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .tablier--distancia .tablier__luz {
+    min-height: 0;
+    padding: var(--e-4);
+    gap: var(--e-5);
+  }
+  .tablier--distancia .tablier__nome {
+    min-height: 0;
+  }
+  .tablier--distancia .tablier__numero {
+    min-width: 4.75rem;
+    margin-top: var(--e-2);
+    padding: 7px 12px 5px;
+    border-radius: 4px;
+  }
+  .tablier--distancia .tablier__luz:nth-child(3) {
+    border-left: 0;
+  }
+  .tablier--distancia .tablier__luz:nth-child(n + 3) {
+    border-top: 1px solid var(--painel-linha);
+  }
+}
+@media (min-width: 1024px) {
+  /* deitado: as quatro em fila. "Aguardam peças" parte-se em duas linhas nas
+     larguras mais estreitas, por isso todos os nomes reservam duas linhas
+     (encostados em baixo) e os quatro números ficam na mesma linha de base */
+  .tablier--distancia {
+    --tablier-simbolo: 80px;
+    --tablier-numero: 3.25rem;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .tablier--distancia .tablier__nome {
+    display: flex;
+    align-items: flex-end;
+    min-height: 2.4em;
+  }
+  .tablier--distancia .tablier__luz:nth-child(3) {
+    border-left: 1px solid var(--painel-linha);
+  }
+  .tablier--distancia .tablier__luz:nth-child(n + 3) {
+    border-top: 0;
   }
 }
 
@@ -904,7 +1052,7 @@ a.lista__item:focus-visible {
   align-items: center;
   gap: var(--e-3);
   padding: var(--e-3) var(--e-4);
-  border-radius: 12px;
+  border-radius: var(--r-controlo);
   background: var(--painel);
   color: var(--painel-tinta);
   border: 1px solid var(--painel-linha);
@@ -917,6 +1065,80 @@ a.lista__item:focus-visible {
 @keyframes aparecer {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: none; }
+}
+
+/* ============================================================
+   Aviso antes de o tablet terminar a sessão sozinho
+   ============================================================ */
+.aviso-bloqueio {
+  position: fixed;
+  left: 50%;
+  bottom: max(var(--e-5), env(safe-area-inset-bottom));
+  z-index: calc(var(--z-aviso) + 1);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--e-3) var(--e-6);
+  width: min(600px, calc(100vw - 2 * var(--e-4)));
+  padding: var(--e-4) var(--e-5);
+  transform: translateX(-50%);
+  border-radius: var(--r-controlo);
+  background: var(--painel);
+  color: var(--painel-tinta);
+  border: 1px solid var(--painel-linha);
+  box-shadow: var(--sombra-flutuante);
+  animation: aparecer var(--dur) var(--curva);
+}
+.aviso-bloqueio__texto {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  font-size: var(--t-corpo-g);
+}
+.aviso-bloqueio__texto strong {
+  font-family: var(--letra-estreita);
+  font-size: var(--t-titulo);
+  font-weight: 600;
+  line-height: 1.15;
+}
+.aviso-bloqueio__texto > span {
+  color: var(--painel-tinta-2);
+}
+/* os segundos num visor, como as leituras do tablier */
+.aviso-bloqueio__visor {
+  display: inline-block;
+  min-width: 2.75rem;
+  padding: 3px 8px 2px;
+  border-radius: 3px;
+  background: var(--painel-visor);
+  box-shadow: inset 0 0 0 1px var(--painel-linha);
+  font-family: var(--letra-estreita);
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1;
+  text-align: right;
+  color: var(--painel-tinta);
+}
+/* neutro, para o âmbar continuar a ser só de quem age no ecrã por baixo */
+.aviso-bloqueio__continuar {
+  min-height: var(--toque-g);
+  padding: 0 var(--e-8);
+  border: 0;
+  border-radius: var(--r-controlo);
+  background: var(--painel-tinta);
+  color: var(--painel);
+  font-size: var(--t-corpo-g);
+  font-weight: 700;
+}
+@media (hover: hover) {
+  .aviso-bloqueio__continuar:hover {
+    background: #ffffff;
+  }
+}
+.aviso-bloqueio__continuar:focus-visible {
+  outline: 2px solid var(--ambar);
+  outline-offset: 3px;
 }
 
 /* ============================================================
@@ -952,11 +1174,6 @@ a.lista__item:focus-visible {
   25% { transform: translateX(-8px); }
   75% { transform: translateX(8px); }
 }
-.teclado-pin__erro {
-  text-align: center;
-  color: var(--erro);
-  font-weight: 500;
-}
 .teclado-pin__teclas {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -967,7 +1184,7 @@ a.lista__item:focus-visible {
   place-items: center;
   height: 72px;
   border: 1px solid var(--linha);
-  border-radius: var(--r-painel);
+  border-radius: var(--r-controlo);
   background: var(--superficie);
   color: var(--tinta);
   font-family: var(--letra-estreita);
@@ -1039,12 +1256,33 @@ a.lista__item:focus-visible {
     padding: var(--e-3) var(--e-4);
     gap: var(--e-3);
   }
-  .tablier__simbolo {
-    width: 44px;
-    height: 44px;
+  .tablier,
+  .tablier--grande {
+    --tablier-simbolo: 44px;
+    --tablier-nome: var(--t-corpo);
+    --tablier-numero: 1.375rem;
   }
-  .tablier__numero {
-    font-size: 1.375rem;
+  .tablier--grande .tablier__luz {
+    min-height: 92px;
+    padding: var(--e-3) var(--e-4);
+    gap: var(--e-3);
+  }
+  .tablier--grande .tablier__numero {
+    min-width: 3.25rem;
+    margin-top: var(--e-1);
+    padding: 5px 9px 4px;
+    border-radius: 3px;
+  }
+}
+
+/* só o ícone (o botão tem o nome em aria-label): com o texto, a barra de topo
+   transbordava (43 px no tablet a 390 px, 22 px a 360 px no computador) */
+@media (max-width: 520px) {
+  .topo__sair {
+    padding: 0;
+  }
+  .topo__sair-texto {
+    display: none;
   }
 }
 
@@ -1054,5 +1292,14 @@ a.lista__item:focus-visible {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+}
+
+/* a 320 px (a largura mínima que tem de caber sem scroll de lado) a barra de
+   topo passava o ecrã 28 px: já não há lugar para o nome da marca ao lado do
+   símbolo, que continua a ser a ligação de volta ao quadro */
+@media (max-width: 359px) {
+  .topo__marca .marca__nome {
+    display: none;
   }
 }

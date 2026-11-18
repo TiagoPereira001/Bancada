@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Plus, Archive } from '../components/icones';
 import { api } from '../lib/api';
 import { useRecurso } from '../lib/useRecurso';
+import { useTitulo } from '../lib/useTitulo';
 import { descreverVeiculo, nomeTipo } from '../lib/formatar';
 import { useSessao } from '../context/SessaoContext';
 import { useAvisos } from '../context/AvisosContext';
@@ -20,11 +21,12 @@ export default function Cliente() {
   const { mostrar } = useAvisos();
   const cliente = useRecurso(`/clientes/${id}`);
   const [aAdicionar, setAAdicionar] = useState(false);
+  useTitulo(cliente.dados?.nome ?? 'Cliente');
 
   if (cliente.aCarregar) return <Esqueleto linhas={3} altura={80} />;
   if (cliente.erro && !cliente.dados) {
     return cliente.erro.status === 404
-      ? <Vazio titulo="Este cliente não existe." acao={<Botao para="/clientes">Ver clientes</Botao>} />
+      ? <Vazio pagina titulo="Este cliente não existe." acao={<Botao para="/clientes">Ver clientes</Botao>} />
       : <ErroCarregar erro={cliente.erro} aoTentar={cliente.recarregar} />;
   }
   const c = cliente.dados;
@@ -88,7 +90,7 @@ export default function Cliente() {
                     <Matricula valor={v.matricula} />
                     <span className="linha-veiculo__texto">
                       <span className="linha-veiculo__titulo">{descreverVeiculo(v)}</span>
-                      <span className="linha-veiculo__sub">{nomeTipo(v.tipo)}{v.ano ? ` · ${v.ano}` : ''}</span>
+                      <span className="linha-veiculo__sub">{nomeTipo(v.tipo)}{v.ano ? ` de ${v.ano}` : ''}</span>
                     </span>
                   </Link>
                 </li>

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { DeviceTablet } from '../components/icones';
 import { api } from '../lib/api';
 import { useRecurso } from '../lib/useRecurso';
+import { useTitulo } from '../lib/useTitulo';
 import { useSessao } from '../context/SessaoContext';
 import { useAvisos } from '../context/AvisosContext';
 import { Botao, BotaoConfirmar } from '../components/Botao';
@@ -12,6 +13,7 @@ import '../styles/gestao.css';
 
 export default function Definicoes() {
   const oficina = useRecurso('/oficinas/atual');
+  useTitulo('Definições');
   if (oficina.aCarregar) return <Esqueleto linhas={3} altura={80} />;
   if (oficina.erro && !oficina.dados) return <ErroCarregar erro={oficina.erro} aoTentar={oficina.recarregar} />;
 
@@ -129,7 +131,6 @@ function TabletOficina() {
   return (
     <section className="painel painel__corpo tablet-oficina" aria-labelledby="titulo-tablet">
       <h2 className="painel__titulo" id="titulo-tablet">Tablet da oficina</h2>
-      <DeviceTablet size={40} weight="regular" aria-hidden="true" className="tablet-oficina__icone" />
       <p>
         No modo bancada, o tablet fica na oficina e cada mecânico entra com o seu nome e PIN.
         Tudo o que regista fica em nome dele. Se ninguém mexer durante 5 minutos, a sessão termina sozinha.
@@ -143,7 +144,7 @@ function TabletOficina() {
           </BotaoConfirmar>
         </>
       ) : (
-        <Botao variante="primario" icone={DeviceTablet} onClick={ligar} aTrabalhar={aTrabalhar}>
+        <Botao variante="secundario" icone={DeviceTablet} onClick={ligar} aTrabalhar={aTrabalhar}>
           Usar este dispositivo como bancada
         </Botao>
       )}

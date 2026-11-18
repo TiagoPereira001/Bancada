@@ -1,32 +1,47 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Plus, MagnifyingGlass } from '../components/icones';
 import { useSessao } from '../context/SessaoContext';
 import { useRecurso } from '../lib/useRecurso';
-import { ESTADOS, descreverVeiculo, euros, inicioDoMes, tempoDesde } from '../lib/formatar';
+import { useTitulo } from '../lib/useTitulo';
+import { ESTADOS, descreverVeiculo, euros, inicioDoMes, quandoEntrou } from '../lib/formatar';
 import { contem } from '../lib/texto';
 import { Tablier } from '../components/Tablier';
 import { Matricula } from '../components/Matricula';
 import { EstadoFolha } from '../components/Estado';
 import { Botao } from '../components/Botao';
-import { ErroCarregar, Esqueleto, Vazio } from '../components/Situacoes';
+import { ErroCarregar, Esqueleto, SemLigacao, Vazio } from '../components/Situacoes';
 import '../styles/quadro.css';
+
+// a luz e a pesquisa que se escolheram ficam guardadas enquanto for a mesma
+// sessão (`ligadoEm`): ir ver uma folha e voltar não as desfaz, e o mecânico
+// continua na lista em que estava. Quem entra a seguir começa com o quadro
+// todo (como a memória dos pedidos: ver useRecurso)
+let vista = { chave: null, filtro: null, pesquisa: '' };
 
 // o quadro da oficina: o tablier com uma luz por estado e, por baixo, os
 // veículos que estão cá dentro (os que esperam há mais tempo primeiro).
 // Atualiza sozinho a cada 20 segundos para o tablet ver o que os colegas mudam
 export default function Quadro() {
-  const { colaborador } = useSessao();
+  const { colaborador, ligadoEm } = useSessao();
+  useTitulo('Quadro da oficina');
   const gestor = colaborador.cargo === 'gestor';
+  // no tablet partilhado (modo bancada) o quadro lê-se de pé, a 1 ou 2 m
+  const noTablet = colaborador.via === 'pin';
   const folhas = useRecurso('/folhas-obra?estado=ativas&ordem=antigas&porPagina=200', { intervalo: 20000, memoria: true });
   const resumo = useRecurso(
     gestor ? `/folhas-obra/resumo?desde=${encodeURIComponent(inicioDoMes())}` : null,
     { intervalo: 60000, memoria: true }
   );
-  const [filtro, setFiltro] = useState(null);
-  const [pesquisa, setPesquisa] = useState('');
+  const [filtro, setFiltro] = useState(() => (vista.chave === ligadoEm ? vista.filtro : null));
+  const [pesquisa, setPesquisa] = useState(() => (vista.chave === ligadoEm ? vista.pesquisa : ''));
+  useEffect(() => {
+    vista = { chave: ligadoEm, filtro, pesquisa };
+  }, [ligadoEm, filtro, pesquisa]);
 
   const itens = folhas.dados?.itens;
+  // o último pedido falhou mas ainda há números: diz de quando são
+  const semLigacao = Boolean(folhas.erro && itens);
   const contagens = useMemo(() => {
     if (!itens) return null;
     const conta = {};
@@ -46,7 +61,17 @@ export default function Quadro() {
     <div className="quadro">
       <h1 className="so-leitores">Quadro da oficina</h1>
 
-      <Tablier contagens={contagens} aCarregar={folhas.aCarregar} filtro={filtro} aoEscolher={setFiltro} />
+      <div className="quadro__estado">
+        <Tablier
+          contagens={contagens}
+          aCarregar={folhas.aCarregar}
+          filtro={filtro}
+          aoEscolher={setFiltro}
+          aDistancia={noTablet}
+          antigo={semLigacao}
+        />
+        {semLigacao && <SemLigacao className="quadro__nota" desde={folhas.atualizadoEm} />}
+      </div>
 
       {gestor && resumo.dados && (
         <p className="quadro__contas num">
@@ -78,10 +103,12 @@ export default function Quadro() {
 
       <section className="painel" aria-labelledby="titulo-lista">
         <header className="painel__cabecalho">
-          <h2 className="painel__titulo" id="titulo-lista">
-            {filtro ? nomeFiltro : 'Na oficina'}
-            {itens && <span className="quadro__contagem num"> {visiveis.length}</span>}
-          </h2>
+          <h2 className="painel__titulo" id="titulo-lista">{filtro ? nomeFiltro : 'Na oficina'}</h2>
+          {itens && (
+            <span className="quadro__contagem num">
+              {visiveis.length} {visiveis.length === 1 ? 'veículo' : 'veículos'}
+            </span>
+          )}
           {filtro && (
             <button type="button" className="quadro__limpar" onClick={() => setFiltro(null)}>
               Mostrar todos
@@ -95,10 +122,8 @@ export default function Quadro() {
         )}
 
         {itens && itens.length === 0 && (
-          <Vazio
-            titulo="A oficina está vazia."
-            acao={<Botao variante="primario" para="/entrada" icone={Plus}>Dar entrada a um veículo</Botao>}
-          >
+          // sem botão aqui: a "Nova entrada" está mesmo por cima, e dois botões âmbar a fazer o mesmo eram dois a falar
+          <Vazio titulo="A oficina está vazia.">
             Quando um veículo entrar, aparece aqui com a luz do estado em que está.
           </Vazio>
         )}
@@ -114,7 +139,10 @@ export default function Quadro() {
             {visiveis.map((folha) => (
               <li key={folha.id}>
                 <Link to={`/folhas/${folha.id}`} className="lista__item fila">
-                  <span className="fila__matricula"><Matricula valor={folha.veiculo.matricula} /></span>
+                  <span className="fila__matricula">
+                    <Matricula valor={folha.veiculo.matricula} />
+                    <span className="fila__folha num">Folha {folha.numero}</span>
+                  </span>
                   <span className="fila__veiculo">
                     <span className="fila__titulo">{descreverVeiculo(folha.veiculo)}</span>
                     <span className="fila__sub">{folha.cliente.nome}</span>
@@ -122,9 +150,7 @@ export default function Quadro() {
                   <span className="fila__queixa">{folha.observacoes || 'Sem observações de entrada.'}</span>
                   <span className="fila__estado">
                     <EstadoFolha estado={folha.estado} />
-                    <span className="fila__tempo">
-                      <span className="num">nº {folha.numero}</span> · {tempoDesde(folha.dataEntrada)}
-                    </span>
+                    <span className="fila__tempo">{quandoEntrou(folha.dataEntrada)}</span>
                   </span>
                 </Link>
               </li>

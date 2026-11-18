@@ -2,6 +2,7 @@
 
 Este ficheiro é o ponto de partida para qualquer agente de IA (Claude, Codex, Cursor, Copilot...) que abra este repositório. Diz onde está cada coisa, que regras não se podem partir e como fazer as tarefas mais comuns. Lê-o antes de mexer no código.
 
+- **O projeto inteiro num só documento** (visão, decisões, arquitetura, caminho, produto, regras): [`docs/PROJETO-BANCADA.md`](docs/PROJETO-BANCADA.md)
 - Produto e utilizadores: [`PRODUCT.md`](PRODUCT.md)
 - Decisões já tomadas e estado atual: [`CLAUDE.md`](CLAUDE.md)
 - Sistema visual: [`DESIGN.md`](DESIGN.md)
@@ -12,7 +13,7 @@ Este ficheiro é o ponto de partida para qualquer agente de IA (Claude, Codex, C
 
 **Bancada**: gestão digital de folhas de obra para oficinas. Substitui as folhas em papel: entrada do veículo, peças e horas registadas à medida que se trabalha, estado da reparação, totais com IVA e histórico por veículo e cliente. É **multi-oficina** (cada oficina só vê os seus dados). O primeiro cliente é a oficina Duarte & Raposo (Canhoso, Covilhã), especializada em autocaravanas.
 
-Projeto final de licenciatura (Informática Web, Móvel e na Nuvem, UBI) do Tiago Dias Pereira (nº 55019). O código, os comentários e a interface estão em português de Portugal.
+Projeto pessoal do Tiago Dias Pereira (nº 55019), que nasceu como projeto final de licenciatura (Informática Web, Móvel e na Nuvem, UBI). Arquitetura alvo: [ADR 0001](docs/adr/0001-arquitetura-para-durar.md). O código, os comentários e a interface estão em português de Portugal.
 
 ## Mapa do repositório
 
@@ -24,13 +25,18 @@ Projeto final de licenciatura (Informática Web, Móvel e na Nuvem, UBI) do Tiag
 ├── PRODUCT.md                 o produto: utilizadores, percurso, funcionalidades, o que não existe
 ├── DESIGN.md                  tokens e regras visuais (formato DESIGN.md do Google Stitch)
 ├── README.md                  instalação e visão geral
+├── LICENSE                    todos os direitos reservados ao autor (não é código aberto)
+├── Iniciar Bancada.command    arranque para testes com duplo clique no macOS (bash 3.2, tudo em containers)
+├── Iniciar Bancada na oficina.command   o mesmo em "modo oficina" (BANCADA_REDE=1): o tablet abre a Bancada pelo Wi-Fi. Ver docs/ensaio-oficina.md
 ├── docker-compose.yml         SQL Server (e, com --profile app, a app completa)
 ├── Dockerfile                 imagem de produção: API + frontend compilado
+├── docker-compose.prod.yml    PROPOSTA de instalação num servidor (Caddy + API + SQL Server Express); ainda não está em uso
+├── infra/                     PROPOSTA: Caddyfile e scripts (deploy, backup, restaurar, restauro-teste, fumo). Ver docs/infraestrutura.md
 ├── .env.example               todas as variáveis de ambiente, explicadas
-├── .github/workflows/ci.yml   CI: testes da API contra SQL Server + lint e build do frontend
+├── .github/workflows/ci.yml   CI: testes da API contra SQL Server, lint e build do frontend, e validação dos scripts, do compose e da imagem
 ├── .claude/skills/            skills de design (impeccable, taste-skill) para agentes
 ├── .impeccable/surfaces/      contrato de direção visual do ecrã principal
-├── docs/                      análise de segurança, performance e viabilidade; auditoria (auditoria.md + scripts); imagens
+├── docs/                      análise de segurança, performance e viabilidade; auditoria (auditoria.md + scripts, com a reauditoria de 28/09 na secção 14); infraestrutura e publicação (infraestrutura.md); revisão de código e dívida técnica (revisao-codigo.md + provas); imagens (o aviso do README gera-se com imagens/gerar-aviso.mjs)
 ├── Relatorio/                 relatório e documento das ferramentas em LaTeX (.tex + .pdf) e anexos
 ├── backend/                   API REST (Node.js 22 + Express 5 + SQL Server)
 │   ├── server.js              arranque do servidor e encerramento limpo
@@ -49,7 +55,8 @@ Projeto final de licenciatura (Informática Web, Móvel e na Nuvem, UBI) do Tiag
 │   │   ├── seguranca.js       verificação de origem (CSRF) e rate limiting
 │   │   └── erros.js           respostas de erro em JSON, sem detalhes internos
 │   ├── routes/                uma rota por recurso (ver tabela "API" abaixo)
-│   ├── scripts/db-setup.js    cria a BD, as tabelas e o login da API (permissões mínimas)
+│   ├── scripts/criar-env.js   cria o .env com passwords e JWT_SECRET aleatórios (nunca substitui um que exista)
+│   ├── scripts/db-setup.js    cria a BD (em modo SIMPLE), as tabelas e o login da API (permissões mínimas); volta a ligar o utilizador órfão de uma cópia restaurada
 │   ├── scripts/seed.js        Duarte & Raposo com dados de demonstração FICTÍCIOS
 │   └── test/                  testes node:test contra SQL Server real
 └── frontend/                  React 19 + Vite 8 (PWA)
@@ -61,12 +68,14 @@ Projeto final de licenciatura (Informática Web, Móvel e na Nuvem, UBI) do Tiag
         ├── main.jsx, App.jsx  entrada e rotas (páginas de gestão carregadas à parte)
         ├── context/           SessaoContext (sessão/bancada), AvisosContext (toasts)
         ├── lib/               api.js, formatar.js (nomes PT dos códigos), hooks
-        ├── components/        Tablier, Luzes (pictogramas dos estados), Matricula, Botao, Campo, Moldura, TecladoPin...
+        ├── components/        Tablier (normal, a distância, grande e só de leitura), Luzes (pictogramas dos estados), Matricula, Botao, Campo, Moldura, AvisoBloqueio, TecladoPin...
         ├── pages/             um ficheiro por ecrã
         └── styles/            tokens.css (fonte de verdade das cores), base, componentes, páginas
 ```
 
 ## Arquitetura em 30 segundos
+
+> **Arquitetura alvo:** [ADR 0001](docs/adr/0001-arquitetura-para-durar.md) (18/11/2026, aceite, por fazer): monólito modular em TypeScript, PostgreSQL com Row-Level Security por oficina, camada de serviços, auditoria, migrações versionadas, login próprio, produção no Coolify do meu servidor. O que está abaixo descreve o código de hoje.
 
 ```text
 browser ──> /api/*  ──> helmet (CSP) ─> rate limit ─> JSON ─> cookies ─> verificarOrigem
@@ -77,7 +86,7 @@ browser ──> /api/*  ──> helmet (CSP) ─> rate limit ─> JSON ─> cook
 
 - **Mesma origem**: em produção a API serve o frontend; em desenvolvimento o Vite reencaminha `/api` para a porta 3000. Não há CORS e os cookies `SameSite=Strict` funcionam.
 - **Sessão**: JWT (HS256, com audiência e emissor) num cookie `httpOnly`. Em cada pedido, `exigirSessao` volta a ler o colaborador na BD, por isso desativar uma conta ou mudar a password corta as sessões logo (campo `Versao_Sessao`).
-- **Modo bancada**: um gestor transforma um dispositivo no tablet da oficina (cookie `bancada_dispositivo`). Os mecânicos entram só com nome e PIN; a sessão via PIN não pode gerir contas nem definições.
+- **Modo bancada**: um gestor transforma um dispositivo no tablet da oficina (cookie `bancada_dispositivo`). Em repouso, o tablet mostra o tablier (o `GET /auth/bancada` devolve também `porEstado`, só as contagens da oficina do dispositivo) e os nomes de quem tem PIN; a sessão via PIN termina aos 5 min de inatividade, com aviso aos 30 s. Os mecânicos entram só com nome e PIN; a sessão via PIN não pode gerir contas nem definições.
 
 ## Regras que não se podem partir
 
@@ -91,19 +100,25 @@ browser ──> /api/*  ──> helmet (CSP) ─> rate limit ─> JSON ─> cook
 8. **Uma folha entregue fica fechada.** Só um gestor a reabre (mudando o estado); linhas e notas não se alteram enquanto está entregue.
 9. **Content-Security-Policy rigorosa.** Nada de scripts ou estilos inline, nem recursos externos (fontes, CDNs, imagens). Fontes e ícones são locais.
 10. **A Bancada não emite faturas.** Em Portugal a faturação exige software certificado pela AT. A app calcula totais e IVA; a fatura sai do programa de faturação da oficina. Não acrescentar "emitir fatura" sem essa certificação.
+11. **Nenhuma porta aberta à rede por omissão.** O `docker-compose.yml` só publica a API (3000) e a base de dados (1433) em `127.0.0.1`. A única exceção é o ensaio na oficina: o `Iniciar Bancada na oficina.command` define `BANCADA_PUBLICAR_EM=0.0.0.0` e `BANCADA_ORIGENS` só nessa corrida (sem HTTPS, só com dados fictícios). Nunca pôr estas variáveis no `.env`, e a porta da base de dados nunca sai de `127.0.0.1`.
 
 ## Convenções
 
 - **Português de Portugal** em código, comentários e interface ("registar", "ecrã", "utilizador"). Comentários explicam o *porquê*, em minúsculas e tom direto, como no resto do código.
 - **Base de dados**: tabelas no singular (`Folha_Obra`), colunas `Pascal_Com_Underscore`, códigos em minúsculas sem acentos (`em_curso`, `mao_de_obra`, `gestor`).
 - **API**: JSON em `camelCase` (`clienteId`, `valorUnitario`); listas devolvem `{ itens, total, pagina, porPagina }`; erros `{ erro, campos? }`.
-- **Frontend**: os nomes bonitos dos códigos vivem em `src/lib/formatar.js`. Dados de rede via `useRecurso(caminho, { intervalo, memoria })`; `memoria` guarda a última resposta para o ecrã aparecer logo ao voltar, e limpa-se sempre que a sessão muda (nunca a usar para dados que uma pessoa não deva ver depois de outra). Ícones importam-se de `src/components/icones.js` (gerado; para um ícone novo, acrescentar a `scripts/gerar-icones.mjs` e correr `npm run icones`).
+- **Frontend**: os nomes bonitos dos códigos vivem em `src/lib/formatar.js`. Dados de rede via `useRecurso(caminho, { intervalo, memoria })`; `memoria` guarda a última resposta para o ecrã aparecer logo ao voltar, e limpa-se sempre que a sessão muda (nunca a usar para dados que uma pessoa não deva ver depois de outra). `definirDados` (a resposta de uma alteração) deita fora o pedido de atualização que vá a caminho: sem isso, os dados de antes desfaziam no ecrã a alteração que acabou de ser gravada. Se um pedido de atualização falhar, ficam os dados e o `erro`, e `atualizadoEm` (ms do último pedido que chegou) diz de quando são: `SemLigacao` (`Situacoes`) escreve "Estes números são de há N min" no ecrã de descanso e no quadro, em vez de os afirmar como de agora. O título do separador vem de `useTitulo('Histórico')` (`src/lib/useTitulo.js`, dá "Histórico | Bancada"): cada página chama-o no topo, antes de qualquer `return` antecipado. `api.get` e `api.patch` aceitam `{ tempoLimite }` (ms) para desistir de um pedido sem resposta: só o pedem os gestos em que ficar pendurado bloqueia alguém (hoje, a mudança de estado da folha, 15 s). Ícones importam-se de `src/components/icones.js` (gerado; para um ícone novo, acrescentar a `scripts/gerar-icones.mjs` e correr `npm run icones`).
+- **Confirmações**: o que fecha ou apaga pede um segundo toque no próprio botão, nunca uma janela modal (`BotaoConfirmar`; e "Entregue" no seletor de estado da folha, que também pede confirmação para reabrir). A pergunta caduca ao fim de `TEMPO_CONFIRMACAO` (`components/Botao.jsx`).
+- **Direitos**: todos os direitos reservados ao autor (`LICENSE`). Não copiar código de terceiros sem confirmar que a licença o permite, e manter o aviso de autor quando a licença o exige (MIT, Apache).
 - **Texto da interface**: frases curtas, sem travessões (—), mensagens de erro dizem o problema e como resolver.
 - **Design**: seguir `DESIGN.md`. Cores só por tokens de `styles/tokens.css`. O tablier e a barra de topo são sempre escuros; o âmbar é a única cor de ação. Os estados usam os pictogramas de `components/Luzes.jsx` (não ícones Phosphor). `:hover` sempre dentro de `@media (hover: hover)` e alvos de toque de 48 px ou mais.
 
 ## Comandos
 
 ```bash
+# configuração (primeira vez): cria o .env na raiz com segredos aleatórios
+node backend/scripts/criar-env.js
+
 # base de dados (Docker) e preparação
 docker compose up -d                 # SQL Server em 127.0.0.1:1433
 cd backend && npm install
@@ -116,11 +131,13 @@ cd backend && npm run dev            # API em http://localhost:3000
 cd frontend && npm install && npm run dev   # app em http://localhost:5173
 
 # verificações (as mesmas do CI)
-cd backend && npm test               # 52 testes contra SQL Server (BD Bancada_Teste)
+cd backend && npm test               # 54 testes contra SQL Server (BD Bancada_Teste)
 cd frontend && npm run lint && npm run build
 
 # tudo em containers (produção local)
 docker compose --profile app up -d --build   # http://localhost:3000
+./Iniciar\ Bancada.command                   # o mesmo, para testes: abre o Docker, cria o .env e os dados, abre o browser
+./Iniciar\ Bancada\ na\ oficina.command      # o mesmo, mas o tablet abre a Bancada pelo Wi-Fi (ensaio na oficina, só dados fictícios)
 ```
 
 Os testes precisam de um SQL Server a correr e das variáveis `DB_ADMIN_PASSWORD` e `DB_PASSWORD` (do `.env`). Usam uma base de dados própria, `Bancada_Teste`, apagada e recriada em cada ficheiro de testes.
@@ -159,9 +176,9 @@ Tudo em `/api`. Exceto onde se diz, exige sessão.
 
 **Acrescentar um ecrã**
 1. Criar `frontend/src/pages/Nome.jsx`; se não for de uso diário no tablet, carregar com `lazy()` em `App.jsx`.
-2. Usar os componentes existentes (`Botao`, `Campo`, `Situacoes` para carregar/vazio/erro, `Matricula`, `EstadoFolha`).
+2. Usar os componentes existentes (`Botao`, `Campo`, `Situacoes` para carregar/vazio/erro, `Matricula`, `EstadoFolha`). Dar-lhe um título com `useTitulo` e um `h1` (num vazio que é a página toda, `<Vazio pagina ...>`).
 3. Estados obrigatórios: a carregar, vazio, erro e normal. Alvos de toque de pelo menos 48 px.
-4. Verificar nos dois temas e em 390 px, 1180 px (tablet) e 1440 px de largura.
+4. Verificar nos dois temas e em 320 px (sem scroll de lado), 390 px, 1180 px (tablet) e 1440 px de largura.
 
 ## O que ainda não existe
 

@@ -2,14 +2,14 @@
 
 Memória do projeto para o Claude Code. É carregado no início de cada sessão e continua disponível depois de a conversa ser compactada. Serve para retomar o trabalho sem voltar a perguntar o que já foi decidido.
 
-**Antes de qualquer tarefa, lê o [`AI.md`](AI.md)**: tem o mapa do repositório, as regras que não se podem partir (isolamento entre oficinas, autoria pela sessão, contas em SQL, soft delete), a API e os comandos. Para trabalho visual, lê também o [`DESIGN.md`](DESIGN.md) e o [`PRODUCT.md`](PRODUCT.md).
+**Para o contexto completo numa só leitura, lê o [`docs/PROJETO-BANCADA.md`](docs/PROJETO-BANCADA.md).** **Antes de qualquer tarefa, lê o [`AI.md`](AI.md)**: tem o mapa do repositório, as regras que não se podem partir (isolamento entre oficinas, autoria pela sessão, contas em SQL, soft delete), a API e os comandos. Para trabalho visual, lê também o [`DESIGN.md`](DESIGN.md) e o [`PRODUCT.md`](PRODUCT.md).
 
 **Mantém este ficheiro atualizado.** No fim de cada tarefa grande, atualiza o "Estado atual" e acrescenta uma linha ao "Registo". O que não ficar escrito aqui perde-se na próxima compactação.
 
 ## O projeto e o autor
 
 - **Bancada**: folhas de obra digitais para oficinas, multi-oficina (cada oficina só vê os seus dados). O primeiro cliente é a **Duarte & Raposo** (Canhoso, Covilhã), oficina de mecânica, eletricidade e autocaravanas.
-- Autor: **Tiago Dias Pereira**, n.º 55019, Universidade da Beira Interior. É o projeto da UC de Projeto de Software Web, Móvel e na Nuvem, da licenciatura em Informática Web, Móvel e na Nuvem. O Tiago trabalha na Duarte & Raposo: os requisitos vêm das folhas de obra reais.
+- Autor: **Tiago Dias Pereira**, n.º 55019, Universidade da Beira Interior. **Desde 18/11/2026 é um projeto pessoal** (nasceu na UC de Projeto de Software Web, Móvel e na Nuvem, da licenciatura em Informática Web, Móvel e na Nuvem). A arquitetura para o futuro está no [ADR 0001](docs/adr/0001-arquitetura-para-durar.md). O Tiago trabalha na Duarte & Raposo: os requisitos vêm das folhas de obra reais.
 - Descrição completa do produto: [`PRODUCT.md`](PRODUCT.md).
 
 ## Preferências do autor
@@ -33,10 +33,12 @@ Memória do projeto para o Claude Code. É carregado no início de cada sessão 
 | Pictogramas dos estados | desenhados de propósito (`Luzes.jsx`): carro, chave de bocas, pistão, bandeira de xadrez, chave. Não usar a roda dentada (lê-se como "definições") |
 | Faturação | a Bancada não emite faturas (é preciso software certificado pela AT); calcula totais e IVA |
 | Documentos para agentes | `AI.md` (mapa), `CLAUDE.md` (esta memória), `AGENTS.md` (aponta para o `AI.md`) |
+| Direitos | todos os direitos reservados ao autor (`LICENSE`); repositório público só para consulta e avaliação. O README abre com um aviso grande de "em desenvolvimento" (`docs/imagens/aviso-em-desenvolvimento.svg`, gerado por `gerar-aviso.mjs`) até a Bancada estar pronta |
+| Arquitetura (18/11/2026) | [ADR 0001](docs/adr/0001-arquitetura-para-durar.md): PostgreSQL com RLS por oficina (sai o SQL Server), TypeScript, camada de serviços, auditoria, migrações, login próprio (nunca pelo Authentik do servidor), PWA, produção no Coolify. Aceite; por fazer |
 
 ## Como trabalhar neste repositório
 
-- **Ramos**: `main` é a versão estável e é o que aparece na página do GitHub. `dev` é a integração. Cada tarefa tem um ramo próprio, que entra no `dev` por PR.
+- **Ramos** (desde 18/11/2026): só `main` (versão estável, a que aparece na página do GitHub) e `dev` (trabalho). Trabalha-se diretamente na `dev`, sem ramos por tarefa. A `main` recebe a `dev` por PR e o merge é do autor. **Commits só em nome do Tiago Dias Pereira, sem linhas de coautoria.** Nada de `push --force`.
 - **CI** (`.github/workflows/ci.yml`): testes da API contra um SQL Server num container, e lint + build do frontend. A GitGuardian (app instalada no repositório) verifica segredos nos PRs. O CI só corre em pushes para `main`/`dev` e em PRs.
 - **Antes de fazer push**: `cd backend && npm test` (precisa do SQL Server) e `cd frontend && npm run lint && npm run build`. Para mexidas no visual, confirmar num browser nos dois temas e em 390, 1180 e 1440 px.
 - **Commits** em português, a explicar o porquê. Terminam com as linhas de atribuição que o ambiente indicar.
@@ -46,7 +48,8 @@ Memória do projeto para o Claude Code. É carregado no início de cada sessão 
 ## Ambiente das sessões na nuvem
 
 - **SQL Server**: se o Docker não estiver a correr, arrancar com `nohup dockerd > /tmp/dockerd.log 2>&1 &`. Depois `docker compose up -d` (com o `.env`), ou um `docker run` da imagem `mcr.microsoft.com/mssql/server:2022-latest` em `127.0.0.1:1433`. Os testes só precisam de `DB_ADMIN_PASSWORD` e `DB_PASSWORD`: geram o seu próprio `JWT_SECRET` e recriam a BD `Bancada_Teste`.
-- **Parar a API**: `pkill -f '^node server\.js$'`. Um padrão mais largo mata a própria shell.
+- **Parar a API**: `pkill -f '^node server\.js$'`. Um padrão mais largo mata a própria shell. O mesmo vale para qualquer `pkill -f` ou `ps | grep`: se o padrão aparecer noutro sítio do mesmo comando (um caminho, um nome de script), a shell também o contém e morre (exit 144). Usar `ps -eo pid,args | grep '[p]adrão' | awk '{print $1}' | xargs -r kill` num comando só com isso. E a verificação de segurança recusa `rm` com `$VAR/...`: usar caminhos literais.
+- **`docker build` no sandbox**: o `npm ci` de dentro da imagem falha com `self-signed certificate in certificate chain` (os containers não confiam na CA do ambiente). Para testar o arranque a sério: copiar o projeto para o scratchpad e, só na cópia, copiar `/root/.ccr/ca-bundle.crt` para a raiz e acrescentar ao Dockerfile, a seguir a cada `FROM ... AS frontend` e `AS api`, `COPY ca-bundle.crt /ca-bundle.crt` e `ENV NODE_EXTRA_CA_CERTS=/ca-bundle.crt`. O Dockerfile do repositório não muda. O lançador testa-se num terminal simulado (`pty.fork()` em Python, a escrever o ecrã para um ficheiro e a carregar em Enter quando aparecer um ficheiro-sinal). Para a Bancada abrir por um IP que não é `localhost` (contexto inseguro, como o tablet), o Chromium precisa de `args: ['--no-proxy-server']`.
 - **Playwright**: lançar o Chromium com `executablePath: '/opt/pw-browsers/chromium'`. O limite de logins (8 em 15 min por IP e email) bloqueia percursos repetidos: reiniciar a API entre percursos.
 - **Relatório (LaTeX)**:
   - Instalar: `apt-get install texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-lang-portuguese texlive-fonts-recommended lmodern latexmk texlive-plain-generic`.
@@ -55,21 +58,28 @@ Memória do projeto para o Claude Code. É carregado no início de cada sessão 
   - Para ver o PDF página a página é preciso o `poppler-utils`. Para ver várias páginas numa só imagem (não há PIL nem ImageMagick): um `.tex` com `\includepdf[pages=-,nup=4x2]{...}` (pacote `pdfpages`) e depois `pdftoppm`.
   - Com o babel em português, o `"` é um atalho e come o espaço seguinte: usar ``` ``...'' ``` para as aspas.
 - **Auditoria** (`docs/auditoria/scripts/`): precisa de `npm install --no-save playwright axe-core` na pasta dos scripts, do `seed-output.txt` do `db:seed` e de `AUDITORIA_DIR`. Reiniciar a API entre corridas (o limite de logins é por email). Para mexer em tabelas com índices filtrados pelo `sqlcmd`, usar `-I` (senão o `QUOTED_IDENTIFIER` fica desligado e o `UPDATE` falha).
+- **Revisão de código** (`docs/revisao-codigo/provas/`): `npm install --no-save playwright` na pasta das provas. O `pin-simultaneo.cjs` usa a BD de testes; os outros precisam da API a servir o frontend compilado.
+- **`npm test` com 47 falhas `hookFailed`** (no `db-setup.js --reset`): ou o SQL Server está parado (o Docker não sobrevive ao reinício da sessão), ou a shell não tem o `DB_ADMIN_PASSWORD` e o `DB_PASSWORD` (não há `.env` no repositório).
 - **Capturas de ecrã**: as do relatório estão em `Relatorio/Anexos/ecras/` (@2x) e as do README em `docs/imagens/` (@1x). Todas usam os dados fictícios do `db:seed`.
 
-## Estado atual (27/09/2026)
+## Estado atual (01/10/2026)
 
 **Feito:**
 - Backend multi-oficina (Node 22, Express 5, SQL Server 2022):
   - 6 tabelas com chaves estrangeiras compostas por oficina;
   - sessões em cookies `httpOnly`, modo bancada com PIN, registo público;
   - login da API sem permissão de `DELETE`.
-- 52 testes automáticos (`node:test`) contra SQL Server real, incluindo o isolamento entre oficinas. CI no GitHub Actions.
+- 54 testes automáticos (`node:test`) contra SQL Server real, incluindo o isolamento entre oficinas. CI no GitHub Actions.
 - Frontend novo (React 19, Vite 8, PWA):
   - quadro com o tablier, modo bancada, nova entrada pela matrícula, folha de obra;
   - histórico, clientes, veículos, equipa e definições;
   - temas claro e escuro.
 - Revisão de design com a impeccable até ao veredito final "ship" (só cobre as correções pontuadas na última ronda).
+- Segunda revisão da interface com o plugin `frontend-design` do repositório `anthropics/claude-code`, a pedido do autor, para "não parecer tão IA" (28/09/2026):
+  - saíram os sinais de interface gerada que o plugin lista: cartões todos com o mesmo raio, textos separados por "·", ícones nos separadores, o login dividido ao meio com lema, dois botões âmbar em Definições;
+  - cada raio vem de um objeto (tablier 16 px, papel 4 px, botões e campos 6 px); o número do tablier aparece num visor como o do computador de bordo; os dados da folha estão em caixas como numa folha de obra em papel;
+  - o plugin não foi copiado para o repositório (a licença é da Anthropic): foi seguido a partir de uma cópia na sessão. As regras novas estão no `DESIGN.md`;
+  - as capturas do README foram refeitas; as do relatório (`Relatorio/Anexos/ecras/`) ainda mostram a versão anterior.
 - Documentação: `README.md`, `AI.md`, `DESIGN.md` (+ `.impeccable/design.json`), `PRODUCT.md` e `docs/analise.md` (segurança, desempenho e viabilidade).
 - Relatório LaTeX atualizado (32 páginas, só o que está feito) e compilado em `Relatorio/relatorio_projeto_final_55019.pdf`.
 - Documento complementar para a apresentação: `Relatorio/relatorio_ferramentas_55019.pdf` (30 páginas).
@@ -80,17 +90,63 @@ Memória do projeto para o Claude Code. É carregado no início de cada sessão 
   - 82 verificações: 69 passam, 9 observações, 4 problemas. Nenhum crítico nem alto.
   - Prioridade alta: REL-001 (sem `errorElement`, erros mostram o ecrã do React Router em inglês) e REL-003 (sem rede, a app mostra "Entrar").
   - Nenhum código mudou: os achados estão todos abertos. Cada um diz como validar a correção.
-- Este trabalho entrou no `dev` por três PRs do ramo `claude/ecstatic-lamport-81qsk8`: o #1 (plataforma, interface, testes e documentação), o #2 (documento das ferramentas) e o #3 (auditoria). O `main` continua na versão de julho: o README novo só aparece na página do GitHub quando o `dev` passar para o `main`, e isso tem de ser pedido ao autor.
+- Revisão de código e dívida técnica em `docs/revisao-codigo.md` (27/09/2026), com as provas em `docs/revisao-codigo/provas/`.
+  - Três bugs confirmados que a auditoria não apanhou: BUG-01 (ALTA: guardar as notas de uma folha apaga o que um colega gravou noutro dispositivo), BUG-02 (MÉDIA: o bloqueio do PIN contorna-se com pedidos em simultâneo) e BUG-03 (BAIXA: Definições não se atualiza depois de desligar os tablets).
+  - 12 itens de dívida técnica. O principal é a regra do dinheiro escrita em 10 sítios (DT-001).
+  - As correções foram validadas numa cópia (52 testes e provas antes e depois), mas nenhum código mudou: estão todas por fazer.
+- `LICENSE` de todos os direitos reservados e aviso grande no topo do README: "em desenvolvimento, ainda não está pronto" e "todos os direitos reservados".
+- Guia de arranque no README ("Como pôr a Bancada a funcionar"), para macOS e Windows:
+  - passo a passo desde um computador sem nada instalado, e 16 problemas comuns com as mensagens de erro reais;
+  - `node backend/scripts/criar-env.js` cria o `.env` com segredos aleatórios (nunca substitui um que exista);
+  - o percurso e as mensagens foram confirmados num clone limpo, em Linux. Os passos próprios do macOS e do Windows (instaladores, Rosetta, WSL, PowerShell) não se testaram aqui.
+- `Iniciar Bancada.command` na raiz: arranque para testes com duplo clique no macOS, a pedido do autor (28/09/2026).
+  - Só precisa do Docker Desktop: abre-o se estiver fechado, cria o `.env` (com o `criar-env.js` num container do Node), arranca tudo com `--profile app`, cria os dados de demonstração e abre http://localhost:3000. Para ao carregar em Enter ou ao fechar a janela.
+  - Resolve sozinho: container de outra cópia ou o `dr_oficina_sql` antigo, `.env` incompleto, password fraca (recomeça), password diferente da do primeiro arranque (pede APAGAR). Deteta-os nos registos do SQL Server: `Password did not match` e `Password validation failed` (não serve procurar só `Login failed for user 'sa'`, que também aparece num arranque normal).
+  - Testado em Linux, num terminal simulado, em oito cenários; o `shellcheck` passa e a sintaxe foi verificada com o bash 3.2 (o do macOS). Os passos próprios do macOS (`open -a Docker`, o Finder, o Gatekeeper) não se testaram aqui.
+  - O `docker-compose.yml` passou a arrancar a API com `exec`: recebe o sinal do `docker stop` e para em 0 s. O SQL Server continua a ser parado à força ao fim de 10 s (o `launch_sqlservr.sh` da imagem não passa o sinal).
+- Ensaio na oficina (01/10/2026), a pedido do autor, que quer começar por testar com os mecânicos da Duarte & Raposo, numa só oficina. O tablet deles é Android e o diagnóstico liga por Bluetooth (não mexe no Wi-Fi). **O ensaio ainda não se fez: o que está feito é a preparação.**
+  - `Iniciar Bancada na oficina.command`: o mesmo lançador em modo oficina (`BANCADA_REDE=1`). Descobre o endereço do Mac na rede, abre a porta 3000 à rede local só nessa corrida (`BANCADA_PUBLICAR_EM=0.0.0.0` e `BANCADA_ORIGENS`, no ambiente e nunca no `.env`; a base de dados fica em `127.0.0.1`), mostra o endereço para o tablet, avisa que não há HTTPS, confirma que responde pelo endereço da rede e pede ao Mac que não adormeça (`caffeinate`). O duplo clique normal volta a fechar a porta. Sem HTTPS o Chrome do tablet não instala a PWA: abre num separador.
+  - Guia do dia em `docs/ensaio-oficina.md`: preparar, montar, guião de 11 tarefas (a 0 é no papel) com o que cronometrar e ver, "já sei que...", perguntas finais e critérios (propostos, não uma regra) para passar ao piloto.
+  - Verificado no Linux, numa cópia do projeto: o lançador a arrancar em modo oficina, a Bancada a abrir pelo endereço da rede no Chromium (contexto inseguro, como o tablet) com o login do gestor, a ativação da bancada e o PIN, a origem da rede aceite e uma alheia recusada (12 verificações), a porta a voltar a fechar com o duplo clique normal e o erro quando não há endereço de rede. A deteção do endereço no macOS foi testada com `route` e `ipconfig` simulados. `shellcheck` limpo e sintaxe em bash 3.2. **Não verificado:** um Mac a sério (`route`, `ipconfig`, `caffeinate`, o pedido da firewall), o Docker Desktop e um tablet Android a sério.
+- Reauditoria de 28/09/2026 (secção 14 de `docs/auditoria.md`), a pedido do autor, que voltou a enviar o mesmo guião de auditoria:
+  - todos os scripts repetidos sobre a versão nova: mesmos resultados na API e no browser, 0 violações axe;
+  - achados novos e corrigidos: QA-005 (a data do histórico transbordava 39 px a 390 px, vinha do redesenho), SEC-009 (`criar-env.js` criava o `.env` legível por todos: agora 600), REL-005 (uma cópia restaurada noutro servidor deixava a API sem entrar: o `db:setup` religa o utilizador órfão), REL-006 (o registo de transações crescia sem limite em modo FULL: o `db:setup` cria as bases novas em SIMPLE);
+  - SEC-010 (o container da API recebe a password do `sa`) fica aberto no compose local e resolvido na proposta de produção; os achados de 27/09 continuam todos abertos.
+- Infraestrutura e publicação em `docs/infraestrutura.md`, a pedido do autor (guião de arquitetura de cloud e DevOps). **A Bancada continua sem estar publicada.** Proposta validada numa cópia em `localhost`, com o SQL Server Express e o Caddy a sério:
+  - `docker-compose.prod.yml` e `infra/` (Caddyfile, `deploy.sh`, `backup.sh`, `restaurar.sh`, `restauro-teste.sh`, `fumo.sh`), ainda não em uso;
+  - medido: cópia verificada, comprimida e cifrada em 2,7 s (1,9 MB); simulacro de perda total recuperado em 17 s com dados idênticos; primeira publicação em 42 s; publicação normal 9 s (1,7 s sem resposta); retrocesso automático; a Express corre os 52 testes;
+  - a edição Developer (omissão da imagem) só serve para desenvolver: em produção, Express. Na Express não há compressão de cópias, TDE, cópias cifradas nem SQL Agent (testado);
+  - RPO e RTO estão por definir com o cliente (perguntas na secção 15). Não há preços nem servidor reais: NÃO VERIFICADO;
+  - o CI ganhou um terceiro trabalho (shellcheck, `docker compose config` e construção da imagem).
+- Crítica de design do Quadro com a impeccable (30/09/2026), a pedido do autor: nota 28/40, dois P1 e três P2. O arquivo está em `.impeccable/critique/`. O autor escolheu começar pelos dois P1, disse que o tablet fica na parede ou na bancada a 1 a 2 m (por isso o tablier maior passa a P1) e que "Terminar" passa a neutro (a Regra da Voz Única vence).
+  - **Feito (`layout`):** o ecrã de descanso (`/bancada`) mostra o tablier grande e só de leitura por cima de "Quem vai trabalhar?", com o bloco centrado; sem ligação, os números esbatem-se e dizem de quando são. O `GET /api/auth/bancada` devolve também `porEstado` (só as contagens da oficina do dispositivo; 2 testes novos, 54 no total). Na sessão do tablet, aviso 30 s antes do bloqueio por inatividade ("Ainda estás aí?", botão neutro "Continuar"; tocar ou carregar numa tecla também continua). O Tablier ganhou `somenteLeitura`, `grande` e `antigo`; as medidas passaram a variáveis CSS (`--tablier-simbolo`, `--tablier-nome`, `--tablier-numero`). Verificado no browser em dois temas e quatro larguras, e com o relógio simulado para o aviso.
+  - **Feito (`harden`):** no seletor de estado da folha, "Entregue" passou a pedir um segundo toque e a ficar à parte dos quatro estados de trabalho (uma linha e 32 px de intervalo; fila própria abaixo de 1101 px), com "Fecha a folha" à vista em vez de num `title` que o toque não mostra. Reabrir uma folha entregue também pede dois toques, porque reabrir limpa a data de entrega. A pergunta inverte o botão (tinta, nem vermelho nem âmbar), caduca aos 4 s, com Escape, quando o foco sai, quando a folha muda entretanto e quando se toca noutro estado; um segundo toque a menos de 0,4 s do primeiro não conta. Passou a `role="group"` com `aria-pressed` (resolve o item do seletor na secção 10 de `docs/revisao-codigo.md`) e a ter uma linha `role="status"` para leitores de ecrã. O botão tocado diz "A gravar...", o pedido desiste aos 15 s (opção nova `tempoLimite` no cliente da API), o erro fica 8 s e a folha volta a pedir-se (a resposta pode ter-se perdido, ou um colega pode tê-la entregue). Achada e corrigida uma corrida real em `useRecurso`: a atualização de 30 s que já ia a caminho trazia os dados de antes e desfazia no ecrã a alteração gravada (reproduzida sem a correção; com ela deixa de acontecer). Verificado no Chromium com toques simulados: 197 verificações (dois temas em quatro tamanhos; no tema claro, 16 larguras de 360 a 1440 px e a letra a 200%), axe sem violações, mecânico contra gestor, e as falhas 500, 409, sem rede, lento e sem resposta; `npm test` com 54 testes. **Não verificado:** um leitor de ecrã a sério e um tablet a sério.
+  - **Feito (`adapt`):** o tablier do quadro do tablet partilhado (modo bancada, `colaborador.via === 'pin'`) sobe um degrau para se ler de pé a 1 ou 2 m. A partir de 1024 px, símbolo de 80 px, nome de 20 px e número de 52 px (154 px por luz); entre 761 e 1023 px, 2×2 com 72 px e 44 px; abaixo disso, como estava. Liguei o tamanho ao modo bancada e não a `pointer: coarse`: a app sabe que é o tablet partilhado, e detetar o toque é um palpite (um gestor com um iPad na secretária, ou um ecrã de parede sem toque, enganam-no). A lista de baixo perde 42 px (4,6 filas visíveis a 820 px, em vez de 5,1). A luz responde ao dedo enquanto se carrega (`:active`). A conta do ângulo visual para um tablet de 10,9" (número de 52 px: 15,9 minutos de arco a 1,5 m, contra 7,9 antes) está no `DESIGN.md`. Verificado no Chromium (toques simulados; não é Safari nem um tablet a sério) em dois temas e dez contextos (tablets de 1024 a 1366 px, ao alto, telemóvel, computador e tablet do gestor), com a oficina cheia (3 algarismos), vazia e a carregar, deslizar a começar numa luz (rola a página e não filtra), axe sem violações e o ecrã reduzido a 40% e a 30% para simular 1,5 e 2 m. **Não verificado:** o teste a 1,5 m num tablet montado na oficina. O `docs/imagens/quadro-tablet.png` do README foi refeito com o quadro novo.
+  - **Feito (`quieter`):** o botão de sair deixou de ter contorno âmbar (competia com a ação principal de todos os ecrãs no tablet: a Regra da Voz Única) e no tablet partilhado chama-se "Sair do tablet" em vez de "Terminar" (no computador continua "Sair"). É neutro nos dois modos, responde ao dedo (`:active`) e, com 520 px ou menos, fica só com o ícone (o nome em `aria-label`): a barra de topo deixou de transbordar a 390 px no tablet (43 px) e a 360 px no computador (22 px). A 320 px ainda transbordava 28 px: tratado no `polish`. O quadro vazio ficou com um só botão âmbar (saiu o "Dar entrada a um veículo", que fazia o mesmo que a "Nova entrada" mesmo por cima). No `DESIGN.md`, a barra de topo já não contradiz a Regra da Voz Única e os botões e os campos dizem 6 px (não 10 px). No sidecar `.impeccable/design.json` e no contrato do quadro só mudou o que referia o botão. No tablet há menos um botão âmbar em todos os ecrãs. Verificado no Chromium (toques simulados): 64 verificações, dois temas, larguras de 320 a 820 px, sair por toque e por teclado, axe sem violações. As capturas `quadro-tablet.png` e `folha.png` do README foram refeitas (a `folha.png` ainda mostrava o seletor de antes do `harden`).
+  - **Feito (`polish`):** passagem final ao percurso do tablet (ecrã de descanso, PIN, quadro, nova entrada, folha) e a outros tamanhos. O que estava mal e ficou arranjado:
+    - **PIN:** a mensagem de erro aparecia entre o visor e as teclas e empurrava-as (44 px, 68 px com duas linhas) quando o dedo já ia a caminho da tecla seguinte. Passou para o sítio da instrução "Escreve o teu PIN", que fica escondida (a guardar o lugar) enquanto a mensagem se vê; o `role="alert"` está num parágrafo que existe sempre, para o leitor de ecrã a anunciar. Nos tablets (1180 e 820 px) o teclado fica quieto com as seis mensagens que se podem ver; a 390 px, só com as de uma linha. **Não tratado:** num telemóvel as mais compridas (bloqueio, sem rede) ocupam duas linhas e empurram o teclado 27 px (54 px a 320 px).
+    - **Quadro sem ligação:** o ecrã de descanso já dizia "Estes números são de há N min", mas o quadro continuava a afirmar os números como se fossem de agora. O `useRecurso` passou a devolver `atualizadoEm` (a memória dos pedidos também o guarda) e o componente `SemLigacao` escreve a nota nos dois ecrãs (o `ultimaLeitura` do `Bancada` saiu). No quadro, o tablier esbate-se e a nota aparece por baixo; quando a ligação volta, desaparecem. Testado com o relógio simulado, a cortar e a repor a rede.
+    - **Filtro e pesquisa do quadro:** perdiam-se ao ir ver uma folha e voltar. Ficam guardados enquanto for a mesma sessão (`ligadoEm`), e quem entrar a seguir no tablet começa com o quadro todo (testado com dois mecânicos).
+    - **Títulos das páginas:** eram todos "Bancada". O `useTitulo` dá "Histórico | Bancada", "Folha nº 2, GH512KT | Bancada", "PIN de Rui Fonseca | Bancada"... em todas as páginas. O 404 e os "não existe" das fichas passaram a ter um `h1` (`<Vazio pagina>`).
+    - **Alvos de toque:** a marca da barra de topo (36 px) e o nome do cliente na folha (24 px) passaram a 48 px sem mexer no desenho.
+    - **Nova entrada:** o erro do campo do cliente está ligado ao campo (`aria-invalid` e `aria-describedby`), como no `Campo` (item da secção 10 de `docs/revisao-codigo.md`).
+    - **320 px:** deixou de haver scroll de lado em todos os ecrãs que percorri (barra de topo, ecrã de descanso, Definições). A marca fica só com o símbolo abaixo de 360 px; a coluna das páginas de gestão é `minmax(0, 1fr)` (as Definições passavam 21 px a 360 px e 61 px a 320 px); e o botão mais comprido das Definições parte-se em duas linhas.
+    - Verificado no Chromium (toques simulados; não é Safari nem um tablet a sério): 612 verificações em dois temas e larguras de 320 a 1440 px, axe sem violações (65 corridas), sem erros na consola, `npm test` com 54 testes, `lint`, `build` e o detetor da impeccable sem achados. **Não verificado:** um leitor de ecrã e um tablet a sério. O arquivo da crítica (`.impeccable/critique/`) ficou marcado como fechado pela própria ferramenta, porque o código do quadro mudou desde a crítica: o que falta dela está na linha a seguir.
+  - **Por fazer da crítica:** os P2 fora do âmbito (o `polish` final está feito). Um só âmbar no que resta: a Folha tem "Adicionar" e o segmento escolhido do "Tipo", e "Guardar notas" passa a âmbar quando as notas mudam; a nova entrada com cliente novo tem "Guardar cliente", "Continuar" e o segmento escolhido. O `DESIGN.md` (Segmentos) documenta o âmbar do segmento escolhido, e isso contradiz a Voz Única (a lista dos usos permitidos do âmbar não o inclui). Não convém pôr "Guardar notas" a secundário antes da gravação automática das notas, o outro P2. Visto de passagem e não tratado: os avisos de erro dos outros ecrãs continuam a durar 3,2 s (só o da mudança de estado da folha dura 8 s) e são `role="status"`, não `alert` (a linha de `AvisosContext` na secção 10 de `docs/revisao-codigo.md`); o separador chama-se "Oficina" e tudo o resto (ligações de voltar, título, 404) chama "Quadro" à mesma página, e qual dos dois fica é decisão do autor; a barra de topo do ecrã de descanso parte o nome da oficina e "Entrar com email" em duas linhas a 390 px.
+- Este trabalho entrou no `dev` por PRs do ramo `claude/ecstatic-lamport-81qsk8`: o #1 (plataforma, interface, testes e documentação), o #2 (documento das ferramentas), o #3 (auditoria), o #4 e o #7 (memória), o #5 (licença e aviso), o #8 (revisão de código) e o do guia de arranque. A 27/09/2026 o `dev` passou para o `main` pelo PR #6, com o merge feito pelo autor. O que entrou no `dev` depois disso (do #7 em diante) só aparece na página do GitHub quando o `dev` voltar a passar para o `main`, e isso tem de ser pedido ao autor.
 
 **Por fazer** (sugestões, nada disto existe):
-1. Testar com os mecânicos da Duarte & Raposo: medir o tempo de uma entrada e de uma peça no papel e no tablet.
+1. Testar com os mecânicos da Duarte & Raposo: medir o tempo de uma entrada e de uma peça no papel e no tablet. Preparado (guia em `docs/ensaio-oficina.md` e modo oficina no lançador); falta fazer o ensaio e, depois, o piloto.
 2. Publicar online: HTTPS, `COOKIE_SECURE=true`, ligação encriptada à BD e cópias de segurança.
 3. Sistema de migrações da base de dados (hoje o esquema recria-se do zero).
 4. Diagramas de casos de uso e de sequência para o relatório.
 5. Folha imprimível para o cliente, com os conselhos.
 6. Recuperação de password por email e um registo de auditoria completo.
 7. Integração com programas de faturação certificados; política de privacidade e contratos RGPD.
-8. Corrigir os achados da auditoria pela ordem da secção 10 de `docs/auditoria.md` (primeiro REL-001 e REL-003) e passar os percursos no browser para testes E2E no CI.
+8. Atualizar as capturas do relatório (`Relatorio/Anexos/ecras/`) para a interface revista a 28/09/2026 e recompilar o PDF.
+9. Corrigir os achados da auditoria (secção 10 de `docs/auditoria.md`, primeiro REL-001 e REL-003) e da revisão de código (secção 14 de `docs/revisao-codigo.md`, primeiro BUG-01 e BUG-02), e passar os percursos no browser para testes E2E no CI.
+10. Publicar a sério, seguindo `docs/infraestrutura.md`: servidor, domínio, certificado, cron das cópias, cópia fora do servidor e guardar a chave privada do `age`. Antes, migrações da base de dados e a resposta do cliente sobre RPO e RTO.
+11. Impor o bloqueio por inatividade no servidor: os 5 minutos do tablet só existem no ecrã (`useBloqueioPorInatividade`) e a sessão por PIN dura 12 h no servidor. Se o Android descartar a página em segundo plano e a recarregar, a sessão continua em nome do mecânico anterior. Antes do piloto.
 
 ## Registo
 
@@ -106,4 +162,27 @@ Memória do projeto para o Claude Code. É carregado no início de cada sessão 
   - este CLAUDE.md passou a ser a memória do projeto e o PRODUCT.md passou a descrição completa do produto;
   - documento das ferramentas (`relatorio_ferramentas_55019`), com todas as afirmações confirmadas no código, no git ou no registo da sessão;
   - relatório principal corrigido: os testes manuais são de julho, e as três opções do ecrã principal foram sorteadas pela impeccable entre sete formas;
-  - auditoria completa (`docs/auditoria.md`), a pedido do autor, com os guiões de auditoria técnica e de mentoria que ele forneceu.
+  - auditoria completa (`docs/auditoria.md`), a pedido do autor, com os guiões de auditoria técnica e de mentoria que ele forneceu;
+  - `LICENSE` de todos os direitos reservados e aviso grande no README; o `dev` passou para o `main` (PR #6, merge feito pelo autor);
+  - o autor perguntou se valia a pena uma organização no GitHub: recomendei esperar pela nota e manter um só repositório;
+  - revisão de código e dívida técnica (`docs/revisao-codigo.md`), a pedido do autor, com os guiões de revisão de código e de refatoração que ele forneceu;
+  - o autor não conseguia arrancar o projeto no Mac (o Docker Desktop estava fechado): a secção de arranque do README passou a um guia completo para macOS e Windows, com o `criar-env.js`.
+- **28/09/2026**:
+  - no Mac do autor, o `db:setup` dava `Login failed for user 'sa'`: o volume `sql_dados` de junho/julho (mesmo nome no compose antigo) guardava a password antiga do `sa`. Solução: `docker compose down -v` e `docker rm -f dr_oficina_sql`;
+  - interface revista com o plugin `frontend-design` (anthropics/claude-code), a pedido do autor;
+  - `Iniciar Bancada.command`: arranque com duplo clique no macOS, para testes.
+- **28 e 29/09/2026**:
+  - o autor enviou de novo o guião de auditoria (igual ao anterior, por isso reauditoria) e um guião novo de arquitetura de cloud e DevOps;
+  - reauditoria e `docs/infraestrutura.md` (ver o Estado atual), com os scripts e o compose de produção validados numa cópia.
+- **30/09/2026**:
+  - crítica de design do Quadro com a impeccable (28/40) e primeiro passo do plano, o `layout` do ecrã de descanso da bancada com o aviso antes do bloqueio (ver o Estado atual);
+  - segundo passo do plano, o `harden` do seletor de estado da folha: Entregue com dois toques, erros e corrida entre a atualização e a gravação (ver o Estado atual);
+  - terceiro passo, o `adapt`: o tablier do quadro maior no tablet partilhado, para se ler a 1 ou 2 m (ver o Estado atual);
+  - quarto passo, o `quieter`: "Sair do tablet" neutro, um só botão âmbar no quadro vazio e o `DESIGN.md` sem as incoerências (ver o Estado atual).
+  - quinto e último passo, o `polish`: a mensagem do PIN que empurrava as teclas, o quadro sem ligação, o filtro que sobrevive à folha, os títulos das páginas, alvos de toque e os 320 px (ver o Estado atual).
+- **01/10/2026**:
+  - o autor perguntou como testar a Bancada a sério numa oficina (o tablet deles também serve para diagnóstico). Respondi com um percurso em três passos: ensaio com dados fictícios, piloto numa oficina com o papel em paralelo, e só depois decidir. Para o piloto faltam, entre outras coisas, servidor, cópias, migrações e os achados BUG-01, REL-001 e REL-003;
+  - o autor escolheu começar pelo ensaio: o tablet é Android e o diagnóstico liga por Bluetooth. Modo oficina no lançador e guia do ensaio (ver o Estado atual). O PR #18 (`polish`) já estava no `dev`.
+- **18/11/2026**: ADR 0001, a arquitetura para durar e crescer (PostgreSQL com RLS, TypeScript, camadas, auditoria, migrações, Coolify). Só documentação; o código não mudou. A Bancada passa a ser um projeto pessoal: README, AI.md e esta memória atualizados.
+  - o trabalho do PR #19 (modo oficina e guia do ensaio), que não tinha chegado à `dev`, foi trazido para lá; o ramo dele foi apagado. Passa a haver só `main` e `dev`;
+  - `docs/PROJETO-BANCADA.md` (o projeto inteiro para qualquer agente, incluindo a análise de produto e a direção para as faturas) e `docs/linkedin.md` (textos para o LinkedIn).

@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Archive, PencilSimple, Plus } from '../components/icones';
 import { api } from '../lib/api';
 import { useRecurso } from '../lib/useRecurso';
+import { useTitulo } from '../lib/useTitulo';
 import { data, descreverVeiculo, euros, nomeTipo, quilometros } from '../lib/formatar';
 import { useSessao } from '../context/SessaoContext';
 import { useAvisos } from '../context/AvisosContext';
@@ -23,11 +24,12 @@ export default function Veiculo() {
   const { mostrar } = useAvisos();
   const veiculo = useRecurso(`/veiculos/${id}`);
   const [aEditar, setAEditar] = useState(false);
+  useTitulo(veiculo.dados ? `Veículo ${veiculo.dados.matricula}` : 'Veículo');
 
   if (veiculo.aCarregar) return <Esqueleto linhas={3} altura={80} />;
   if (veiculo.erro && !veiculo.dados) {
     return veiculo.erro.status === 404
-      ? <Vazio titulo="Este veículo não existe." acao={<Botao para="/veiculos">Ver veículos</Botao>} />
+      ? <Vazio pagina titulo="Este veículo não existe." acao={<Botao para="/veiculos">Ver veículos</Botao>} />
       : <ErroCarregar erro={veiculo.erro} aoTentar={veiculo.recarregar} />;
   }
   const v = veiculo.dados;
@@ -49,8 +51,9 @@ export default function Veiculo() {
         <Matricula valor={v.matricula} tamanho="grande" />
         <div>
           <h1 className="cabecalho__titulo">{descreverVeiculo(v)}</h1>
+          <p className="ficha-veiculo__sub">{nomeTipo(v.tipo)}{v.ano ? ` de ${v.ano}` : ''}</p>
           <p className="ficha-veiculo__sub">
-            {nomeTipo(v.tipo)}{v.ano ? ` de ${v.ano}` : ''} · <Link to={`/clientes/${v.cliente.id}`}>{v.cliente.nome}</Link>
+            Cliente: <Link to={`/clientes/${v.cliente.id}`}>{v.cliente.nome}</Link>
           </p>
         </div>
         <div className="ficha-veiculo__acoes">

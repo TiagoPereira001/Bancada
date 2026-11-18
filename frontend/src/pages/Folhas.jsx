@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MagnifyingGlass } from '../components/icones';
 import { useRecurso } from '../lib/useRecurso';
+import { useTitulo } from '../lib/useTitulo';
 import { useAtraso } from '../lib/useAtraso';
 import { ESTADOS, data, descreverVeiculo, euros } from '../lib/formatar';
 import { Matricula } from '../components/Matricula';
@@ -15,6 +16,7 @@ const POR_PAGINA = 30;
 
 // o histórico: todas as folhas da oficina, incluindo as entregues
 export default function Folhas() {
+  useTitulo('Histórico');
   const [estado, setEstado] = useState('');
   const [pesquisa, setPesquisa] = useState('');
   const [pagina, setPagina] = useState(1);
@@ -69,9 +71,12 @@ export default function Folhas() {
                   <Matricula valor={f.veiculo.matricula} />
                   <span className="linha-historico__texto">
                     <span className="linha-historico__titulo">{descreverVeiculo(f.veiculo)}</span>
-                    <span className="linha-historico__sub">{f.cliente.nome} · {data(f.dataEntrada)}</span>
+                    <span className="linha-historico__sub">{f.cliente.nome}</span>
                   </span>
-                  <EstadoFolha estado={f.estado} />
+                  <span className="linha-historico__estado">
+                    <EstadoFolha estado={f.estado} />
+                    <span className="linha-historico__data num">entrou a {data(f.dataEntrada)}</span>
+                  </span>
                   <span className="linha-historico__valor num">{euros(f.subtotal)}</span>
                 </Link>
               </li>

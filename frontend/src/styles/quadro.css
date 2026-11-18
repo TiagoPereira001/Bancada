@@ -5,6 +5,17 @@
   gap: var(--e-5);
 }
 
+/* o tablier e, se faltar a ligação, a nota que diz de quando são os números:
+   são um grupo, mais chegados do que o resto do quadro */
+.quadro__estado {
+  display: grid;
+  gap: var(--e-3);
+}
+.quadro__nota {
+  padding: 0 var(--e-1);
+  color: var(--tinta-2);
+}
+
 .quadro__contas {
   display: flex;
   flex-wrap: wrap;
@@ -29,7 +40,8 @@
 }
 
 .quadro__contagem {
-  color: var(--tinta-3);
+  margin-left: auto;
+  color: var(--tinta-2);
   font-weight: 500;
 }
 .quadro__limpar {
@@ -56,6 +68,17 @@
   gap: var(--e-4);
   min-height: 80px;
   padding: var(--e-3) var(--e-5);
+}
+/* a chapa e, por baixo, o número da folha: as duas formas de a encontrar */
+.fila__matricula {
+  display: grid;
+  justify-items: start;
+  gap: 5px;
+}
+.fila__folha {
+  font-size: var(--t-legenda);
+  font-weight: 600;
+  color: var(--tinta-3);
 }
 .fila__veiculo {
   display: grid;

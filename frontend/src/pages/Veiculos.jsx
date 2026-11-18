@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { MagnifyingGlass, Plus } from '../components/icones';
 import { useRecurso } from '../lib/useRecurso';
+import { useTitulo } from '../lib/useTitulo';
 import { useAtraso } from '../lib/useAtraso';
 import { descreverVeiculo, nomeTipo } from '../lib/formatar';
 import { useAvisos } from '../context/AvisosContext';
@@ -17,6 +18,7 @@ import '../styles/entrada-veiculo.css';
 const POR_PAGINA = 30;
 
 export default function Veiculos() {
+  useTitulo('Veículos');
   const navegar = useNavigate();
   const { mostrar } = useAvisos();
   const [pesquisa, setPesquisa] = useState('');
@@ -70,7 +72,7 @@ export default function Veiculos() {
                   <Matricula valor={v.matricula} />
                   <span className="linha-veiculo__texto">
                     <span className="linha-veiculo__titulo">{descreverVeiculo(v)}</span>
-                    <span className="linha-veiculo__sub">{nomeTipo(v.tipo)} · {v.cliente.nome}</span>
+                    <span className="linha-veiculo__sub">{nomeTipo(v.tipo)} de {v.cliente.nome}</span>
                   </span>
                   {v.folhaAtiva ? <EstadoFolha estado={v.folhaAtiva.estado} /> : <span className="linha-veiculo__fora">Fora da oficina</span>}
                 </Link>

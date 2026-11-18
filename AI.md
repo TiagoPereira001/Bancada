@@ -2,6 +2,7 @@
 
 Este ficheiro é o ponto de partida para qualquer agente de IA (Claude, Codex, Cursor, Copilot...) que abra este repositório. Diz onde está cada coisa, que regras não se podem partir e como fazer as tarefas mais comuns. Lê-o antes de mexer no código.
 
+- **O projeto inteiro num só documento** (visão, decisões, arquitetura, caminho, produto, regras): [`docs/PROJETO-BANCADA.md`](docs/PROJETO-BANCADA.md)
 - Produto e utilizadores: [`PRODUCT.md`](PRODUCT.md)
 - Decisões já tomadas e estado atual: [`CLAUDE.md`](CLAUDE.md)
 - Sistema visual: [`DESIGN.md`](DESIGN.md)

@@ -33,7 +33,7 @@ A Bancada substitui as folhas de obra em papel das oficinas. Cada entrada de um 
 
 O projeto nasceu na oficina **Duarte & Raposo** (Canhoso, Covilhã), especializada em mecânica, eletricidade e autocaravanas, onde as folhas de papel se perdiam, se sujavam e obrigavam a fazer as contas à mão. Começou como um sistema só para essa oficina e passou a servir **qualquer oficina**: cada uma regista-se sozinha e só vê os seus dados. A Duarte & Raposo é o primeiro cliente.
 
-A descrição completa do produto (utilizadores, percurso de um carro pela oficina, o que existe e o que ainda não existe) está no [`PRODUCT.md`](PRODUCT.md). A arquitetura para a Bancada durar e crescer (PostgreSQL com isolamento por oficina, TypeScript, auditoria, produção no meu servidor) está decidida no [ADR 0001](docs/adr/0001-arquitetura-para-durar.md) e ainda **não** está feita.
+A descrição completa do produto (utilizadores, percurso de um carro pela oficina, o que existe e o que ainda não existe) está no [`PRODUCT.md`](PRODUCT.md). A arquitetura para a Bancada durar e crescer (PostgreSQL com isolamento por oficina, TypeScript, auditoria, produção no meu servidor) está decidida no [ADR 0001](docs/adr/0001-arquitetura-para-durar.md) e ainda **não** está feita. O projeto inteiro (visão, decisões, caminho e produto) está em [`docs/PROJETO-BANCADA.md`](docs/PROJETO-BANCADA.md).
 
 **Para a experimentares:** num Mac, faz duplo clique em [`Iniciar Bancada.command`](#no-mac-com-um-duplo-clique) (só precisas do Docker Desktop). No Windows, ou se queres mexer no código, segue o guia [Como pôr a Bancada a funcionar](#como-pôr-a-bancada-a-funcionar).
 
@@ -496,7 +496,7 @@ Dica: procura nesta página (`Cmd + F` no Mac, `Ctrl + F` no Windows) um pedaço
 
 ## Fluxo de trabalho
 
-- **Ramos:** `main` é a versão estável, `dev` é a integração, e cada tarefa tem o seu ramo, que entra no `dev` por pull request.
+- **Ramos:** só dois. `main` é a versão estável e `dev` é onde se trabalha; a `main` recebe a `dev` por pull request.
 - **CI:** em cada pull request, o GitHub Actions corre os testes da API contra um SQL Server o lint + build do frontend, e valida os scripts, os ficheiros do Docker Compose e a construção da imagem. A GitGuardian procura segredos. Um PR só entra com tudo verde.
 - **Antes de enviar:** `npm test` no backend e `npm run lint && npm run build` no frontend.
 

@@ -2,7 +2,7 @@
 
 Memória do projeto para o Claude Code. É carregado no início de cada sessão e continua disponível depois de a conversa ser compactada. Serve para retomar o trabalho sem voltar a perguntar o que já foi decidido.
 
-**Antes de qualquer tarefa, lê o [`AI.md`](AI.md)**: tem o mapa do repositório, as regras que não se podem partir (isolamento entre oficinas, autoria pela sessão, contas em SQL, soft delete), a API e os comandos. Para trabalho visual, lê também o [`DESIGN.md`](DESIGN.md) e o [`PRODUCT.md`](PRODUCT.md).
+**Para o contexto completo numa só leitura, lê o [`docs/PROJETO-BANCADA.md`](docs/PROJETO-BANCADA.md).** **Antes de qualquer tarefa, lê o [`AI.md`](AI.md)**: tem o mapa do repositório, as regras que não se podem partir (isolamento entre oficinas, autoria pela sessão, contas em SQL, soft delete), a API e os comandos. Para trabalho visual, lê também o [`DESIGN.md`](DESIGN.md) e o [`PRODUCT.md`](PRODUCT.md).
 
 **Mantém este ficheiro atualizado.** No fim de cada tarefa grande, atualiza o "Estado atual" e acrescenta uma linha ao "Registo". O que não ficar escrito aqui perde-se na próxima compactação.
 
@@ -38,7 +38,7 @@ Memória do projeto para o Claude Code. É carregado no início de cada sessão 
 
 ## Como trabalhar neste repositório
 
-- **Ramos**: `main` é a versão estável e é o que aparece na página do GitHub. `dev` é a integração. Cada tarefa tem um ramo próprio, que entra no `dev` por PR. O `main` recebe o `dev` por PR e o merge é do autor: o classificador de segurança do Claude Code não deixa o agente fazê-lo (trata-o como publicação em produção).
+- **Ramos** (desde 18/11/2026): só `main` (versão estável, a que aparece na página do GitHub) e `dev` (trabalho). Trabalha-se diretamente na `dev`, sem ramos por tarefa. A `main` recebe a `dev` por PR e o merge é do autor. **Commits só em nome do Tiago Dias Pereira, sem linhas de coautoria.** Nada de `push --force`.
 - **CI** (`.github/workflows/ci.yml`): testes da API contra um SQL Server num container, e lint + build do frontend. A GitGuardian (app instalada no repositório) verifica segredos nos PRs. O CI só corre em pushes para `main`/`dev` e em PRs.
 - **Antes de fazer push**: `cd backend && npm test` (precisa do SQL Server) e `cd frontend && npm run lint && npm run build`. Para mexidas no visual, confirmar num browser nos dois temas e em 390, 1180 e 1440 px.
 - **Commits** em português, a explicar o porquê. Terminam com as linhas de atribuição que o ambiente indicar.
@@ -184,3 +184,5 @@ Memória do projeto para o Claude Code. É carregado no início de cada sessão 
   - o autor perguntou como testar a Bancada a sério numa oficina (o tablet deles também serve para diagnóstico). Respondi com um percurso em três passos: ensaio com dados fictícios, piloto numa oficina com o papel em paralelo, e só depois decidir. Para o piloto faltam, entre outras coisas, servidor, cópias, migrações e os achados BUG-01, REL-001 e REL-003;
   - o autor escolheu começar pelo ensaio: o tablet é Android e o diagnóstico liga por Bluetooth. Modo oficina no lançador e guia do ensaio (ver o Estado atual). O PR #18 (`polish`) já estava no `dev`.
 - **18/11/2026**: ADR 0001, a arquitetura para durar e crescer (PostgreSQL com RLS, TypeScript, camadas, auditoria, migrações, Coolify). Só documentação; o código não mudou. A Bancada passa a ser um projeto pessoal: README, AI.md e esta memória atualizados.
+  - o trabalho do PR #19 (modo oficina e guia do ensaio), que não tinha chegado à `dev`, foi trazido para lá; o ramo dele foi apagado. Passa a haver só `main` e `dev`;
+  - `docs/PROJETO-BANCADA.md` (o projeto inteiro para qualquer agente, incluindo a análise de produto e a direção para as faturas) e `docs/linkedin.md` (textos para o LinkedIn).

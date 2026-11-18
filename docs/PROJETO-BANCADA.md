@@ -137,7 +137,21 @@ No servidor pessoal do autor: uma VM da Time4VPS (3 vCPU, 8 GB, x86_64, Ubuntu 2
 
 **Rejeitado:** certificar a própria Bancada como software de faturação. É um processo formal e contínuo (assinatura, numeração, comunicação à AT, SAF-T, QR, ATCUD) que transforma o projeto num programa de faturação, que é exatamente o que a Bancada decidiu não ser.
 
-**Por verificar antes de construir:** que programas certificados têm API pública, o que custam às oficinas, e os requisitos legais em vigor, sempre na fonte oficial.
+**Pesquisa de 18/11/2026** (fontes indicadas; preços **não** verificados):
+
+- **Quantos há:** a AT mantém a lista oficial de programas certificados no Portal das Finanças (ligação no [gov.pt](https://www.gov.pt/servicos/consultar-o-programa-de-faturacao-certificado), página atualizada a 29/07/2026). A lista não se deixou contar automaticamente. Uma fonte secundária (Doutor Finanças, data não indicada) fala de **2.552 programas certificados**. Ordem de grandeza: milhares, quase todos sem API pública.
+- **A obrigação:** a Portaria n.º 340/2013 obriga quem emite faturas a usar exclusivamente programas certificados pela AT, com algumas exceções (por exemplo, de volume de negócios) que mudaram ao longo dos anos: confirmar a versão em vigor no Diário da República antes de escrever qualquer texto para clientes.
+- **Com API pública documentada** (confirmado nas páginas oficiais dos próprios programas):
+
+| Programa | Documentação da API | Notas |
+|---|---|---|
+| InvoiceXpress | [docs.invoicexpress.com](https://docs.invoicexpress.com/) | API REST com chave por conta; a resposta de uma fatura traz `atcud`, `saft_hash` e a ligação para o documento |
+| Moloni | [moloni.pt/dev](https://www.moloni.pt/dev/) | faturas, recibos, notas de crédito e de débito, faturas simplificadas |
+| Vendus | [vendus.pt/ws](https://www.vendus.pt/ws/) | API v1.1 com chave; mais virado para ponto de venda |
+| TOConline | [api-docs.toconline.pt](https://api-docs.toconline.pt/) | da Ordem dos Contabilistas Certificados; segundo uma fonte secundária, só se subscreve através de um contabilista |
+| Cegid Jasmin / Primavera | [developers.ila.cegid.com](https://developers.ila.cegid.com/en/cloud/rose/api-documentation/) | API REST da Cegid; produtos mais completos (vendas, compras, contabilidade) |
+
+- **Recomendação para a primeira integração:** começar por **um** destes (InvoiceXpress ou Moloni parecem os mais simples para uma oficina pequena), com o adaptador atrás da porta "faturação", e só acrescentar outro quando uma oficina real o pedir. Antes de escolher: perguntar à Duarte & Raposo que programa usa hoje, e confirmar preços e limites da API na página oficial.
 
 ## 10. Caminho
 

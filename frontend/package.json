@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.2.0",
   "license": "UNLICENSED",
-  "description": "Frontend da Bancada: PWA para o tablet da oficina e gestão no computador",
+  "description": "Frontend da Baylight: PWA para o tablet da oficina e gestão no computador",
   "type": "module",
   "scripts": {
     "dev": "vite",

@@ -1,5 +1,5 @@
 // os símbolos dos estados (as luzes do tablier e do seletor de estado da
-// folha), desenhados de propósito para a Bancada. São pictogramas cheios, como as luzes de aviso de um carro (e não ícones de
+// folha), desenhados de propósito para a Baylight. São pictogramas cheios, como as luzes de aviso de um carro (e não ícones de
 // aplicação): legíveis de longe, num tablet na parede da oficina.
 // Geometria simples numa grelha de 32x32. As formas cheias vão no sentido dos
 // ponteiros do relógio e os furos no sentido contrário (regra "nonzero").

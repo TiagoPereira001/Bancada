@@ -9,7 +9,7 @@
 #   infra/deploy.sh
 #
 # Limites (estão explicados no documento): a troca do container leva alguns
-# segundos em que a Bancada não responde, e voltar à versão anterior repõe só a
+# segundos em que a Baylight não responde, e voltar à versão anterior repõe só a
 # aplicação: uma alteração à base de dados (hoje não há migrações) não se desfaz
 # sozinha. Para isso é a cópia do passo 2.
 set -euo pipefail

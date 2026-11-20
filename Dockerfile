@@ -1,4 +1,4 @@
-# Bancada: imagem de produção (API + frontend compilado, na mesma origem)
+# Baylight: imagem de produção (API + frontend compilado, na mesma origem)
 
 # 1) compila o frontend
 FROM node:22-bookworm-slim AS frontend

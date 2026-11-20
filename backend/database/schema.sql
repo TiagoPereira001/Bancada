@@ -1,5 +1,5 @@
 /*
-  Bancada: gestão digital para oficinas
+  Baylight: gestão digital para oficinas
   Esquema da base de dados (SQL Server 2022)
 
   A base de dados em si é criada pelo `npm run db:setup` (scripts/db-setup.js),

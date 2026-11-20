@@ -1,4 +1,4 @@
-# Bancada: ambiente com Docker
+# Baylight: ambiente com Docker
 #
 # desenvolvimento (só a base de dados; a API e o frontend correm com npm):
 #   docker compose up -d
@@ -7,10 +7,10 @@
 #   docker compose --profile app up -d --build
 #   -> http://localhost:3000
 #
-# só nos ensaios na oficina (um tablet a abrir a Bancada pelo Wi-Fi): o
-# lançador "Iniciar Bancada na oficina.command" define BANCADA_PUBLICAR_EM=0.0.0.0
+# só nos ensaios na oficina (um tablet a abrir a Baylight pelo Wi-Fi): o
+# lançador "Iniciar Baylight na oficina.command" define BANCADA_PUBLICAR_EM=0.0.0.0
 # e BANCADA_ORIGENS (com o endereço deste computador na rede). É uma exceção
-# de uma corrida: não pôr estas duas no .env, senão a Bancada ficava aberta à
+# de uma corrida: não pôr estas duas no .env, senão a Baylight ficava aberta à
 # rede sempre que arranca. Sem HTTPS, só com dados de demonstração.
 #
 # as passwords vêm do .env na raiz (ver .env.example). Nunca escrever aqui.

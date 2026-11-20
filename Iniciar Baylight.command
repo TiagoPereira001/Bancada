@@ -1,5 +1,5 @@
 #!/bin/bash
-# Iniciar Bancada: põe a Bancada a funcionar para testes com um duplo clique
+# Iniciar Baylight: põe a Baylight a funcionar para testes com um duplo clique
 # no Finder (macOS). Só precisa do Docker Desktop: a base de dados, a API e a
 # interface correm em containers (docker compose --profile app), por isso não
 # é preciso instalar o Node.js nem escrever comandos.
@@ -7,13 +7,13 @@
 # O que faz, por esta ordem:
 #   1. abre o Docker Desktop, se estiver fechado, e espera que arranque;
 #   2. cria o .env com passwords aleatórias, se ainda não existir;
-#   3. constrói e arranca a Bancada (da primeira vez demora vários minutos);
+#   3. constrói e arranca a Baylight (da primeira vez demora vários minutos);
 #   4. cria os dados de demonstração (fictícios) e mostra como entrar;
 #   5. abre o browser em http://localhost:3000.
 # Para parar: Enter nesta janela, Ctrl + C, ou fechar a janela.
 #
-# Modo oficina (BANCADA_REDE=1, que é o que o "Iniciar Bancada na oficina.command"
-# faz): o tablet abre a Bancada pelo Wi-Fi, em http://<endereço deste computador>:3000.
+# Modo oficina (BANCADA_REDE=1, que é o que o "Iniciar Baylight na oficina.command"
+# faz): o tablet abre a Baylight pelo Wi-Fi, em http://<endereço deste computador>:3000.
 # É para o ensaio na oficina (docs/ensaio-oficina.md), só com dados de
 # demonstração: sem HTTPS, e enquanto a janela estiver aberta qualquer
 # dispositivo ligado à mesma rede lhe chega. Ao parar, o duplo clique normal
@@ -69,10 +69,10 @@ abrir() {
 compose() { docker compose --profile app "$@"; }
 
 if [ "${BANCADA_REDE:-}" = 1 ]; then
-    printf '\033]0;Bancada (modo oficina)\007'
+    printf '\033]0;Baylight (modo oficina)\007'
     printf '\n%sBANCADA%s  modo oficina: o tablet abre-a pelo Wi-Fi, só com dados de demonstração fictícios\n' "$AMBAR$NEGRITO" "$FIM"
 else
-    printf '\033]0;Bancada\007'
+    printf '\033]0;Baylight\007'
     printf '\n%sBANCADA%s  versão de testes, com dados de demonstração fictícios\n' "$AMBAR$NEGRITO" "$FIM"
 fi
 
@@ -111,13 +111,13 @@ docker compose version >/dev/null 2>&1 || falhar "Falta o docker compose." \
     "Atualiza o Docker Desktop para uma versão recente e tenta outra vez."
 ok "O Docker está a correr."
 
-# daqui para a frente, se a janela fechar ou se carregar em Ctrl + C, a Bancada
+# daqui para a frente, se a janela fechar ou se carregar em Ctrl + C, a Baylight
 # é parada antes de sair
 PARADO=0
 parar() {
     [ "$PARADO" = 1 ] && return
     PARADO=1
-    printf '\nA parar a Bancada...\n'
+    printf '\nA parar a Baylight...\n'
     compose stop >/dev/null 2>&1
     printf 'Parei. Os dados ficam guardados para a próxima vez.\n'
 }
@@ -165,10 +165,10 @@ if [ "${BANCADA_REDE:-}" = 1 ]; then
     BANCADA_PUBLICAR_EM=0.0.0.0
     BANCADA_ORIGENS="$ENDERECO,$ENDERECO_REDE"
     export BANCADA_PUBLICAR_EM BANCADA_ORIGENS
-    ok "Modo oficina: o tablet vai abrir a Bancada em $ENDERECO_REDE"
+    ok "Modo oficina: o tablet vai abrir a Baylight em $ENDERECO_REDE"
     info "Só com dados de demonstração. Enquanto esta janela estiver aberta, qualquer"
-    info "dispositivo ligado a este Wi-Fi consegue abrir a Bancada, e sem HTTPS."
-    # impede que o Mac adormeça (e a Bancada desapareça do tablet) enquanto
+    info "dispositivo ligado a este Wi-Fi consegue abrir a Baylight, e sem HTTPS."
+    # impede que o Mac adormeça (e a Baylight desapareça do tablet) enquanto
     # esta janela estiver aberta; o caffeinate termina quando o script termina
     if [ "$SISTEMA" = Darwin ] && command -v caffeinate >/dev/null 2>&1; then
         caffeinate -i -w $$ >/dev/null 2>&1 &
@@ -192,7 +192,7 @@ env_completo() {
 if [ -f .env ] && ! env_completo; then
     antigo=".env.antigo-$(date +%Y%m%d%H%M%S)"
     mv .env "$antigo"
-    info "O .env desta pasta não tinha tudo o que a Bancada precisa. Guardei-o como $antigo."
+    info "O .env desta pasta não tinha tudo o que a Baylight precisa. Guardei-o como $antigo."
 fi
 if [ -f .env ]; then
     ok "Já existe um .env nesta pasta: uso esse."
@@ -202,7 +202,7 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-passo "3/5  Arrancar a Bancada"
+passo "3/5  Arrancar a Baylight"
 if [ -n "$ENDERECO_REDE" ]; then
     info "Se o macOS perguntar se o Docker pode aceitar ligações da rede, escolhe Permitir:"
     info "é isso que deixa o tablet entrar."
@@ -267,7 +267,7 @@ recomecar() {
     resposta=$(printf '%s' "$resposta" | tr '[:lower:]' '[:upper:]')
     [ "$resposta" = APAGAR ] || falhar "Não apaguei nada." "Abre outra vez este ficheiro quando quiseres continuar."
     compose down -v
-    arrancar || falhar "A Bancada não arrancou." "Vê a mensagem acima."
+    arrancar || falhar "A Baylight não arrancou." "Vê a mensagem acima."
 }
 
 arrancar
@@ -285,13 +285,13 @@ case $? in
         info "A password do SQL Server no .env era fraca demais. Guardei-o como $fraco"
         info "e criei um novo. A arrancar outra vez..."
         compose down -v >/dev/null 2>&1
-        arrancar || falhar "A Bancada não arrancou." "Vê a mensagem acima."
+        arrancar || falhar "A Baylight não arrancou." "Vê a mensagem acima."
         ;;
     *)
         docker logs --tail 15 bancada_sql 2>&1 | sed 's/^/    /'
         dicas="Vê as mensagens acima. Se falam em «port is already allocated» ou «ports are not available», há outro programa a usar a porta 1433 ou 3000."
         [ "$(uname -m)" = arm64 ] && dicas="$dicas No Docker Desktop, confirma também que o Rosetta está ligado (Settings, General)."
-        falhar "A Bancada não arrancou." "$dicas"
+        falhar "A Baylight não arrancou." "$dicas"
         ;;
 esac
 
@@ -313,7 +313,7 @@ esperar_api() {
 }
 esperar_api
 
-# no modo oficina, confirma que a Bancada também responde pelo endereço da
+# no modo oficina, confirma que a Baylight também responde pelo endereço da
 # rede, que é o que o tablet vai usar (uma firewall pode estar a barrá-lo)
 if [ -n "$ENDERECO_REDE" ]; then
     if curl -fs --max-time 5 "$ENDERECO_REDE/api/saude" >/dev/null 2>&1; then
@@ -360,7 +360,7 @@ fi
 
 # ---------------------------------------------------------------------------
 passo "5/5  Pronto"
-printf '\n  A Bancada está a correr em %s%s%s\n' "$NEGRITO" "$ENDERECO" "$FIM"
+printf '\n  A Baylight está a correr em %s%s%s\n' "$NEGRITO" "$ENDERECO" "$FIM"
 if [ -n "$ENDERECO_REDE" ]; then
     printf '  No tablet, abre o Chrome e escreve: %s%s%s\n' "$NEGRITO" "$ENDERECO_REDE" "$FIM"
     info "Entra como gestor e, em Definições, escolhe «Usar este dispositivo como bancada»."
@@ -370,8 +370,8 @@ if [ "$novos" = 1 ]; then
     info "(São dados fictícios, só deste computador. Esta janela é o único sítio onde aparecem.)"
 fi
 abrir "$ENDERECO"
-printf '\n  Para parar a Bancada: carrega em Enter nesta janela (ou fecha-a).\n'
-# só um Enter sozinho para a Bancada: um N escrito tarde de mais, depois dos
+printf '\n  Para parar a Baylight: carrega em Enter nesta janela (ou fecha-a).\n'
+# só um Enter sozinho para a Baylight: um N escrito tarde de mais, depois dos
 # 20 segundos da pergunta, não a desliga por engano
 while read -r linha; do
     [ -z "$linha" ] && break

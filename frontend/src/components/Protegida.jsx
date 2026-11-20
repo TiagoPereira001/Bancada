@@ -5,7 +5,7 @@ import { Marca } from './Marca';
 // ecrã enquanto se confirma a sessão ao abrir a app (é muito rápido)
 export function Arranque() {
   return (
-    <div className="arranque" aria-busy="true" aria-label="A abrir a Bancada">
+    <div className="arranque" aria-busy="true" aria-label="A abrir a Baylight">
       <Marca tamanho={44} comNome={false} />
     </div>
   );

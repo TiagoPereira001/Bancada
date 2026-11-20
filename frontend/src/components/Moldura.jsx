@@ -50,7 +50,7 @@ export function Moldura() {
       <a className="saltar" href="#conteudo">Saltar para o conteúdo</a>
       <header className="topo">
         <div className="topo__barra">
-          <Link to="/" className="topo__marca" aria-label="Bancada: voltar ao quadro da oficina">
+          <Link to="/" className="topo__marca" aria-label="Baylight: voltar ao quadro da oficina">
             <Marca tamanho={30} />
           </Link>
           <span className="topo__oficina" title={oficina?.nome}>{oficina?.nome}</span>

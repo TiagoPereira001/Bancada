@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Cópia de segurança da Bancada: completa, verificada, comprimida e cifrada.
+# Cópia de segurança da Baylight: completa, verificada, comprimida e cifrada.
 # (PROPOSTA, ainda não está em uso: ver docs/infraestrutura.md)
 #
 # Uso:  infra/backup.sh [etiqueta]     (etiqueta: horaria, diaria, antes-do-deploy...)

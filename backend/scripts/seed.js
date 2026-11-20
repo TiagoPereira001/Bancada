@@ -1,5 +1,5 @@
 // dados de demonstração: cria a Duarte & Raposo, o primeiro cliente da
-// Bancada, com colaboradores, clientes, veículos e folhas de obra.
+// Baylight, com colaboradores, clientes, veículos e folhas de obra.
 //
 // ATENÇÃO: os clientes, veículos, matrículas e folhas são FICTÍCIOS. Servem
 // para experimentar a aplicação e tirar capturas de ecrã, não são dados reais.

@@ -1,4 +1,4 @@
-// gera src/components/icones.js com os ícones Phosphor que a Bancada usa,
+// gera src/components/icones.js com os ícones Phosphor que a Baylight usa,
 // e só nos pesos (regular, bold, fill) em que são usados.
 //
 // porquê: o pacote @phosphor-icons/react traz os 6 pesos de cada ícone. Com

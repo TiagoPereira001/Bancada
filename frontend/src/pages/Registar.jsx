@@ -35,7 +35,7 @@ export default function Registar() {
     setErros({});
     try {
       const resposta = await registar(dados);
-      mostrar(`Bem-vindo à Bancada, ${resposta.oficina.nome}.`);
+      mostrar(`Bem-vindo à Baylight, ${resposta.oficina.nome}.`);
       navegar('/equipa', { replace: true });
     } catch (err) {
       setErro(err.message);

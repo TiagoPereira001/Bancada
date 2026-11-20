@@ -13,8 +13,8 @@ export default defineConfig({
       injectRegister: 'script',
       includeAssets: ['favicon.svg', 'tema.js', 'icons/apple-touch-icon.png'],
       manifest: {
-        name: 'Bancada',
-        short_name: 'Bancada',
+        name: 'Baylight',
+        short_name: 'Baylight',
         description: 'Folhas de obra digitais para oficinas',
         lang: 'pt-PT',
         theme_color: '#0f1012',

@@ -2,7 +2,7 @@
   "name": "bancada-api",
   "version": "0.2.0",
   "private": true,
-  "description": "API REST da Bancada: gestão digital para oficinas",
+  "description": "API REST da Baylight: gestão digital para oficinas",
   "main": "server.js",
   "type": "commonjs",
   "engines": {

@@ -1,6 +1,6 @@
 // cria o ficheiro .env na raiz do projeto, a partir do .env.example, com as
 // passwords da base de dados e o JWT_SECRET gerados ao acaso. É o primeiro
-// passo para pôr a Bancada a funcionar num computador novo.
+// passo para pôr a Baylight a funcionar num computador novo.
 //
 // uso (na pasta do projeto, em macOS, Windows ou Linux):
 //   node backend/scripts/criar-env.js

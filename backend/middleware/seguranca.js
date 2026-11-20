@@ -3,7 +3,7 @@ const config = require('../config');
 const { ErroHttp } = require('../lib/erros');
 
 // proteção contra CSRF: um site malicioso não pode pôr o browser de um
-// gestor a fazer pedidos que alteram dados na Bancada.
+// gestor a fazer pedidos que alteram dados na Baylight.
 // 1) os cookies de sessão são SameSite=Strict (o browser não os envia em
 //    pedidos vindos de outros sites);
 // 2) e, por cima disso, pedidos que alteram dados (POST, PUT, PATCH, DELETE)

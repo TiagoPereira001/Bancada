@@ -1,4 +1,4 @@
-# Bancada: instalação num servidor (PROPOSTA, ainda não está em uso)
+# Baylight: instalação num servidor (PROPOSTA, ainda não está em uso)
 #
 # O que é: o docker-compose.yml da raiz serve para desenvolver e para testar num
 # computador. Este serve para um servidor com um domínio e HTTPS. O passo a passo
@@ -17,7 +17,7 @@
 # Ficheiro .env na raiz do servidor (criar com: node backend/scripts/criar-env.js),
 # mais estas duas linhas:
 #   COMPOSE_FILE=docker-compose.prod.yml
-#   DOMINIO=bancada.exemplo.pt
+#   DOMINIO=baylight.exemplo.pt
 # (o COMPOSE_FILE faz com que "docker compose" use sempre este ficheiro no
 # servidor, e nunca o de desenvolvimento por engano)
 #

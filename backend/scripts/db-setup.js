@@ -1,4 +1,4 @@
-// prepara a base de dados da Bancada:
+// prepara a base de dados da Baylight:
 //  1. cria a base de dados e as tabelas (database/schema.sql), se ainda não existirem
 //  2. cria o login que a API usa (DB_USER), só com permissão para ler e escrever
 //     dados, e sem permissão para apagar clientes, veículos, colaboradores,

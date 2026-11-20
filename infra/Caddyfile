@@ -1,6 +1,6 @@
 # Caddy: recebe os pedidos da internet, trata do HTTPS e passa-os à API.
 #
-# Com um domínio a sério (DOMINIO=bancada.exemplo.pt, com o DNS a apontar para
+# Com um domínio a sério (DOMINIO=baylight.exemplo.pt, com o DNS a apontar para
 # este servidor e as portas 80 e 443 abertas), o Caddy pede e renova sozinho o
 # certificado (Let's Encrypt). Com DOMINIO=localhost usa um certificado da sua
 # própria autoridade local: serve para testar num computador.

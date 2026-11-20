@@ -16,7 +16,7 @@ import '../styles/entrada.css';
 // se roda a chave (acendem todas e apagam). Fica a âmbar acesa.
 export function PainelMarca() {
   return (
-    <section className="entrada__painel" aria-label="Bancada">
+    <section className="entrada__painel" aria-label="Baylight">
       <div className="entrada__coluna entrada__coluna--painel">
         <div className="entrada__marca">
           <Marca tamanho={44} />
@@ -113,7 +113,7 @@ export default function Entrar() {
           </Botao>
 
           <p className="entrada__alternativa">
-            A tua oficina ainda não usa a Bancada? <Link to="/registar">Registar a oficina</Link>
+            A tua oficina ainda não usa a Baylight? <Link to="/registar">Registar a oficina</Link>
           </p>
           {oficina && <span className="so-leitores">{oficina.nome}</span>}
         </form>

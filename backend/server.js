@@ -5,7 +5,7 @@ const { fecharPool } = require('./db');
 const app = criarApp();
 
 const servidor = app.listen(config.porta, () => {
-    console.log(`API da Bancada a correr em http://localhost:${config.porta}`);
+    console.log(`API da Baylight a correr em http://localhost:${config.porta}`);
 });
 
 // ao parar (Ctrl+C, docker stop), deixa acabar os pedidos em curso e fecha

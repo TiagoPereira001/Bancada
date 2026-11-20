@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Teste de fumo: a Bancada publicada responde e está bem configurada.
+# Teste de fumo: a Baylight publicada responde e está bem configurada.
 # (PROPOSTA: ver docs/infraestrutura.md)
 #
-# Uso:  infra/fumo.sh https://bancada.exemplo.pt
+# Uso:  infra/fumo.sh https://baylight.exemplo.pt
 #       CACERT=/caminho/root.crt infra/fumo.sh https://localhost   (só em testes,
 #       com o certificado de uma autoridade local; nunca se desliga a verificação)
 #

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Repõe a base de dados da Bancada a partir de uma cópia de segurança
+# Repõe a base de dados da Baylight a partir de uma cópia de segurança
 # (recuperação de um desastre ou de um engano).
 # ATENÇÃO: com --substituir, apaga a base de dados que existir e põe a da cópia.
 # (PROPOSTA: ver docs/infraestrutura.md)

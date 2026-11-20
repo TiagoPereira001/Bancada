@@ -2,7 +2,7 @@
   <img src="Relatorio/Anexos/ubi-banner.png" alt="Universidade da Beira Interior" width="100%">
 </p>
 
-<h1 align="center">Bancada</h1>
+<h1 align="center">Baylight</h1>
 
 <p align="center">
   <strong>Folhas de obra digitais para oficinas.</strong><br>
@@ -13,7 +13,7 @@
   <img src="docs/imagens/aviso-em-desenvolvimento.svg" alt="Em desenvolvimento: ainda não está pronto para uso real. Todos os direitos reservados, © 2026 Tiago Dias Pereira.">
 </p>
 
-> **Em desenvolvimento.** A Bancada ainda não foi testada numa oficina e não deve ser usada com dados reais.<br>
+> **Em desenvolvimento.** A Baylight ainda não foi testada numa oficina e não deve ser usada com dados reais.<br>
 > **Todos os direitos reservados** a Tiago Dias Pereira. O código está público só para consulta: ver [Direitos de autor](#direitos-de-autor).
 
 <p align="center">
@@ -29,13 +29,13 @@
 
 ## O que é
 
-A Bancada substitui as folhas de obra em papel das oficinas. Cada entrada de um veículo passa a ser uma folha digital. Os mecânicos registam as peças e as horas à medida que trabalham, e o gestor vê o que está na oficina, em que estado, quanto vale o trabalho e quem o fez.
+A Baylight substitui as folhas de obra em papel das oficinas. Cada entrada de um veículo passa a ser uma folha digital. Os mecânicos registam as peças e as horas à medida que trabalham, e o gestor vê o que está na oficina, em que estado, quanto vale o trabalho e quem o fez.
 
 O projeto nasceu na oficina **Duarte & Raposo** (Canhoso, Covilhã), especializada em mecânica, eletricidade e autocaravanas, onde as folhas de papel se perdiam, se sujavam e obrigavam a fazer as contas à mão. Começou como um sistema só para essa oficina e passou a servir **qualquer oficina**: cada uma regista-se sozinha e só vê os seus dados. A Duarte & Raposo é o primeiro cliente.
 
-A descrição completa do produto (utilizadores, percurso de um carro pela oficina, o que existe e o que ainda não existe) está no [`PRODUCT.md`](PRODUCT.md). A arquitetura para a Bancada durar e crescer (PostgreSQL com isolamento por oficina, TypeScript, auditoria, produção no meu servidor) está decidida no [ADR 0001](docs/adr/0001-arquitetura-para-durar.md) e ainda **não** está feita. O projeto inteiro (visão, decisões, caminho e produto) está em [`docs/PROJETO-BANCADA.md`](docs/PROJETO-BANCADA.md).
+A descrição completa do produto (utilizadores, percurso de um carro pela oficina, o que existe e o que ainda não existe) está no [`PRODUCT.md`](PRODUCT.md). A arquitetura para a Baylight durar e crescer (PostgreSQL com isolamento por oficina, TypeScript, auditoria, produção no meu servidor) está decidida no [ADR 0001](docs/adr/0001-arquitetura-para-durar.md) e ainda **não** está feita. O projeto inteiro (visão, decisões, caminho e produto) está em [`docs/PROJETO-BAYLIGHT.md`](docs/PROJETO-BAYLIGHT.md).
 
-**Para a experimentares:** num Mac, faz duplo clique em [`Iniciar Bancada.command`](#no-mac-com-um-duplo-clique) (só precisas do Docker Desktop). No Windows, ou se queres mexer no código, segue o guia [Como pôr a Bancada a funcionar](#como-pôr-a-bancada-a-funcionar).
+**Para a experimentares:** num Mac, faz duplo clique em [`Iniciar Baylight.command`](#no-mac-com-um-duplo-clique) (só precisas do Docker Desktop). No Windows, ou se queres mexer no código, segue o guia [Como pôr a Baylight a funcionar](#como-pôr-a-bancada-a-funcionar).
 
 ## Funcionalidades
 
@@ -57,7 +57,7 @@ A descrição completa do produto (utilizadores, percurso de um carro pela ofici
 - **Registo público** de oficinas novas.
 - **Temas claro e escuro.** Pensada para tablet (alvos de toque grandes), funciona também no computador e no telemóvel. É uma PWA: pode ser instalada no ecrã inicial.
 
-A Bancada **não emite faturas**: em Portugal, isso exige software certificado pela Autoridade Tributária. Calcula os totais e o IVA; a fatura é emitida no programa de faturação da oficina.
+A Baylight **não emite faturas**: em Portugal, isso exige software certificado pela Autoridade Tributária. Calcula os totais e o IVA; a fatura é emitida no programa de faturação da oficina.
 
 <p align="center">
   <img src="docs/imagens/folha.png" alt="Folha de obra com linhas, totais com IVA e notas" width="49%">
@@ -72,7 +72,7 @@ A Bancada **não emite faturas**: em Portugal, isso exige software certificado p
 - interface completa para tablet, computador e telemóvel;
 - 54 testes automáticos contra um SQL Server real;
 - integração contínua no GitHub;
-- arranque para testes com um duplo clique no Mac (`Iniciar Bancada.command`);
+- arranque para testes com um duplo clique no Mac (`Iniciar Baylight.command`);
 - auditoria de qualidade, segurança, desempenho e acessibilidade (repetida a 28/09/2026 sobre a versão atual) e revisão de código, com as provas e os scripts para as repetir;
 - proposta de publicação num servidor (HTTPS, cópias de segurança cifradas, restauro, retrocesso), validada numa cópia em `localhost`;
 - documentação e relatório.
@@ -118,27 +118,27 @@ A análise completa (o que foi encontrado, o risco e o que mudou) está em [`doc
 
 Seis tabelas: `Oficina`, `Colaborador`, `Cliente`, `Veiculo`, `Folha_Obra` e `Linha_Reparacao`. O esquema está em [`backend/database/schema.sql`](backend/database/schema.sql), com comentários a explicar cada decisão, e o diagrama no anexo do relatório.
 
-## Como pôr a Bancada a funcionar
+## Como pôr a Baylight a funcionar
 
-Este guia leva-te de um computador sem nada instalado até à Bancada aberta no browser, com dados de demonstração (clientes, veículos e folhas fictícios). Serve para **macOS** e para **Windows**. Não precisas de saber programar: basta copiar os comandos, um de cada vez, e confirmar que aparece o que o guia diz. Se alguma coisa correr mal, procura a mensagem de erro em [Problemas comuns](#problemas-comuns).
+Este guia leva-te de um computador sem nada instalado até à Baylight aberta no browser, com dados de demonstração (clientes, veículos e folhas fictícios). Serve para **macOS** e para **Windows**. Não precisas de saber programar: basta copiar os comandos, um de cada vez, e confirmar que aparece o que o guia diz. Se alguma coisa correr mal, procura a mensagem de erro em [Problemas comuns](#problemas-comuns).
 
 Qual caminho escolher:
 
 | Se tens... | e queres... | Faz |
 |---|---|---|
-| um **Mac** | só experimentar a Bancada | [duplo clique em `Iniciar Bancada.command`](#no-mac-com-um-duplo-clique): só precisas do Docker Desktop |
-| um **Windows** | só experimentar a Bancada | o [passo a passo](#passo-a-passo-primeira-vez) com a [alternativa tudo em containers](#alternativa-tudo-em-containers) (ainda não há um script de duplo clique para o Windows) |
-| um **Mac** e um **tablet Android** na oficina | o ensaio com os mecânicos (dados fictícios) | [duplo clique em `Iniciar Bancada na oficina.command`](#no-mac-para-o-ensaio-na-oficina) e o guia [`docs/ensaio-oficina.md`](docs/ensaio-oficina.md) |
+| um **Mac** | só experimentar a Baylight | [duplo clique em `Iniciar Baylight.command`](#no-mac-com-um-duplo-clique): só precisas do Docker Desktop |
+| um **Windows** | só experimentar a Baylight | o [passo a passo](#passo-a-passo-primeira-vez) com a [alternativa tudo em containers](#alternativa-tudo-em-containers) (ainda não há um script de duplo clique para o Windows) |
+| um **Mac** e um **tablet Android** na oficina | o ensaio com os mecânicos (dados fictícios) | [duplo clique em `Iniciar Baylight na oficina.command`](#no-mac-para-o-ensaio-na-oficina) e o guia [`docs/ensaio-oficina.md`](docs/ensaio-oficina.md) |
 | um Mac ou um Windows | mexer no código | o [início rápido](#início-rápido-para-quem-já-tem-docker-desktop-nodejs-22-e-git) ou o passo a passo |
 
 A primeira vez demora mais, porque há programas para instalar e a base de dados para descarregar. Da segunda vez em diante é muito mais rápido: ver [Da próxima vez](#da-próxima-vez).
 
 ### No Mac, com um duplo clique
 
-Para experimentar a Bancada num Mac só precisas do **Docker Desktop**. Não é preciso instalar o Node.js nem escrever comandos. É a forma mais simples de a testar, e serve as vezes que quiseres: da segunda vez em diante, é só outro duplo clique. É só para testes no teu computador (não publica nada na internet).
+Para experimentar a Baylight num Mac só precisas do **Docker Desktop**. Não é preciso instalar o Node.js nem escrever comandos. É a forma mais simples de a testar, e serve as vezes que quiseres: da segunda vez em diante, é só outro duplo clique. É só para testes no teu computador (não publica nada na internet).
 
 1. Instala o Docker Desktop (passo 1, no macOS) e descarrega o projeto (passo 2).
-2. Abre a pasta do projeto no Finder e faz duplo clique em **`Iniciar Bancada.command`**.
+2. Abre a pasta do projeto no Finder e faz duplo clique em **`Iniciar Baylight.command`**.
 3. Abre-se uma janela do Terminal que trata de tudo:
    - abre o Docker Desktop, se estiver fechado;
    - cria o `.env` com passwords aleatórias;
@@ -159,16 +159,16 @@ A janela também resolve sozinha os problemas mais comuns:
 
 > **Se o macOS não deixar abrir o ficheiro** ("programador não identificado"): acontece quando o projeto veio num ZIP descarregado pelo browser. Carrega com o botão direito no ficheiro, depois em *Abrir* e outra vez em *Abrir*. Nas versões mais recentes do macOS, vai a *Definições do Sistema* → *Privacidade e segurança*: mais abaixo aparece um botão para o abrir na mesma.
 >
-> **Se o duplo clique abrir o ficheiro num editor de texto** em vez de o correr: no Terminal, na pasta do projeto, escreve `chmod +x "Iniciar Bancada.command"` e tenta outra vez.
+> **Se o duplo clique abrir o ficheiro num editor de texto** em vez de o correr: no Terminal, na pasta do projeto, escreve `chmod +x "Iniciar Baylight.command"` e tenta outra vez.
 
 ### No Mac, para o ensaio na oficina
 
-Para um tablet (ou um telemóvel) abrir a Bancada pelo Wi-Fi, a partir do teu Mac, faz duplo clique em **`Iniciar Bancada na oficina.command`**. Faz o mesmo que o outro ficheiro, e mais isto:
+Para um tablet (ou um telemóvel) abrir a Baylight pelo Wi-Fi, a partir do teu Mac, faz duplo clique em **`Iniciar Baylight na oficina.command`**. Faz o mesmo que o outro ficheiro, e mais isto:
 - descobre o endereço do Mac na rede e mostra-o (`http://192.168...:3000`), para o escreveres no Chrome do tablet;
 - abre a porta 3000 à rede local **só nessa corrida** (a base de dados continua só no Mac) e aceita esse endereço como origem dos pedidos;
 - pede ao Mac que não adormeça enquanto a janela estiver aberta.
 
-É só com os dados de demonstração e **sem HTTPS**: enquanto a janela estiver aberta, qualquer aparelho ligado ao mesmo Wi-Fi consegue abrir a Bancada (a janela avisa). Sem HTTPS o Chrome também não a instala como app: abre num separador. Ao parar, e no duplo clique normal, a porta volta a ficar só no Mac. O que se diz acima sobre o macOS não deixar abrir o ficheiro vale também para este. O guia do dia, com o guião para os mecânicos, está em [`docs/ensaio-oficina.md`](docs/ensaio-oficina.md).
+É só com os dados de demonstração e **sem HTTPS**: enquanto a janela estiver aberta, qualquer aparelho ligado ao mesmo Wi-Fi consegue abrir a Baylight (a janela avisa). Sem HTTPS o Chrome também não a instala como app: abre num separador. Ao parar, e no duplo clique normal, a porta volta a ficar só no Mac. O que se diz acima sobre o macOS não deixar abrir o ficheiro vale também para este. O guia do dia, com o guião para os mecânicos, está em [`docs/ensaio-oficina.md`](docs/ensaio-oficina.md).
 
 ### Início rápido (para quem já tem Docker Desktop, Node.js 22 e Git)
 
@@ -210,7 +210,7 @@ Os comandos são iguais no macOS e no Windows, exceto quando o guia diz o contr�
 | Programa | Para quê |
 |---|---|
 | **Docker Desktop** | corre a base de dados (SQL Server) dentro de um *container*, uma espécie de caixa isolada, sem a instalar no computador. É gratuito para uso pessoal e para ensino |
-| **Node.js 22** | corre a API e a interface da Bancada. A versão 22 é a que os testes automáticos usam |
+| **Node.js 22** | corre a API e a interface da Baylight. A versão 22 é a que os testes automáticos usam |
 | **Git** | descarrega o projeto do GitHub (também dá para usar um ZIP: ver o passo 2) |
 
 <details>
@@ -272,7 +272,7 @@ O primeiro cria a pasta `Projeto_final_UBI`, com o projeto lá dentro; o segundo
 
 #### Passo 3: criar o ficheiro de configuração (`.env`)
 
-A Bancada precisa de um ficheiro chamado `.env`, com as passwords da base de dados e um segredo para as sessões. Este comando cria-o com valores aleatórios e seguros, só para o teu computador:
+A Baylight precisa de um ficheiro chamado `.env`, com as passwords da base de dados e um segredo para as sessões. Este comando cria-o com valores aleatórios e seguros, só para o teu computador:
 
 ```bash
 node backend/scripts/criar-env.js
@@ -339,7 +339,7 @@ npm run dev
 | `npm install` | descarrega as bibliotecas de que a API precisa (só da primeira vez) | `added ... packages` e, normalmente, `found 0 vulnerabilities` |
 | `npm run db:setup` | cria a base de dados, as tabelas e o login que a API usa | `Base de dados Bancada pronta. A API entra como bancada_app.` Antes disso pode aparecer `À espera do SQL Server (1/20)...`, o que é normal |
 | `npm run db:seed` | cria a oficina Duarte & Raposo com clientes, veículos e folhas **fictícios** | o email e a password do gestor, os PINs de três mecânicos e `Guarda estes dados: não voltam a ser mostrados.` |
-| `npm run dev` | arranca a API | `API da Bancada a correr em http://localhost:3000` |
+| `npm run dev` | arranca a API | `API da Baylight a correr em http://localhost:3000` |
 
 Se já tinhas feito este passo antes, o `db:setup` diz `A base de dados Bancada já existia: só atualizei o login bancada_app.` (está certo) e o `db:seed` diz `Já existe uma conta ...` (ver [Recomeçar do zero](#recomeçar-do-zero)).
 
@@ -347,9 +347,9 @@ Se já tinhas feito este passo antes, o `db:setup` diz `A base de dados Bancada 
 
 **Deixa este terminal aberto**, com a API a correr: se o fechares, a API desliga-se.
 
-> Se o sistema perguntar se o Node.js pode aceitar ligações da rede (a Firewall do Windows, ou a do macOS se a tiveres ligada), podes recusar (*Cancelar*): a Bancada funciona na mesma neste computador.
+> Se o sistema perguntar se o Node.js pode aceitar ligações da rede (a Firewall do Windows, ou a do macOS se a tiveres ligada), podes recusar (*Cancelar*): a Baylight funciona na mesma neste computador.
 
-#### Passo 6: abrir a Bancada
+#### Passo 6: abrir a Baylight
 
 1. Abre um **segundo** terminal: no macOS, com o Terminal à frente, carrega em `Cmd + N` (janela nova); no Windows, abre outro PowerShell pelo menu Iniciar. O terminal novo abre na tua pasta pessoal, por isso entra outra vez na pasta do projeto e arranca a interface, um comando de cada vez:
 
@@ -371,7 +371,7 @@ Para experimentar o **modo bancada** (o tablet partilhado dos mecânicos): *Defi
 
 ### Da próxima vez
 
-**No Mac com o duplo clique:** faz outra vez duplo clique em `Iniciar Bancada.command`. Não é preciso mais nada.
+**No Mac com o duplo clique:** faz outra vez duplo clique em `Iniciar Baylight.command`. Não é preciso mais nada.
 
 No resto dos casos, com o Docker Desktop aberto (e a dizer Engine running):
 
@@ -400,9 +400,9 @@ Não é preciso repetir o `npm install`, o `db:setup` nem o `db:seed`.
 
 ### Alternativa: tudo em containers
 
-(No Mac, o `Iniciar Bancada.command` faz tudo isto por ti, incluindo o `.env`.)
+(No Mac, o `Iniciar Baylight.command` faz tudo isto por ti, incluindo o `.env`.)
 
-Em vez dos passos 5 e 6, o Docker pode correr também a API e a interface já compilada. Serve para experimentar a Bancada sem instalar o Node.js, mas as alterações ao código só aparecem depois de voltar a construir tudo. Precisas na mesma do `.env` do passo 3 (sem Node.js, cria-o à mão). Não uses este modo ao mesmo tempo que os passos 5 e 6: a porta 3000 é a mesma. No Mac, o [`Iniciar Bancada.command`](#no-mac-com-um-duplo-clique) faz isto tudo com um duplo clique.
+Em vez dos passos 5 e 6, o Docker pode correr também a API e a interface já compilada. Serve para experimentar a Baylight sem instalar o Node.js, mas as alterações ao código só aparecem depois de voltar a construir tudo. Precisas na mesma do `.env` do passo 3 (sem Node.js, cria-o à mão). Não uses este modo ao mesmo tempo que os passos 5 e 6: a porta 3000 é a mesma. No Mac, o [`Iniciar Baylight.command`](#no-mac-com-um-duplo-clique) faz isto tudo com um duplo clique.
 
 ```bash
 docker compose --profile app up -d --build
@@ -410,7 +410,7 @@ docker exec bancada_app node backend/scripts/seed.js
 ```
 
 1. O primeiro comando constrói a aplicação (da primeira vez demora uns minutos) e arranca-a com a base de dados.
-2. Antes do segundo, espera que `docker logs bancada_app` mostre `API da Bancada a correr em http://localhost:3000`: a API só arranca depois de preparar a base de dados.
+2. Antes do segundo, espera que `docker logs bancada_app` mostre `API da Baylight a correr em http://localhost:3000`: a API só arranca depois de preparar a base de dados.
 3. O segundo cria os dados de demonstração e mostra o email, a password e os PINs.
 4. Abre **http://localhost:3000** (neste modo é a porta 3000, não a 5173).
 
@@ -468,7 +468,7 @@ Dica: procura nesta página (`Cmd + F` no Mac, `Ctrl + F` no Windows) um pedaço
 #### Na API e no browser
 
 12. **`EADDRINUSE: address already in use`** com a porta `3000` (API), ou o `npm run dev` do frontend diz **`Port 5173 is in use, trying another one...`** e abre noutra porta (`5174`...).<br>
-    Há outro programa a usar essa porta, muitas vezes um terminal antigo da Bancada (ou o modo tudo em containers, na porta 3000: para-o com `docker compose --profile app stop`). Fecha-o, para este com `Ctrl + C` e volta a correr `npm run dev`. A interface tem de ficar em `http://localhost:5173`: noutra porta, a entrada falha (problema 13).
+    Há outro programa a usar essa porta, muitas vezes um terminal antigo da Baylight (ou o modo tudo em containers, na porta 3000: para-o com `docker compose --profile app stop`). Fecha-o, para este com `Ctrl + C` e volta a correr `npm run dev`. A interface tem de ficar em `http://localhost:5173`: noutra porta, a entrada falha (problema 13).
 13. **No login aparece `Pedido recusado: origem não permitida.`**<br>
     A página foi aberta noutro endereço. Abre exatamente http://localhost:5173 (no modo tudo em containers, http://localhost:3000), com `localhost` e não `127.0.0.1`. Se o Vite abriu noutra porta, vê o problema 12.
 14. **No login aparece `Erro 502. Tenta outra vez.`, ou o browser diz que não consegue abrir a página.**
@@ -490,7 +490,7 @@ Dica: procura nesta página (`Cmd + F` no Mac, `Ctrl + F` no Windows) um pedaço
 | [`docs/analise.md`](docs/analise.md) | análise de segurança, desempenho e viabilidade |
 | [`docs/auditoria.md`](docs/auditoria.md) | auditoria de qualidade, segurança, desempenho e acessibilidade (27/09/2026, repetida a 28/09/2026 na secção 14), com os scripts para a repetir |
 | [`docs/ensaio-oficina.md`](docs/ensaio-oficina.md) | o plano do ensaio na oficina com os mecânicos (tablet Android, dados fictícios): preparar, montar, guião, o que anotar. Ainda não realizado |
-| [`docs/infraestrutura.md`](docs/infraestrutura.md) | infraestrutura e publicação: proposta validada numa cópia (HTTPS, SQL Server Express, cópias de segurança, restauro, retrocesso). A Bancada ainda não está publicada |
+| [`docs/infraestrutura.md`](docs/infraestrutura.md) | infraestrutura e publicação: proposta validada numa cópia (HTTPS, SQL Server Express, cópias de segurança, restauro, retrocesso). A Baylight ainda não está publicada |
 | [`docs/revisao-codigo.md`](docs/revisao-codigo.md) | revisão de código e dívida técnica (27/09/2026): bugs encontrados, plano de refatoração por fases e exemplos validados, com as provas |
 | [`Relatorio/`](Relatorio/) | relatório do projeto e documento das ferramentas usadas (e porquê), em LaTeX, com os PDF compilados |
 
@@ -516,7 +516,7 @@ Dica: procura nesta página (`Cmd + F` no Mac, `Ctrl + F` no Windows) um pedaço
 ├── CLAUDE.md           memória do projeto para o Claude Code
 ├── AGENTS.md           ponto de entrada para outros agentes (aponta para o AI.md)
 ├── LICENSE             todos os direitos reservados
-├── Iniciar Bancada.command   arranque com duplo clique no Mac (tudo em containers)
+├── Iniciar Baylight.command   arranque com duplo clique no Mac (tudo em containers)
 ├── docker-compose.yml
 ├── docker-compose.prod.yml   proposta para um servidor (ainda não em uso)
 └── Dockerfile

@@ -76,7 +76,7 @@ export class Cliente {
 
 // consulta ao SQL Server como administrador, dentro do container (só na
 // preparação de casos que a API não deixa criar, como datas no passado)
-export function sql(consulta, bd = 'Bancada') {
+export function sql(consulta, bd = 'Baylight') {
     const saida = execFileSync('docker', [
         'exec', process.env.SQL_CONTAINER || 'bancada_sql', '/opt/mssql-tools18/bin/sqlcmd', '-S', 'localhost', '-U', 'sa',
         '-P', process.env.DB_ADMIN_PASSWORD, '-C', '-b', '-I', '-d', bd, '-h', '-1', '-W', '-s', '|', '-Q',

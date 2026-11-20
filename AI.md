@@ -2,7 +2,7 @@
 
 Este ficheiro é o ponto de partida para qualquer agente de IA (Claude, Codex, Cursor, Copilot...) que abra este repositório. Diz onde está cada coisa, que regras não se podem partir e como fazer as tarefas mais comuns. Lê-o antes de mexer no código.
 
-- **O projeto inteiro num só documento** (visão, decisões, arquitetura, caminho, produto, regras): [`docs/PROJETO-BANCADA.md`](docs/PROJETO-BANCADA.md)
+- **O projeto inteiro num só documento** (visão, decisões, arquitetura, caminho, produto, regras): [`docs/PROJETO-BAYLIGHT.md`](docs/PROJETO-BAYLIGHT.md)
 - Produto e utilizadores: [`PRODUCT.md`](PRODUCT.md)
 - Decisões já tomadas e estado atual: [`CLAUDE.md`](CLAUDE.md)
 - Sistema visual: [`DESIGN.md`](DESIGN.md)
@@ -11,7 +11,7 @@ Este ficheiro é o ponto de partida para qualquer agente de IA (Claude, Codex, C
 
 ## O que é
 
-**Bancada**: gestão digital de folhas de obra para oficinas. Substitui as folhas em papel: entrada do veículo, peças e horas registadas à medida que se trabalha, estado da reparação, totais com IVA e histórico por veículo e cliente. É **multi-oficina** (cada oficina só vê os seus dados). O primeiro cliente é a oficina Duarte & Raposo (Canhoso, Covilhã), especializada em autocaravanas.
+**Baylight**: gestão digital de folhas de obra para oficinas. Substitui as folhas em papel: entrada do veículo, peças e horas registadas à medida que se trabalha, estado da reparação, totais com IVA e histórico por veículo e cliente. É **multi-oficina** (cada oficina só vê os seus dados). O primeiro cliente é a oficina Duarte & Raposo (Canhoso, Covilhã), especializada em autocaravanas.
 
 Projeto pessoal do Tiago Dias Pereira (nº 55019), que nasceu como projeto final de licenciatura (Informática Web, Móvel e na Nuvem, UBI). Arquitetura alvo: [ADR 0001](docs/adr/0001-arquitetura-para-durar.md). O código, os comentários e a interface estão em português de Portugal.
 
@@ -26,8 +26,8 @@ Projeto pessoal do Tiago Dias Pereira (nº 55019), que nasceu como projeto final
 ├── DESIGN.md                  tokens e regras visuais (formato DESIGN.md do Google Stitch)
 ├── README.md                  instalação e visão geral
 ├── LICENSE                    todos os direitos reservados ao autor (não é código aberto)
-├── Iniciar Bancada.command    arranque para testes com duplo clique no macOS (bash 3.2, tudo em containers)
-├── Iniciar Bancada na oficina.command   o mesmo em "modo oficina" (BANCADA_REDE=1): o tablet abre a Bancada pelo Wi-Fi. Ver docs/ensaio-oficina.md
+├── Iniciar Baylight.command    arranque para testes com duplo clique no macOS (bash 3.2, tudo em containers)
+├── Iniciar Baylight na oficina.command   o mesmo em "modo oficina" (BANCADA_REDE=1): o tablet abre a Baylight pelo Wi-Fi. Ver docs/ensaio-oficina.md
 ├── docker-compose.yml         SQL Server (e, com --profile app, a app completa)
 ├── Dockerfile                 imagem de produção: API + frontend compilado
 ├── docker-compose.prod.yml    PROPOSTA de instalação num servidor (Caddy + API + SQL Server Express); ainda não está em uso
@@ -99,15 +99,15 @@ browser ──> /api/*  ──> helmet (CSP) ─> rate limit ─> JSON ─> cook
 7. **Sem segredos no código.** Tudo vem do `.env` (ver `.env.example`). Uma password e um `JWT_SECRET` antigos estiveram expostos no histórico do git: nunca os reutilizar.
 8. **Uma folha entregue fica fechada.** Só um gestor a reabre (mudando o estado); linhas e notas não se alteram enquanto está entregue.
 9. **Content-Security-Policy rigorosa.** Nada de scripts ou estilos inline, nem recursos externos (fontes, CDNs, imagens). Fontes e ícones são locais.
-10. **A Bancada não emite faturas.** Em Portugal a faturação exige software certificado pela AT. A app calcula totais e IVA; a fatura sai do programa de faturação da oficina. Não acrescentar "emitir fatura" sem essa certificação.
-11. **Nenhuma porta aberta à rede por omissão.** O `docker-compose.yml` só publica a API (3000) e a base de dados (1433) em `127.0.0.1`. A única exceção é o ensaio na oficina: o `Iniciar Bancada na oficina.command` define `BANCADA_PUBLICAR_EM=0.0.0.0` e `BANCADA_ORIGENS` só nessa corrida (sem HTTPS, só com dados fictícios). Nunca pôr estas variáveis no `.env`, e a porta da base de dados nunca sai de `127.0.0.1`.
+10. **A Baylight não emite faturas.** Em Portugal a faturação exige software certificado pela AT. A app calcula totais e IVA; a fatura sai do programa de faturação da oficina. Não acrescentar "emitir fatura" sem essa certificação.
+11. **Nenhuma porta aberta à rede por omissão.** O `docker-compose.yml` só publica a API (3000) e a base de dados (1433) em `127.0.0.1`. A única exceção é o ensaio na oficina: o `Iniciar Baylight na oficina.command` define `BANCADA_PUBLICAR_EM=0.0.0.0` e `BANCADA_ORIGENS` só nessa corrida (sem HTTPS, só com dados fictícios). Nunca pôr estas variáveis no `.env`, e a porta da base de dados nunca sai de `127.0.0.1`.
 
 ## Convenções
 
 - **Português de Portugal** em código, comentários e interface ("registar", "ecrã", "utilizador"). Comentários explicam o *porquê*, em minúsculas e tom direto, como no resto do código.
 - **Base de dados**: tabelas no singular (`Folha_Obra`), colunas `Pascal_Com_Underscore`, códigos em minúsculas sem acentos (`em_curso`, `mao_de_obra`, `gestor`).
 - **API**: JSON em `camelCase` (`clienteId`, `valorUnitario`); listas devolvem `{ itens, total, pagina, porPagina }`; erros `{ erro, campos? }`.
-- **Frontend**: os nomes bonitos dos códigos vivem em `src/lib/formatar.js`. Dados de rede via `useRecurso(caminho, { intervalo, memoria })`; `memoria` guarda a última resposta para o ecrã aparecer logo ao voltar, e limpa-se sempre que a sessão muda (nunca a usar para dados que uma pessoa não deva ver depois de outra). `definirDados` (a resposta de uma alteração) deita fora o pedido de atualização que vá a caminho: sem isso, os dados de antes desfaziam no ecrã a alteração que acabou de ser gravada. Se um pedido de atualização falhar, ficam os dados e o `erro`, e `atualizadoEm` (ms do último pedido que chegou) diz de quando são: `SemLigacao` (`Situacoes`) escreve "Estes números são de há N min" no ecrã de descanso e no quadro, em vez de os afirmar como de agora. O título do separador vem de `useTitulo('Histórico')` (`src/lib/useTitulo.js`, dá "Histórico | Bancada"): cada página chama-o no topo, antes de qualquer `return` antecipado. `api.get` e `api.patch` aceitam `{ tempoLimite }` (ms) para desistir de um pedido sem resposta: só o pedem os gestos em que ficar pendurado bloqueia alguém (hoje, a mudança de estado da folha, 15 s). Ícones importam-se de `src/components/icones.js` (gerado; para um ícone novo, acrescentar a `scripts/gerar-icones.mjs` e correr `npm run icones`).
+- **Frontend**: os nomes bonitos dos códigos vivem em `src/lib/formatar.js`. Dados de rede via `useRecurso(caminho, { intervalo, memoria })`; `memoria` guarda a última resposta para o ecrã aparecer logo ao voltar, e limpa-se sempre que a sessão muda (nunca a usar para dados que uma pessoa não deva ver depois de outra). `definirDados` (a resposta de uma alteração) deita fora o pedido de atualização que vá a caminho: sem isso, os dados de antes desfaziam no ecrã a alteração que acabou de ser gravada. Se um pedido de atualização falhar, ficam os dados e o `erro`, e `atualizadoEm` (ms do último pedido que chegou) diz de quando são: `SemLigacao` (`Situacoes`) escreve "Estes números são de há N min" no ecrã de descanso e no quadro, em vez de os afirmar como de agora. O título do separador vem de `useTitulo('Histórico')` (`src/lib/useTitulo.js`, dá "Histórico | Baylight"): cada página chama-o no topo, antes de qualquer `return` antecipado. `api.get` e `api.patch` aceitam `{ tempoLimite }` (ms) para desistir de um pedido sem resposta: só o pedem os gestos em que ficar pendurado bloqueia alguém (hoje, a mudança de estado da folha, 15 s). Ícones importam-se de `src/components/icones.js` (gerado; para um ícone novo, acrescentar a `scripts/gerar-icones.mjs` e correr `npm run icones`).
 - **Confirmações**: o que fecha ou apaga pede um segundo toque no próprio botão, nunca uma janela modal (`BotaoConfirmar`; e "Entregue" no seletor de estado da folha, que também pede confirmação para reabrir). A pergunta caduca ao fim de `TEMPO_CONFIRMACAO` (`components/Botao.jsx`).
 - **Direitos**: todos os direitos reservados ao autor (`LICENSE`). Não copiar código de terceiros sem confirmar que a licença o permite, e manter o aviso de autor quando a licença o exige (MIT, Apache).
 - **Texto da interface**: frases curtas, sem travessões (—), mensagens de erro dizem o problema e como resolver.
@@ -136,8 +136,8 @@ cd frontend && npm run lint && npm run build
 
 # tudo em containers (produção local)
 docker compose --profile app up -d --build   # http://localhost:3000
-./Iniciar\ Bancada.command                   # o mesmo, para testes: abre o Docker, cria o .env e os dados, abre o browser
-./Iniciar\ Bancada\ na\ oficina.command      # o mesmo, mas o tablet abre a Bancada pelo Wi-Fi (ensaio na oficina, só dados fictícios)
+./Iniciar\ Baylight.command                   # o mesmo, para testes: abre o Docker, cria o .env e os dados, abre o browser
+./Iniciar\ Baylight\ na\ oficina.command      # o mesmo, mas o tablet abre a Baylight pelo Wi-Fi (ensaio na oficina, só dados fictícios)
 ```
 
 Os testes precisam de um SQL Server a correr e das variáveis `DB_ADMIN_PASSWORD` e `DB_PASSWORD` (do `.env`). Usam uma base de dados própria, `Bancada_Teste`, apagada e recriada em cada ficheiro de testes.
@@ -195,6 +195,7 @@ Para não assumir funcionalidades que não há:
 
 | Termo | Significado |
 |---|---|
+| Baylight | o nome do produto desde 20/11/2026 (antes chamava-se Bancada). Em português usa-se no feminino ("a Baylight") |
 | Oficina | a empresa cliente da plataforma (o "tenant") |
 | Colaborador | pessoa da oficina: `gestor` ou `mecanico` |
 | Folha de obra | a ficha de uma entrada de um veículo na oficina (numerada por oficina) |

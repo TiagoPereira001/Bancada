@@ -1,6 +1,6 @@
 // gera o aviso do topo do README (aviso-em-desenvolvimento.svg).
 //
-// O texto passa a contornos com a letra da Bancada (Barlow e Barlow
+// O texto passa a contornos com a letra da Baylight (Barlow e Barlow
 // Condensed, do node_modules do frontend), para o aviso ficar igual em
 // qualquer computador: o GitHub mostra o SVG como imagem e não carrega letras.
 //

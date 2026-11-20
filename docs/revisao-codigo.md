@@ -1,6 +1,6 @@
 # Revisão de código e dívida técnica
 
-Revisão de todo o código da Bancada (backend, frontend, esquema da base de dados, scripts e testes), feita a 27/09/2026 a pedido do autor, com os guiões de revisão de código profissional e de refatoração que ele forneceu. O código revisto é o do `dev` nesse dia (commit `2ea6ba7`).
+Revisão de todo o código da Baylight (backend, frontend, esquema da base de dados, scripts e testes), feita a 27/09/2026 a pedido do autor, com os guiões de revisão de código profissional e de refatoração que ele forneceu. O código revisto é o do `dev` nesse dia (commit `2ea6ba7`).
 
 Complementa a [auditoria](auditoria.md). A auditoria testou o comportamento da aplicação de fora; esta revisão lê o código por dentro. Quando um problema já está na auditoria, aponto para ele em vez de o repetir.
 
@@ -52,7 +52,7 @@ Os locais aparecem como `ficheiro:linha`, no commit revisto. As caixas **Para ap
 
 ### O que o código faz e como está organizado
 
-A Bancada é uma aplicação web de folhas de obra para oficinas: cada oficina vê só os seus dados. O código divide-se assim:
+A Baylight é uma aplicação web de folhas de obra para oficinas: cada oficina vê só os seus dados. O código divide-se assim:
 
 ```text
 browser (React 19, PWA)
@@ -281,7 +281,7 @@ Cada caso: como está → o problema → a proposta.
 | Problema | As notas (quilómetros, observações, conselhos) são copiadas para o estado do formulário **uma vez**, quando a folha abre. A folha atualiza-se sozinha de 30 em 30 segundos (`Folha.jsx:23`), mas o formulário não. Quando um colega grava noutro dispositivo, este ecrã continua com o texto antigo. O botão "Guardar notas" acende como se alguém tivesse mexido, porque o texto antigo é diferente do que veio do servidor. Ao guardar, o `PATCH` leva os **três** campos, e o texto antigo substitui o do colega. |
 | Porquê | O `useState(valorInicial)` só usa o valor inicial na primeira renderização. |
 | Prova | `provas/estado-antigo.mjs`, com o gestor no computador e um mecânico no tablet, na mesma folha:<br>1. o gestor grava uma observação nova;<br>2. o tablet volta a pedir a folha e **recebe o texto novo**, mas o campo continua a mostrar "Texto original da entrada";<br>3. "Guardar notas" está ativo sem ninguém mexer;<br>4. o mecânico escreve só um conselho e guarda;<br>5. **as observações voltam a "Texto original da entrada" e a nota do gestor perde-se, sem aviso.** |
-| Porque é ALTA | Perde-se texto que uma pessoa escreveu, sem aviso nem forma de o recuperar (não há histórico), no cenário para que a Bancada foi feita: um tablet na oficina e um computador no escritório, com atualização automática. O botão aceso até convida ao erro. |
+| Porque é ALTA | Perde-se texto que uma pessoa escreveu, sem aviso nem forma de o recuperar (não há histórico), no cenário para que a Baylight foi feita: um tablet na oficina e um computador no escritório, com atualização automática. O botão aceso até convida ao erro. |
 | Correção | Guardar só os campos que a pessoa editou e mostrar o resto a partir da folha. 18 linhas novas, validado: [exemplo 15.2](#152-as-notas-guardam-só-o-que-a-pessoa-mudou-bug-01). O projeto já usa uma solução para o mesmo problema noutro sítio: `key={c.id}` em `Cliente.jsx:54`. |
 
 ### BUG-02
@@ -1076,7 +1076,7 @@ Aplica-se às mudanças validadas na cópia (secção 15).
 
 ## 20. Relatório final
 
-**Sumário.** O código da Bancada é limpo, legível e seguro, e a arquitetura é a certa para o tamanho do projeto. A revisão encontrou três bugs que os testes e a auditoria não apanharam, porque só aparecem com dois dispositivos ou pedidos em simultâneo. Um deles perde texto escrito por pessoas. Encontrou também uma regra de dinheiro repetida em dez sítios. As correções foram aplicadas numa cópia e validadas; nenhum código do projeto mudou.
+**Sumário.** O código da Baylight é limpo, legível e seguro, e a arquitetura é a certa para o tamanho do projeto. A revisão encontrou três bugs que os testes e a auditoria não apanharam, porque só aparecem com dois dispositivos ou pedidos em simultâneo. Um deles perde texto escrito por pessoas. Encontrou também uma regra de dinheiro repetida em dez sítios. As correções foram aplicadas numa cópia e validadas; nenhum código do projeto mudou.
 
 **Maiores problemas.** Ver a lista da [secção 18](#18-avaliação-final).
 

@@ -1,4 +1,4 @@
-# ADR 0001: Arquitetura para a Bancada durar e crescer
+# ADR 0001: Arquitetura para a Baylight durar e crescer
 
 - **Estado:** aceite (18/11/2026). **Implementação: por fazer.** Nada disto está no código ainda.
 - **Decisor:** Tiago Dias Pereira.
@@ -6,9 +6,9 @@
 
 ## Contexto
 
-A Bancada é um **projeto pessoal**. O `README.md` e o `CLAUDE.md` ainda a descrevem como projeto de uma unidade curricular: essa parte está desatualizada e é corrigida à parte.
+A Baylight é um **projeto pessoal**. O `README.md` e o `CLAUDE.md` ainda a descrevem como projeto de uma unidade curricular: essa parte está desatualizada e é corrigida à parte.
 
-Quero que a Bancada tenha vida longa e espaço para crescer (mais oficinas, mais funcionalidades), e que corra no meu servidor pessoal: uma VM da Time4VPS (3 vCPU, 8 GB de RAM, x86_64, Ubuntu 24.04) com o Coolify, onde já corre a MyNotes. A oficina tem internet fiável, por isso a Bancada continua a ser uma aplicação web (PWA) e não uma app só no tablet.
+Quero que a Baylight tenha vida longa e espaço para crescer (mais oficinas, mais funcionalidades), e que corra no meu servidor pessoal: uma VM da Time4VPS (3 vCPU, 8 GB de RAM, x86_64, Ubuntu 24.04) com o Coolify, onde já corre a MyNotes. A oficina tem internet fiável, por isso a Baylight continua a ser uma aplicação web (PWA) e não uma app só no tablet.
 
 O que o código tem hoje (ramo `dev`, 18/11/2026):
 
@@ -63,7 +63,7 @@ Uma ferramenta de migrações (Drizzle, como na MyNotes) e a regra de **só acre
 
 ### 8. Login próprio
 
-O login continua na Bancada: email e password (bcrypt), PIN do modo bancada, sessões em cookie `httpOnly`. **Os utilizadores das oficinas nunca passam pelo Authentik do meu servidor** e nunca se misturam com os da MyNotes: vivem noutra base de dados, noutra pilha. Acrescenta-se:
+O login continua na Baylight: email e password (bcrypt), PIN do modo bancada, sessões em cookie `httpOnly`. **Os utilizadores das oficinas nunca passam pelo Authentik do meu servidor** e nunca se misturam com os da MyNotes: vivem noutra base de dados, noutra pilha. Acrescenta-se:
 
 - recuperação de password por email (precisa de SMTP);
 - MFA para gestores;
@@ -75,7 +75,7 @@ Tudo o que é externo entra por uma interface (porta) com um adaptador:
 
 - notificações ao cliente ("o carro está pronto") por email, SMS ou WhatsApp;
 - fotografias de danos e peças, guardadas fora da VM (armazenamento compatível com S3);
-- exportação para o programa de faturação da oficina (a Bancada continua a **não** emitir faturas: isso exige software certificado pela AT);
+- exportação para o programa de faturação da oficina (a Baylight continua a **não** emitir faturas: isso exige software certificado pela AT);
 - trabalhos em segundo plano com uma fila em Postgres (`pg-boss`).
 
 Nada disto existe hoje. As portas garantem que, quando vier, as regras de negócio não mudam.
@@ -111,7 +111,7 @@ Antes do registo público a sério: termos de serviço, política de privacidade
 - **Bom:** menos RAM (o Postgres gasta uma fração do SQL Server); sem limites de licença; isolamento entre oficinas garantido pela base de dados; dinheiro testado; código com tipos; operação igual à da MyNotes (as mesmas cópias, o mesmo deploy, a mesma monitorização).
 - **Custo:** reescrever o acesso a dados (esquema, consultas e testes), a camada de serviços e a passagem a TypeScript. Aceito o esforço.
 - **Obrigatório a partir daqui:** nenhuma consulta de dados de oficina sem RLS ativa; dinheiro só em `NUMERIC` ou cêntimos; migrações só a acrescentar; cada fase fecha com testes verdes.
-- **Por verificar:** quanta RAM gasta a Bancada na VM com Postgres; o desenho exato das políticas de RLS com o modo bancada.
+- **Por verificar:** quanta RAM gasta a Baylight na VM com Postgres; o desenho exato das políticas de RLS com o modo bancada.
 
 ## Alternativas rejeitadas
 

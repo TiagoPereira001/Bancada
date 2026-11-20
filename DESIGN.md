@@ -1,5 +1,5 @@
 ---
-name: Bancada
+name: Baylight
 description: Folhas de obra digitais para oficinas, pensadas para um tablet partilhado no chão da oficina.
 colors:
   ambar: "#f0a43a"
@@ -252,7 +252,7 @@ components:
     height: "72px"
 ---
 
-# Design System: Bancada
+# Design System: Baylight
 
 > Os títulos das secções ficam em inglês porque seguem o formato DESIGN.md (as ferramentas que o leem dependem deles). O resto está em português, como a aplicação. Os valores normativos estão no bloco YAML acima e em `frontend/src/styles/tokens.css`, que é a fonte de verdade no código. Os temas claro e escuro partilham os nomes; as variantes escuras têm o sufixo `-escuro` no YAML.
 
@@ -260,13 +260,13 @@ components:
 
 **Creative North Star: "O Tablier da Oficina"**
 
-A Bancada é desenhada como o painel de instrumentos de um carro. Há uma parte que é sempre escura (a barra de topo, o tablier com as luzes de aviso, o painel da entrada) e uma superfície de trabalho que segue o tema do dispositivo: clara ao sol da oficina, escura à noite. As luzes são o sinal principal. Num relance, a meio de uma reparação e a um ou dois metros do tablet, o mecânico vê quantos carros estão abertos, em curso, à espera de peças ou prontos, tal como se vê uma luz de aviso acesa sem ler nada.
+A Baylight é desenhada como o painel de instrumentos de um carro. Há uma parte que é sempre escura (a barra de topo, o tablier com as luzes de aviso, o painel da entrada) e uma superfície de trabalho que segue o tema do dispositivo: clara ao sol da oficina, escura à noite. As luzes são o sinal principal. Num relance, a meio de uma reparação e a um ou dois metros do tablet, o mecânico vê quantos carros estão abertos, em curso, à espera de peças ou prontos, tal como se vê uma luz de aviso acesa sem ler nada.
 
 É uma ferramenta de trabalho e não um produto de marketing. A densidade é média: alvos grandes para dedos sujos ou com luvas, texto de leitura entre 16 e 18 px, números sempre tabulares. A identidade vem de objetos reais da oficina e não de decoração: as luzes do tablier, a chapa de matrícula branca com a faixa azul europeia e a letra Barlow, que nasceu da sinalética e das matrículas. O âmbar é a cor de ação, a mesma "luz indicadora" que já existia no login original do projeto.
 
 O que foi rejeitado de forma explícita: o quadro kanban genérico de colunas, o dashboard de métricas com números gigantes, as lentes e os aros à volta das luzes (fazem-nas parecer botões de uma app e não lâmpadas) e as janelas modais para confirmar.
 
-Em setembro de 2026, a interface foi revista com o plugin `frontend-design` do Claude Code (repositório `anthropics/claude-code`), que lista os sinais mais comuns de uma interface gerada por IA. Saíram os que a Bancada tinha: cartões todos com o mesmo raio, textos de apoio separados por pontos ("Fiat Ducato · célula Rapido · 2021"), ícones que repetiam o nome de cada separador, o ecrã de entrada dividido ao meio com um lema de marketing e dois botões âmbar no mesmo ecrã. O que já era próprio da Bancada ficou (o tablier, as chapas, o âmbar) e ganhou mais peso.
+Em setembro de 2026, a interface foi revista com o plugin `frontend-design` do Claude Code (repositório `anthropics/claude-code`), que lista os sinais mais comuns de uma interface gerada por IA. Saíram os que a Baylight tinha: cartões todos com o mesmo raio, textos de apoio separados por pontos ("Fiat Ducato · célula Rapido · 2021"), ícones que repetiam o nome de cada separador, o ecrã de entrada dividido ao meio com um lema de marketing e dois botões âmbar no mesmo ecrã. O que já era próprio da Baylight ficou (o tablier, as chapas, o âmbar) e ganhou mais peso.
 
 **Key Characteristics:**
 - Painel de instrumentos sempre escuro por cima de uma superfície de trabalho clara ou escura.
@@ -397,7 +397,7 @@ Os pictogramas das luzes estão numa grelha de 32 × 32 e usam formas cheias com
 ### Navigation
 - **Barra de topo:** sempre grafite, 64 px. À esquerda a marca e o nome da oficina, à direita o nome de quem está a trabalhar, o botão de tema e o de sair. No tablet partilhado aparece "no tablet da oficina" por baixo do nome, e Sair passa a "Sair do tablet". Os dois botões são neutros (contorno `painel-linha`, texto `painel-tinta`, fundo `painel-2` ao passar o rato ou ao premir): o âmbar é da ação principal do ecrã, e um botão de sair com contorno âmbar a competir com ela era o que mais ruído fazia (Regra da Voz Única). Com 520 px ou menos o botão de sair fica só com o ícone (o nome fica em `aria-label`), porque com o texto a barra transbordava (43 px a 390 px no tablet, 22 px a 360 px no computador). Com 359 px ou menos a marca fica só com o símbolo (continua a ser a ligação de volta ao quadro, agora com 48 px de altura como os botões ao lado): a 320 px, a largura mínima que tem de caber sem scroll de lado, a barra passava o ecrã 28 px. A barra do ecrã de descanso faz o mesmo.
 - **Separadores:** Oficina, Histórico, Clientes e Veículos, mais Equipa e Definições para o gestor. Ficam numa faixa `superficie` com 52 px de altura, só com o nome, em Tab (a letra das placas). O ativo fica com o texto em `tinta` e a barra âmbar de 3 px por baixo. Em ecrãs estreitos a faixa faz scroll na horizontal.
-- **Ecrãs de entrada** (Entrar e Registar): uma faixa grafite em cima, com a marca e uma frase a dizer o que é a Bancada à esquerda e as quatro luzes do tablier à direita, que fazem o autoteste de quando se roda a chave. O formulário fica por baixo, na superfície de trabalho, alinhado pela mesma aresta da marca. Não há lema de marketing nem ecrã dividido ao meio.
+- **Ecrãs de entrada** (Entrar e Registar): uma faixa grafite em cima, com a marca e uma frase a dizer o que é a Baylight à esquerda e as quatro luzes do tablier à direita, que fazem o autoteste de quando se roda a chave. O formulário fica por baixo, na superfície de trabalho, alinhado pela mesma aresta da marca. Não há lema de marketing nem ecrã dividido ao meio.
 - **Ecrã de descanso da bancada** (`/bancada`): é o que o tablet mostra quase o dia todo, por isso diz o estado da oficina antes de pedir quem vai trabalhar. Por ordem: o tablier grande e só de leitura, "Quem vai trabalhar?" (2.25rem, um degrau abaixo) e os nomes. O bloco fica no meio do ecrã (com muitos nomes, começa no topo e desce). O intervalo entre o tablier e o título (48 px) é maior do que o resto: são dois grupos, o que se lê e o que se toca. Só mostra números (a API devolve as contagens por estado da oficina do dispositivo, sem dados de clientes nem de veículos); para tocar numa folha continua a ser preciso o PIN. Atualiza a cada 20 s. No passo do PIN o tablier desaparece.
 - **Aviso antes do bloqueio** (`AvisoBloqueio`): 30 s antes de o tablet terminar a sessão por inatividade (5 min), aparece em baixo, ao centro, uma barra grafite com "Ainda estás aí?", "A sessão termina em 24 s" (os segundos num visor) e o botão neutro "Continuar", que não é âmbar para o âmbar continuar a ser só de quem age no ecrã por baixo. Não tira o foco de onde a pessoa estava e não é um modal: tocar em qualquer sítio ou carregar numa tecla também continua. O leitor de ecrã lê uma frase só, sem contar os segundos.
 
@@ -438,7 +438,7 @@ Um círculo sólido de 10 px na cor do estado, sempre seguido do nome ("Em curso
 Doze teclas em grelha 3 × 4, com 72 px de altura e cantos de 14 px. Os algarismos estão em Barlow Condensed de 2rem. Segue o tema do tablet. Só a tecla de entrar é âmbar, e fica desativada até haver 4 algarismos. Os pontos do visor são anéis de 18 px em `linha-forte`, que ficam cheios em `tinta`. Um PIN errado abana o visor e mostra a mensagem em `erro`, no sítio da instrução "Escreve o teu PIN" (que fica escondida enquanto a mensagem se vê, e guarda o lugar). Entre o visor e as teclas não pode aparecer nada: a mensagem que lá estava empurrava as teclas 44 px (68 px com duas linhas) no momento em que o dedo já ia a caminho da tecla seguinte. Nos tablets e a 390 px o teclado fica quieto com as mensagens de uma linha ("PIN incorreto. Restam 4 tentativas."); num telemóvel as mais compridas (o bloqueio, a falta de rede) ocupam duas linhas e empurram-no 27 px (54 px a 320 px). Só acontece com o PIN já bloqueado ou sem rede: não está tratado. Também funciona com o teclado físico.
 
 ### Marca e ícones da PWA
-A marca é a "luz indicadora": uma lâmpada âmbar dentro de um aro escuro, num quadrado grafite de cantos redondos, com uma barra cinzenta por baixo. Ao lado vem BANCADA em Wordmark. Os PNG da PWA em `frontend/public/icons/` (192, 512, a versão maskable e o apple-touch-icon) foram exportados de `frontend/public/favicon.svg` pelo Chromium (Playwright). As imagens em `docs/imagens/` são capturas da própria aplicação, com os dados fictícios do `npm run db:seed`.
+A marca é a "luz indicadora": uma lâmpada âmbar dentro de um aro escuro, num quadrado grafite de cantos redondos, com uma barra cinzenta por baixo. Ao lado vem BAYLIGHT em Wordmark. Os PNG da PWA em `frontend/public/icons/` (192, 512, a versão maskable e o apple-touch-icon) foram exportados de `frontend/public/favicon.svg` pelo Chromium (Playwright). As imagens em `docs/imagens/` são capturas da própria aplicação, com os dados fictícios do `npm run db:seed`.
 
 ## Do's and Don'ts
 

@@ -1,6 +1,6 @@
 # Auditoria de qualidade, segurança e desempenho
 
-**Bancada**, versão do ramo `dev` no commit `7856129` · 27 de setembro de 2026
+**Baylight**, versão do ramo `dev` no commit `7856129` · 27 de setembro de 2026
 
 Esta auditoria foi feita pelo Claude Code (assistente de programação com IA), a pedido do autor, seguindo dois guiões que ele forneceu:
 - um de auditoria técnica completa (funcionalidade, API, dados, segurança, desempenho, acessibilidade, fiabilidade e automação);
@@ -335,10 +335,10 @@ A prioridade de correção está na [secção 10](#10-prioridades-de-correção)
 | Impacto | Para o explorar, é preciso ter roubado o cookie. Isso é difícil: é `httpOnly`, `SameSite=Strict`, e a CSP bloqueia scripts de fora. A revogação já existe onde mais importa: mudar a password ou o PIN, ou desativar a conta, sobe a `Versao_Sessao` e corta tudo (A11, A12). |
 | Recomendação | Para produção, uma de três: sessões mais curtas com renovação; subir a `Versao_Sessao` também ao sair (mais simples, mas sair num dispositivo tira a pessoa de todos); ou uma lista de tokens revogados. Documentar a escolha. |
 
-> **Para aprender: sessões com e sem estado.** Um JWT é **sem estado**: o servidor confia na assinatura e não guarda nada, por isso não sabe "desligar" um token que emitiu. Uma sessão **com estado** (um id guardado na BD) apaga-se num instante, mas obriga a uma consulta por pedido. A Bancada já faz um meio-termo inteligente: lê o colaborador na BD em cada pedido (para cortar contas desativadas). A pergunta de júri clássica é: "se alguém roubar o token, como o invalidas?". Deves saber responder por palavras tuas.
+> **Para aprender: sessões com e sem estado.** Um JWT é **sem estado**: o servidor confia na assinatura e não guarda nada, por isso não sabe "desligar" um token que emitiu. Uma sessão **com estado** (um id guardado na BD) apaga-se num instante, mas obriga a uma consulta por pedido. A Baylight já faz um meio-termo inteligente: lê o colaborador na BD em cada pedido (para cortar contas desativadas). A pergunta de júri clássica é: "se alguém roubar o token, como o invalidas?". Deves saber responder por palavras tuas.
 
 ### SEC-002
-**É possível saber se um email tem conta na Bancada**
+**É possível saber se um email tem conta na Baylight**
 
 | | |
 |---|---|
@@ -723,7 +723,7 @@ Faz estes sozinho, antes de pedir ajuda a qualquer IA. O objetivo é conseguires
 2. **Prever antes de testar.** Para cada valor, prevê se o `Validador.inteiro()` aceita ou recusa: `"12"`, `" 12 "`, `"0x10"`, `"1e3"`, `12.0`, `"12.0"`, `[12]`, `true`. Depois confirma com um teste em `validar.test.js`. Onde falhaste a previsão, porquê?
 3. **Paginar primeiro.** Reescreve a consulta do histórico com uma CTE que escolhe os 50 ids da página e só depois faz o `OUTER APPLY`. Mede antes e depois com `SET STATISTICS IO ON` na oficina de carga (`carga.sql`). Quantas leituras poupaste?
 4. **Fronteira de erro.** Acrescenta um `errorElement` à rota de topo. Para testar, lança um erro de propósito num componente (`throw new Error('teste')`). O que deve o mecânico ver? E o que deve ficar registado para ti?
-5. **Explicar em três frases** a um colega que não é informático porque é que "sair" não invalida o token, porque é que isso é aceitável aqui, e o que mudarias antes de pôr a Bancada online.
+5. **Explicar em três frases** a um colega que não é informático porque é que "sair" não invalida o token, porque é que isso é aceitável aqui, e o que mudarias antes de pôr a Baylight online.
 
 ### Perguntas que o júri pode fazer
 
@@ -745,7 +745,7 @@ Para cada uma, o sítio onde está a resposta. A explicação deve ser tua.
 
 **Porquê.** A 28/09 o autor enviou outra vez o mesmo guião de auditoria técnica (igual byte a byte ao de 27/09). Desde o commit `7856129` mudaram três coisas:
 - a interface foi redesenhada (PR #10);
-- entrou o lançador `Iniciar Bancada.command` (PR #11);
+- entrou o lançador `Iniciar Baylight.command` (PR #11);
 - entraram o `criar-env.js` (PR #9) e o `exec` no arranque da API no `docker-compose.yml`.
 
 A API não mudou (só o `db-setup.js`, nesta reauditoria). Em vez de refazer o documento, repeti **todos** os scripts da auditoria sobre a versão nova, com as mesmas versões das ferramentas (Playwright 1.63.0, axe-core 4.13.0, Lighthouse 12.8.2), e revi à mão o código novo. Também li os registos do SQL Server e testei uma cópia de segurança e o restauro, para o documento de infraestrutura ([`docs/infraestrutura.md`](infraestrutura.md)). Foi aí que apareceram o [REL-005](#rel-005) e o [REL-006](#rel-006).
@@ -843,7 +843,7 @@ O CLS do quadro chegou a 0,088 numa das três corridas: continua abaixo de 0,1 (
 
 ### 14.3 O código novo, revisto à mão
 
-- **`Iniciar Bancada.command`**:
+- **`Iniciar Baylight.command`**:
   - mostra a password do gestor e os PINs só no Terminal, como o `db:seed`;
   - as cópias `.env.antigo-*` e `.env.fraco-*` que cria estão fora do git (`git check-ignore` confirma, pela regra `.env.*`);
   - só abre `http://localhost:3000`, e as portas continuam presas a `127.0.0.1`;

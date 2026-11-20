@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "generatedAt": "2026-09-26T22:31:14+00:00",
-  "title": "Design System: Bancada",
+  "title": "Design System: Baylight",
   "extensions": {
     "colorMeta": {
       "ambar": {
@@ -956,7 +956,7 @@
       },
       "wordmark": {
         "displayName": "Wordmark",
-        "purpose": "BANCADA ao lado da marca."
+        "purpose": "BAYLIGHT ao lado da marca."
       }
     },
     "shadows": [
@@ -1073,7 +1073,7 @@
       "kind": "nav",
       "refersTo": "top-bar",
       "description": "Barra sempre grafite; separadores na superfície com a barra âmbar no ativo.",
-      "html": "<header class=\"ds-topo\"><div class=\"ds-topo__barra\"><strong class=\"ds-topo__marca\">BANCADA</strong><span class=\"ds-topo__oficina\">Duarte &amp; Raposo</span><button class=\"ds-topo__sair\">Sair do tablet</button></div><nav class=\"ds-separadores\"><a class=\"ds-separador ds-separador--ativo\" href=\"#\">Oficina</a><a class=\"ds-separador\" href=\"#\">Histórico</a><a class=\"ds-separador\" href=\"#\">Clientes</a></nav></header>",
+      "html": "<header class=\"ds-topo\"><div class=\"ds-topo__barra\"><strong class=\"ds-topo__marca\">BAYLIGHT</strong><span class=\"ds-topo__oficina\">Duarte &amp; Raposo</span><button class=\"ds-topo__sair\">Sair do tablet</button></div><nav class=\"ds-separadores\"><a class=\"ds-separador ds-separador--ativo\" href=\"#\">Oficina</a><a class=\"ds-separador\" href=\"#\">Histórico</a><a class=\"ds-separador\" href=\"#\">Clientes</a></nav></header>",
       "css": ".ds-topo { font-family: Barlow, system-ui, sans-serif; } .ds-topo__barra { display: flex; align-items: center; gap: 16px; min-height: 64px; padding: 0 16px; background: var(--painel, #0f1012); color: var(--painel-tinta, #e7e9e4); } .ds-topo__marca { font: 700 1.375rem/1 \"Barlow Condensed\", Barlow, sans-serif; letter-spacing: 0.06em; } .ds-topo__oficina { padding-left: 16px; border-left: 1px solid var(--painel-linha, #2a2d31); color: var(--painel-tinta-2, #9aa0a6); } .ds-topo__sair { margin-left: auto; min-height: 48px; padding: 0 16px; border: 1px solid var(--painel-linha, #2a2d31); border-radius: 6px; background: transparent; color: var(--painel-tinta, #e7e9e4); font-weight: 600; white-space: nowrap; cursor: pointer; } .ds-separadores { display: flex; gap: 4px; padding: 0 8px; background: var(--superficie, #f8f9fa); border-bottom: 1px solid var(--linha, #d3d7db); } .ds-separador { position: relative; display: inline-flex; align-items: center; min-height: 52px; padding: 0 16px; color: var(--tinta-2, #4a5058); font: 600 1.125rem \"Barlow Condensed\", Barlow, sans-serif; letter-spacing: 0.01em; text-decoration: none; } @media (hover: hover) { .ds-separador:hover { color: var(--tinta, #15171a); } } .ds-separador--ativo { color: var(--tinta, #15171a); } .ds-separador--ativo::after { content: \"\"; position: absolute; left: 12px; right: 12px; bottom: -1px; height: 3px; border-radius: 3px 3px 0 0; background: var(--ambar, #f0a43a); }"
     },
     {
@@ -1111,7 +1111,7 @@
   ],
   "narrative": {
     "northStar": "O Tablier da Oficina",
-    "overview": "A Bancada é desenhada como o painel de instrumentos de um carro. Há uma parte que é sempre escura (a barra de topo, o tablier com as luzes de aviso, o painel da entrada) e uma superfície de trabalho que segue o tema do dispositivo: clara ao sol da oficina, escura à noite. As luzes são o sinal principal. Num relance, a meio de uma reparação e a um ou dois metros do tablet, o mecânico vê quantos carros estão abertos, em curso, à espera de peças ou prontos, tal como se vê uma luz de aviso acesa sem ler nada.\n\nÉ uma ferramenta de trabalho e não um produto de marketing. A densidade é média: alvos grandes para dedos sujos ou com luvas, texto de leitura entre 16 e 18 px, números sempre tabulares. A identidade vem de objetos reais da oficina e não de decoração: as luzes do tablier, a chapa de matrícula branca com a faixa azul europeia e a letra Barlow, que nasceu da sinalética e das matrículas. O âmbar é a cor de ação, a mesma \"luz indicadora\" que já existia no login original do projeto.\n\nO que foi rejeitado de forma explícita: o quadro kanban genérico de colunas, o dashboard de métricas com números gigantes, as lentes e os aros à volta das luzes (fazem-nas parecer botões de uma app e não lâmpadas) e as janelas modais para confirmar. Na revisão com o plugin frontend-design (setembro de 2026) saíram também os sinais de interface gerada: cartões todos com o mesmo raio, textos separados por pontos, ícones repetidos nos separadores, o ecrã de entrada dividido ao meio com um lema e dois botões âmbar no mesmo ecrã.",
+    "overview": "A Baylight é desenhada como o painel de instrumentos de um carro. Há uma parte que é sempre escura (a barra de topo, o tablier com as luzes de aviso, o painel da entrada) e uma superfície de trabalho que segue o tema do dispositivo: clara ao sol da oficina, escura à noite. As luzes são o sinal principal. Num relance, a meio de uma reparação e a um ou dois metros do tablet, o mecânico vê quantos carros estão abertos, em curso, à espera de peças ou prontos, tal como se vê uma luz de aviso acesa sem ler nada.\n\nÉ uma ferramenta de trabalho e não um produto de marketing. A densidade é média: alvos grandes para dedos sujos ou com luvas, texto de leitura entre 16 e 18 px, números sempre tabulares. A identidade vem de objetos reais da oficina e não de decoração: as luzes do tablier, a chapa de matrícula branca com a faixa azul europeia e a letra Barlow, que nasceu da sinalética e das matrículas. O âmbar é a cor de ação, a mesma \"luz indicadora\" que já existia no login original do projeto.\n\nO que foi rejeitado de forma explícita: o quadro kanban genérico de colunas, o dashboard de métricas com números gigantes, as lentes e os aros à volta das luzes (fazem-nas parecer botões de uma app e não lâmpadas) e as janelas modais para confirmar. Na revisão com o plugin frontend-design (setembro de 2026) saíram também os sinais de interface gerada: cartões todos com o mesmo raio, textos separados por pontos, ícones repetidos nos separadores, o ecrã de entrada dividido ao meio com um lema e dois botões âmbar no mesmo ecrã.",
     "keyCharacteristics": [
       "Painel de instrumentos sempre escuro por cima de uma superfície de trabalho clara ou escura.",
       "Luzes de aviso desenhadas de propósito (carro, chave de bocas, pistão, bandeira de xadrez, chave), acesas quando há veículos nesse estado.",

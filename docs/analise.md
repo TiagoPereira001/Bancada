@@ -54,7 +54,7 @@ Números do build atual: JavaScript inicial **120 KB gzip** (React DOM 66 KB, Re
 
 ### Como produto
 
-- **Faturação:** em Portugal, emitir faturas exige software certificado pela Autoridade Tributária. Certificar é caro e demorado; o caminho realista é integrar com programas de faturação que têm API (InvoiceXpress, Moloni, Vendus) e enviar-lhes os dados da folha. Até lá a Bancada calcula e prepara, e a fatura sai do programa da oficina (a interface já o diz).
+- **Faturação:** em Portugal, emitir faturas exige software certificado pela Autoridade Tributária. Certificar é caro e demorado; o caminho realista é integrar com programas de faturação que têm API (InvoiceXpress, Moloni, Vendus) e enviar-lhes os dados da folha. Até lá a Baylight calcula e prepara, e a fatura sai do programa da oficina (a interface já o diz).
 - **RGPD:** a plataforma guarda dados pessoais dos clientes das oficinas. Para ser usada a sério precisa de política de privacidade, contrato de subcontratação com cada oficina e uma resposta para o direito ao apagamento (anonimizar, porque os registos fiscais têm de ser guardados 10 anos).
 - **Diferenciação:** o tablet partilhado com PIN, a simplicidade face aos ERPs e o detalhe das autocaravanas (chassis e célula) são vantagens reais para oficinas pequenas.
 

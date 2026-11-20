@@ -1,16 +1,18 @@
-# Handoff da Bancada
+# Handoff da Baylight
 
 > **Escrito a 20/11/2026**, para quem pegar neste projeto a seguir (uma pessoa, ou outra sessão do Claude Code). Diz onde estamos, o que já foi feito, em que estado está cada coisa, o que falta e o que eu faria agora.
+
+> **Nota posterior, no mesmo dia:** o produto passou a chamar-se **Baylight** (domínio `baylight.dev`) e este documento foi atualizado com o novo nome. Onde diz "o repositório chama-se Bancada" refere-se ao nome do repositório no GitHub, que só muda quando o Tiago o renomear. O CI vermelho da secção 3 foi corrigido no commit `0113d81` (ver o "Registo" do `CLAUDE.md`). O que o handoff diz do commit `9cb3331` ser em nome do Claude é verdade e não se reescreve.
 >
 > Tudo o que aqui está como "verificado" foi confirmado **hoje**, a correr os comandos num ambiente Linux limpo (clone de `dev`, commit `b440141`). O que não foi confirmado está dito como tal. Quando este documento e o código discordarem, **manda o código**.
 >
-> Leitura recomendada, por ordem: este ficheiro, [`CLAUDE.md`](CLAUDE.md) (regras e memória), [`docs/PROJETO-BANCADA.md`](docs/PROJETO-BANCADA.md) (o projeto inteiro), [`AI.md`](AI.md) (mapa do código), [`docs/adr/0001-arquitetura-para-durar.md`](docs/adr/0001-arquitetura-para-durar.md) (para onde vai).
+> Leitura recomendada, por ordem: este ficheiro, [`CLAUDE.md`](CLAUDE.md) (regras e memória), [`docs/PROJETO-BAYLIGHT.md`](docs/PROJETO-BAYLIGHT.md) (o projeto inteiro), [`AI.md`](AI.md) (mapa do código), [`docs/adr/0001-arquitetura-para-durar.md`](docs/adr/0001-arquitetura-para-durar.md) (para onde vai).
 
 ---
 
 ## 1. Em 30 segundos
 
-- **Bancada**: folhas de obra digitais para oficinas, feitas para o chão da oficina (tablet partilhado, PIN, quadro como o tablier de um carro). Multi-oficina: cada oficina só vê os seus dados. Dono e autor: **Tiago Dias Pereira**. Nasceu na oficina Duarte & Raposo (Canhoso, Covilhã); desde 18/11/2026 é um **projeto pessoal**.
+- **Baylight**: folhas de obra digitais para oficinas, feitas para o chão da oficina (tablet partilhado, PIN, quadro como o tablier de um carro). Multi-oficina: cada oficina só vê os seus dados. Dono e autor: **Tiago Dias Pereira**. Nasceu na oficina Duarte & Raposo (Canhoso, Covilhã); desde 18/11/2026 é um **projeto pessoal**.
 - **Funciona**, com dados de demonstração: API Node 22 + Express 5 + SQL Server 2022, frontend React 19 + Vite 8 (PWA). 54 testes passam.
 - **Nunca foi usada numa oficina com dados reais** e **não está publicada**. O ensaio na oficina está preparado, mas ainda não se fez.
 - **O CI está vermelho** em `main` e `dev` desde 18/11 (ver a secção 3). É a primeira coisa a resolver.
@@ -22,8 +24,8 @@
 - **Git:** só `main` (estável) e `dev` (trabalho). Trabalha-se **diretamente na `dev`**, sem ramos por tarefa. A `main` recebe a `dev` por PR e **o merge é do Tiago**. **Commits só em nome do Tiago, sem linhas de coautoria. Nada de `push --force`.** O histórico foi reescrito a 18/11 para cumprir isto: os hashes que aparecem em documentos antigos (por exemplo, `523068b`) já não existem.
 - **Nunca inventar** clientes, testemunhos, métricas, preços nem funcionalidades. "Por fazer" é "por fazer". Dados de demonstração são sempre fictícios.
 - **Segredos nunca** no código, no git ou no chat. As passwords geram-se ao correr.
-- **Regras do código que não se partem** (detalhe no `AI.md`): cada oficina só vê os seus dados; autoria vem da sessão; nada se apaga a sério; dinheiro só em SQL com `DECIMAL`; SQL sempre parametrizado; CSP rigorosa; a Bancada **não emite faturas**; nenhuma porta aberta à rede por omissão.
-- **Antes de dar uma tarefa por pronta:** `cd backend && npm test`, `cd frontend && npm run lint && npm run build`, e, para mexidas no visual, ver no browser nos dois temas e em 390, 1180 e 1440 px. **A documentação faz parte do pronto** (atualizar `CLAUDE.md`, `AI.md`, `PRODUCT.md` e `docs/PROJETO-BANCADA.md` na mesma tarefa).
+- **Regras do código que não se partem** (detalhe no `AI.md`): cada oficina só vê os seus dados; autoria vem da sessão; nada se apaga a sério; dinheiro só em SQL com `DECIMAL`; SQL sempre parametrizado; CSP rigorosa; a Baylight **não emite faturas**; nenhuma porta aberta à rede por omissão.
+- **Antes de dar uma tarefa por pronta:** `cd backend && npm test`, `cd frontend && npm run lint && npm run build`, e, para mexidas no visual, ver no browser nos dois temas e em 390, 1180 e 1440 px. **A documentação faz parte do pronto** (atualizar `CLAUDE.md`, `AI.md`, `PRODUCT.md` e `docs/PROJETO-BAYLIGHT.md` na mesma tarefa).
 
 ## 3. Onde estamos (estado verificado a 20/11/2026)
 
@@ -51,7 +53,7 @@ O `npm audit` diz que há correção com `npm audit fix`. **Não a apliquei** (n
 
 ### Nesta conversa (setembro e outubro de 2026)
 - **27/09:** documentos de base (`CLAUDE.md`, `PRODUCT.md`, `DESIGN.md`, `AI.md`); relatório da UC e documento das ferramentas (LaTeX); `LICENSE` de todos os direitos reservados e aviso no README; **auditoria completa** (`docs/auditoria.md`, 82 verificações, nenhum achado crítico nem alto); **revisão de código e dívida técnica** (`docs/revisao-codigo.md`, 3 bugs confirmados e 12 itens de dívida); guia de arranque para macOS e Windows no README.
-- **28/09:** interface revista com o plugin `frontend-design` (menos "cara de IA": raios por objeto, visor no tablier, dados da folha em caixas); **`Iniciar Bancada.command`** (duplo clique no Mac); **reauditoria** (corrigiu QA-005, SEC-009, REL-005 e REL-006).
+- **28/09:** interface revista com o plugin `frontend-design` (menos "cara de IA": raios por objeto, visor no tablier, dados da folha em caixas); **`Iniciar Baylight.command`** (duplo clique no Mac); **reauditoria** (corrigiu QA-005, SEC-009, REL-005 e REL-006).
 - **28 e 29/09:** **`docs/infraestrutura.md`**: proposta de publicação (Caddy, SQL Server Express, cópias cifradas com `age`, restauro, retrocesso) **validada numa cópia em `localhost`**, com `docker-compose.prod.yml` e `infra/`. Nada disto está em uso.
 - **30/09:** crítica de design do quadro (28/40) e os cinco passos do plano, todos entregues:
   1. `layout`: o ecrã de descanso do tablet mostra o tablier grande e só de leitura, e há um aviso 30 s antes do bloqueio por inatividade;
@@ -59,10 +61,10 @@ O `npm audit` diz que há correção com `npm audit fix`. **Não a apliquei** (n
   3. `adapt`: tablier maior no tablet partilhado, para se ler a 1 ou 2 m;
   4. `quieter`: botão "Sair do tablet" neutro e um só botão âmbar por ecrã no quadro vazio;
   5. `polish`: mensagem do PIN que já não empurra as teclas, quadro sem ligação diz de quando são os números, filtro e pesquisa sobrevivem a ir ver uma folha, títulos das páginas, alvos de toque, 320 px sem scroll de lado.
-- **01/10:** **modo oficina** (`Iniciar Bancada na oficina.command`, `BANCADA_REDE=1`): o tablet abre a Bancada pelo Wi-Fi a partir do Mac, a porta só se abre nessa corrida. Guia do ensaio em `docs/ensaio-oficina.md` (guião de 11 tarefas). Contexto: o tablet da oficina é **Android** e o diagnóstico liga por **Bluetooth**, por isso não mexe no Wi-Fi.
+- **01/10:** **modo oficina** (`Iniciar Baylight na oficina.command`, `BANCADA_REDE=1`): o tablet abre a Baylight pelo Wi-Fi a partir do Mac, a porta só se abre nessa corrida. Guia do ensaio em `docs/ensaio-oficina.md` (guião de 11 tarefas). Contexto: o tablet da oficina é **Android** e o diagnóstico liga por **Bluetooth**, por isso não mexe no Wi-Fi.
 
 ### Feito pelo Tiago a 18/11/2026
-- **ADR 0001** (arquitetura alvo) e **`docs/PROJETO-BANCADA.md`** (o projeto inteiro num só documento, com análise de produto), **`docs/linkedin.md`** (textos para o perfil e uma publicação).
+- **ADR 0001** (arquitetura alvo) e **`docs/PROJETO-BAYLIGHT.md`** (o projeto inteiro num só documento, com análise de produto), **`docs/linkedin.md`** (textos para o perfil e uma publicação).
 - **Faturação:** pesquisa dos programas certificados com API (InvoiceXpress, Moloni, Vendus, TOConline, Cegid Jasmin/Primavera). Direção recomendada: integrar **um** deles atrás de uma "porta" de faturação. Preços **não** verificados.
 - **Ramos simplificados** (só `main` e `dev`), commits só em nome do Tiago, README e `AI.md` atualizados. O PR #20 passou a `dev` para a `main`.
 
@@ -80,7 +82,7 @@ O `npm audit` diz que há correção com `npm audit fix`. **Não a apliquei** (n
 | Proposta de infraestrutura (`docs/infraestrutura.md`) | **validada numa cópia** | descreve a versão **SQL Server**: fica em parte ultrapassada pelo ADR (Postgres, Coolify). Ainda não está em uso |
 | Ensaio na oficina | **preparado, não realizado** | guia em `docs/ensaio-oficina.md` |
 | Arquitetura alvo (ADR 0001) | **decidida, por fazer** | nada está no código |
-| Faturação por programa certificado | **só pesquisa** | por decidir; a Bancada continua a não emitir faturas |
+| Faturação por programa certificado | **só pesquisa** | por decidir; a Baylight continua a não emitir faturas |
 | Publicação online / servidor | **não existe** | o servidor do autor (Time4VPS, Coolify) está fora deste repositório, em `~/Desktop/Server` |
 | Texto legal (termos, privacidade, acordo RGPD) | **não existe** | obrigatório antes do registo público e de dados reais |
 | Relatório LaTeX da UC (`Relatorio/`) | **feito em setembro**, PDFs compilados | capturas de ecrã anteriores à revisão de 28/09; **não sei se já foi entregue**, não lhe toquei |
@@ -119,11 +121,11 @@ O `npm audit` diz que há correção com `npm audit fix`. **Não a apliquei** (n
 ## 7. Incoerências que encontrei hoje (nenhuma corrigida)
 
 1. **CI vermelho** (secção 3). O PR #20 entrou na `main` com o CI vermelho; não sei se foi visto.
-2. **52 testes, mas são 54:** `docs/PROJETO-BANCADA.md` (secção 5) e o ADR 0001 dizem 52. O código, o `README.md`, o `AI.md` e o `CLAUDE.md` dizem 54, e hoje contei 54 e passaram os 54.
+2. **52 testes, mas são 54:** `docs/PROJETO-BAYLIGHT.md` (secção 5) e o ADR 0001 dizem 52. O código, o `README.md`, o `AI.md` e o `CLAUDE.md` dizem 54, e hoje contei 54 e passaram os 54.
 3. **Nome do repositório:** no GitHub é `Bancada`; o `README.md` (selo do CI, `git clone`, `cd Projeto_final_UBI`) e o remoto local ainda dizem `Projeto_final_UBI`. O GitHub redireciona, por isso funciona, mas os guias de arranque ficam com o nome antigo. `docs/linkedin.md` já usa o novo.
 4. **`CLAUDE.md`, "Estado atual":** o título ainda diz 01/10/2026 e o texto descreve o trabalho "por ramos" (PRs do ramo `claude/ecstatic-lamport-81qsk8`, que já não existe). O "Registo" já tem a entrada de 18/11. Também diz duas coisas opostas sobre commits: "terminam com as linhas de atribuição que o ambiente indicar" e "sem linhas de coautoria". **Segui a segunda**, que é a do Tiago e a mais recente.
 5. **`docs/infraestrutura.md`** descreve SQL Server Express + Caddy; o ADR escolhe PostgreSQL + Coolify. A proposta é histórica e os scripts de `infra/` e o `docker-compose.prod.yml` seguem a versão SQL Server.
-6. **Sessão:** `docs/PROJETO-BANCADA.md` diz que "a sessão termina ao fim de 5 minutos parada". É verdade só no ecrã (ponto 2 da secção 6).
+6. **Sessão:** `docs/PROJETO-BAYLIGHT.md` diz que "a sessão termina ao fim de 5 minutos parada". É verdade só no ecrã (ponto 2 da secção 6).
 
 ## 8. O que eu faria agora
 
@@ -145,7 +147,7 @@ Nada disto foi feito: **só o ponto 1 mexe no que é urgente**, e peço-te o "si
 1. Posso corrigir já o CI (ponto 1 da secção 8)? E o resto da secção 8 vai por esta ordem?
 2. **Quando é o ensaio** e já tens o Mac e o tablet em casa para o teste da véspera?
 3. O repositório **mudou de nome de propósito** para `Bancada`? Atualizo os guias do README?
-4. **Que programa de faturação usa a Duarte & Raposo hoje?** É a pergunta que decide qual integrar primeiro (secção 9 do `PROJETO-BANCADA.md`).
+4. **Que programa de faturação usa a Duarte & Raposo hoje?** É a pergunta que decide qual integrar primeiro (secção 9 do `PROJETO-BAYLIGHT.md`).
 5. Os BUG-02, BUG-03 e a dívida técnica: corrijo agora ou levo-os como testes para a reescrita?
 6. Os P2 de design (âmbar, notas automáticas, "Oficina" ou "Quadro"): quando quiseres decidir.
 7. O relatório LaTeX da UC: já foi entregue? Mexo-lhe ou deixo como está?
@@ -165,14 +167,14 @@ cd backend  && npm audit --omit=dev --audit-level=high     # é o que o CI corre
 docker rm -f bancada_sql_teste                     # no fim
 ```
 
-- **Para ver a app:** `docker compose --profile app up -d --build` (ou `Iniciar Bancada.command` no Mac) e `http://localhost:3000`. Os dados de demonstração criam-se com `npm run db:seed`; as passwords e os PINs só aparecem no terminal. **Ensaio na oficina:** `Iniciar Bancada na oficina.command`.
+- **Para ver a app:** `docker compose --profile app up -d --build` (ou `Iniciar Baylight.command` no Mac) e `http://localhost:3000`. Os dados de demonstração criam-se com `npm run db:seed`; as passwords e os PINs só aparecem no terminal. **Ensaio na oficina:** `Iniciar Baylight na oficina.command`.
 - **Armadilhas desta máquina de trabalho** (estão no `CLAUDE.md`, "Ambiente das sessões na nuvem"): `pkill -f` com um padrão que também aparece no comando mata a própria shell; `docker build` não confia na CA do ambiente (`npm ci` falha dentro da imagem), por isso testa-se numa cópia com a CA no Dockerfile; o limite de logins (8 em 15 min) obriga a reiniciar a API entre percursos no browser; o Chromium usa `executablePath: '/opt/pw-browsers/chromium'`.
 
 ## 11. Mapa rápido
 
 | Para... | Ver |
 |---|---|
-| o produto | `PRODUCT.md`, `docs/PROJETO-BANCADA.md` |
+| o produto | `PRODUCT.md`, `docs/PROJETO-BAYLIGHT.md` |
 | as regras e a API | `AI.md` |
 | a memória e as decisões | `CLAUDE.md` |
 | o visual | `DESIGN.md`, `frontend/src/styles/tokens.css`, `.impeccable/` |

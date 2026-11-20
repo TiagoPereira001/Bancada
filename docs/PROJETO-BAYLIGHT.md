@@ -1,8 +1,8 @@
-# Bancada: o projeto inteiro num só documento
+# Baylight: o projeto inteiro num só documento
 
-> **Para quem é:** qualquer pessoa ou agente de IA que chegue a este repositório sem contexto. Em 10 minutos fica a saber o que é a Bancada, porque existe, o que já faz, o que **não** faz, o que está decidido, para onde vai e que regras não se podem partir.
+> **Para quem é:** qualquer pessoa ou agente de IA que chegue a este repositório sem contexto. Em 10 minutos fica a saber o que é a Baylight, porque existe, o que já faz, o que **não** faz, o que está decidido, para onde vai e que regras não se podem partir.
 >
-> **Atualizado:** 18/11/2026. **Autor e dono:** Tiago Dias Pereira. **Língua:** português de Portugal (código, interface e documentos).
+> **Atualizado:** 20/11/2026 (nome Baylight, antes Bancada). **Autor e dono:** Tiago Dias Pereira. **Língua:** português de Portugal (código, interface e documentos).
 >
 > Este documento resume e liga. O detalhe vive nos ficheiros de origem, que mandam quando houver diferença: [`PRODUCT.md`](../PRODUCT.md) (produto), [`AI.md`](../AI.md) (mapa do código e regras), [`DESIGN.md`](../DESIGN.md) (visual), [`docs/adr/0001-arquitetura-para-durar.md`](adr/0001-arquitetura-para-durar.md) (arquitetura alvo) e, acima de todos, o próprio código.
 
@@ -10,7 +10,7 @@
 
 ## 1. Numa frase
 
-**A Bancada substitui as folhas de obra em papel das oficinas por uma folha digital feita para o chão da oficina:** os mecânicos registam peças e horas num tablet partilhado enquanto trabalham, e o gestor sabe a cada momento que carros estão na oficina, em que estado, quanto vale o trabalho e quem o fez.
+**A Baylight substitui as folhas de obra em papel das oficinas por uma folha digital feita para o chão da oficina:** os mecânicos registam peças e horas num tablet partilhado enquanto trabalham, e o gestor sabe a cada momento que carros estão na oficina, em que estado, quanto vale o trabalho e quem o fez.
 
 ## 2. O problema
 
@@ -40,7 +40,7 @@ Os programas que existem para oficinas são pensados para o escritório (ERP, fa
 | **Mecânicos** | tablet partilhado na bancada ou na parede | dar entrada a um carro em poucos toques, registar peças e horas, mudar o estado, deixar conselhos para o cliente |
 | **Gestor** (dono ou responsável) | sobretudo no computador | saber o que está na oficina, histórico de clientes e veículos, gerir a equipa e os PINs, ver os valores com IVA |
 | **Oficinas novas** | registo público | registar-se sozinhas, sem falar com ninguém |
-| **Clientes das oficinas** (indiretos) | não usam a Bancada | contas certas, histórico do carro, conselhos de manutenção, aviso quando o carro está pronto |
+| **Clientes das oficinas** (indiretos) | não usam a Baylight | contas certas, histórico do carro, conselhos de manutenção, aviso quando o carro está pronto |
 
 ## 5. O que existe hoje (verificado no código)
 
@@ -75,16 +75,16 @@ Os programas que existem para oficinas são pensados para o escritório (ERP, fa
 
 | Decisão | Escolha | Desde |
 |---|---|---|
-| Nome | Bancada | origem |
+| Nome | **Baylight** (antes Bancada), domínio `baylight.dev`. "Bancada" ficou como nome do conceito (modo bancada) e de nomes técnicos | 20/11/2026 |
 | Natureza | **projeto pessoal** do Tiago (nasceu como projeto de uma cadeira da licenciatura em Informática Web, Móvel e na Nuvem, UBI) | 18/11/2026 |
 | Âmbito | plataforma para qualquer oficina; a Duarte & Raposo é o primeiro cliente, não a marca | origem |
 | Novas oficinas | registo público (a oficina e o primeiro gestor) | origem |
 | Dispositivo dos mecânicos | tablet partilhado (referência 1180 × 820, deitado), modo bancada com nome + PIN | origem |
 | Ecrã principal | tablier de luzes, uma por estado | origem |
 | Identidade visual | grafite + âmbar, a "luz indicadora", pictogramas próprios (carro, chave de bocas, pistão, bandeira de xadrez, chave); claro e escuro | origem |
-| Faturação | a Bancada **não emite** faturas; calcula totais e IVA | origem |
+| Faturação | a Baylight **não emite** faturas; calcula totais e IVA | origem |
 | Tipo de aplicação | **aplicação web instalável (PWA)**, não app nativa nem app só no tablet: a oficina tem internet fiável, e um tablet sozinho seria o único sítio dos dados | 18/11/2026 |
-| Login | **próprio da Bancada** (email e password, PIN); os utilizadores das oficinas nunca passam pelo Authentik do servidor do autor e nunca se misturam com os da MyNotes | 18/11/2026 |
+| Login | **próprio da Baylight** (email e password, PIN); os utilizadores das oficinas nunca passam pelo Authentik do servidor do autor e nunca se misturam com os da MyNotes | 18/11/2026 |
 | Arquitetura alvo | [ADR 0001](adr/0001-arquitetura-para-durar.md): monólito modular, TypeScript, **PostgreSQL com Row-Level Security por oficina** (sai o SQL Server), camadas, auditoria, migrações, produção no Coolify | 18/11/2026 |
 | Onde corre | no servidor pessoal do autor (Time4VPS, Coolify), como **segundo projeto**, depois da MyNotes | 18/11/2026 |
 | Ramos | só **`main`** (estável) e **`dev`** (trabalho); sem ramos por tarefa | 18/11/2026 |
@@ -127,15 +127,15 @@ Os pontos que fazem a diferença:
 
 ### Produção
 
-No servidor pessoal do autor: uma VM da Time4VPS (3 vCPU, 8 GB, x86_64, Ubuntu 24.04, Vilnius, UE) com o **Coolify**, onde já corre a MyNotes. A Bancada é um recurso próprio (app + o seu Postgres), com rede e volume próprios, imagem feita no CI e publicada no GHCR, deploy automático a partir da `main`, cópias cifradas fora da VM com restauro testado, monitorização externa. Primeiro só por túnel; público num domínio próprio quando estiver pronta. O estado do servidor vive fora deste repositório, em `~/Desktop/Server` (começar pelo `AGENTS.md`).
+No servidor pessoal do autor: uma VM da Time4VPS (3 vCPU, 8 GB, x86_64, Ubuntu 24.04, Vilnius, UE) com o **Coolify**, onde já corre a MyNotes. A Baylight é um recurso próprio (app + o seu Postgres), com rede e volume próprios, imagem feita no CI e publicada no GHCR, deploy automático a partir da `main`, cópias cifradas fora da VM com restauro testado, monitorização externa. Primeiro só por túnel; público num domínio próprio quando estiver pronta. O estado do servidor vive fora deste repositório, em `~/Desktop/Server` (começar pelo `AGENTS.md`).
 
 ## 9. Faturas
 
-**Em Portugal, uma fatura tem de ser emitida por software certificado pela Autoridade Tributária** (Portaria n.º 363/2010 e legislação seguinte). Por isso a Bancada não emite faturas.
+**Em Portugal, uma fatura tem de ser emitida por software certificado pela Autoridade Tributária** (Portaria n.º 363/2010 e legislação seguinte). Por isso a Baylight não emite faturas.
 
-**Direção recomendada (ainda por decidir):** integrar com um programa de faturação **já certificado** que tenha API. Na folha entregue, um botão "Emitir fatura" envia o cliente, as linhas e o IVA; o programa certificado emite a fatura; a Bancada guarda o número e a ligação para o PDF. A oficina usa a conta dela nesse programa e a responsabilidade fiscal fica do lado de quem é certificado. Encaixa no ADR 0001 como uma porta ("faturação") com um adaptador por programa.
+**Direção recomendada (ainda por decidir):** integrar com um programa de faturação **já certificado** que tenha API. Na folha entregue, um botão "Emitir fatura" envia o cliente, as linhas e o IVA; o programa certificado emite a fatura; a Baylight guarda o número e a ligação para o PDF. A oficina usa a conta dela nesse programa e a responsabilidade fiscal fica do lado de quem é certificado. Encaixa no ADR 0001 como uma porta ("faturação") com um adaptador por programa.
 
-**Rejeitado:** certificar a própria Bancada como software de faturação. É um processo formal e contínuo (assinatura, numeração, comunicação à AT, SAF-T, QR, ATCUD) que transforma o projeto num programa de faturação, que é exatamente o que a Bancada decidiu não ser.
+**Rejeitado:** certificar a própria Baylight como software de faturação. É um processo formal e contínuo (assinatura, numeração, comunicação à AT, SAF-T, QR, ATCUD) que transforma o projeto num programa de faturação, que é exatamente o que a Baylight decidiu não ser.
 
 **Pesquisa de 18/11/2026** (fontes indicadas; preços **não** verificados):
 
@@ -163,7 +163,7 @@ No servidor pessoal do autor: uma VM da Time4VPS (3 vCPU, 8 GB, x86_64, Ubuntu 2
 | 3. Público | domínio, email (recuperação de conta), texto legal, registo aberto | recuperação de password a funcionar; texto legal revisto |
 | 4. Crescer | faturação certificada por API, notificações ao cliente, fotografias, auditoria visível, orçamentos | cada uma com a sua decisão e os seus testes |
 
-## 11. A Bancada como produto (para um dia a vender)
+## 11. A Baylight como produto (para um dia a vender)
 
 > Esta secção é uma **análise**, não uma promessa. Não há clientes pagantes, preços nem métricas; os números de mercado e de preços têm de ser confirmados antes de usar.
 
@@ -173,13 +173,13 @@ No servidor pessoal do autor: uma VM da Time4VPS (3 vCPU, 8 GB, x86_64, Ubuntu 2
 - "Sabe quem fez cada trabalho e o histórico de cada carro em segundos."
 - "Os seus mecânicos usam-na de luvas, no tablet que já tem."
 
-**Para quem vender primeiro:** oficinas pequenas e independentes (poucos mecânicos, ainda no papel), começando pela região onde há uma referência real (a Duarte & Raposo, depois do piloto). Nichos onde a Bancada já é mais forte: oficinas de autocaravanas e oficinas com clientes estrangeiros.
+**Para quem vender primeiro:** oficinas pequenas e independentes (poucos mecânicos, ainda no papel), começando pela região onde há uma referência real (a Duarte & Raposo, depois do piloto). Nichos onde a Baylight já é mais forte: oficinas de autocaravanas e oficinas com clientes estrangeiros.
 
 **Modelo de negócio provável:** subscrição mensal por oficina (software como serviço), com o servidor, as cópias e as atualizações incluídos. Um período de experiência gratuito encaixa no registo público que já existe. **Preço por definir**, depois de falar com oficinas e de ver o que a concorrência cobra.
 
 **O que tem de existir antes de cobrar a alguém:**
 1. As fases 1 a 3 do caminho (dados isolados pela base de dados, cópias testadas, HTTPS, recuperação de conta).
-2. **Texto legal:** termos de serviço, política de privacidade e um **acordo de tratamento de dados** (as oficinas guardam dados dos clientes delas na Bancada; o autor passa a ser subcontratante no RGPD).
+2. **Texto legal:** termos de serviço, política de privacidade e um **acordo de tratamento de dados** (as oficinas guardam dados dos clientes delas na Baylight; o autor passa a ser subcontratante no RGPD).
 3. Faturação por integração com um programa certificado (secção 9): é a primeira pergunta de uma oficina.
 4. Forma de faturar as próprias subscrições (atividade aberta nas Finanças e um programa certificado).
 5. Suporte e um compromisso de disponibilidade realista para um só autor.
@@ -198,7 +198,7 @@ No servidor pessoal do autor: uma VM da Time4VPS (3 vCPU, 8 GB, x86_64, Ubuntu 2
 3. **Dinheiro ao cêntimo:** nunca somar dinheiro com números de vírgula flutuante; totais e IVA no servidor.
 4. **Autoria pela sessão,** nunca por um campo do pedido.
 5. **Nada se apaga a sério;** arquiva-se.
-6. **Não emitir faturas** nem prometer que a Bancada o faz.
+6. **Não emitir faturas** nem prometer que a Baylight o faz.
 7. **Não inventar** clientes, testemunhos, métricas, preços nem funcionalidades. "Por fazer" é "por fazer".
 8. **Segredos nunca** no código, no git ou em conversas (`.env` fora do git; as passwords antigas do histórico público nunca se reutilizam).
 9. **Português de Portugal** em tudo, **sem travessões** nos textos.

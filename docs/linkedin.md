@@ -1,6 +1,6 @@
-# Bancada no LinkedIn
+# Baylight no LinkedIn
 
-> Textos prontos para publicar a Bancada no LinkedIn: a secção **Projetos** do perfil e uma **publicação**. Escritos para serem verdadeiros: a Bancada está em desenvolvimento, ainda não foi usada numa oficina com dados reais e não tem clientes nem métricas. **Antes de publicar, confirmar** que o que aqui está continua certo (ver a secção 5 do [`PROJETO-BANCADA.md`](PROJETO-BANCADA.md)) e trocar o que tiver mudado.
+> Textos prontos para publicar a Baylight no LinkedIn: a secção **Projetos** do perfil e uma **publicação**. Escritos para serem verdadeiros: a Baylight está em desenvolvimento, ainda não foi usada numa oficina com dados reais e não tem clientes nem métricas. **Antes de publicar, confirmar** que o que aqui está continua certo (ver a secção 5 do [`PROJETO-BAYLIGHT.md`](PROJETO-BAYLIGHT.md)) e trocar o que tiver mudado.
 >
 > Atualizado: 18/11/2026.
 
@@ -8,7 +8,7 @@
 
 ## 1. Secção "Projetos" do perfil
 
-**Nome do projeto:** Bancada: folhas de obra digitais para oficinas
+**Nome do projeto:** Baylight: folhas de obra digitais para oficinas
 
 **Data:** desde 2026 (em curso)
 
@@ -18,7 +18,7 @@
 
 **Descrição** (cabe no limite do LinkedIn):
 
-> A Bancada substitui as folhas de obra em papel das oficinas por uma folha digital pensada para o chão da oficina.
+> A Baylight substitui as folhas de obra em papel das oficinas por uma folha digital pensada para o chão da oficina.
 >
 > Nasceu na oficina onde trabalho, a partir das folhas de obra reais: folhas que se perdiam, contas feitas à mão e pouca certeza sobre quem fez o quê.
 >
@@ -50,7 +50,7 @@
 >
 > Folhas que se sujavam, se perdiam, e no fim obrigavam a fazer as contas à mão. Para saber o que se fez a um carro no ano passado, era procurar numa pilha.
 >
-> Por isso comecei a construir a Bancada: folhas de obra digitais, feitas para o chão da oficina e não para o escritório.
+> Por isso comecei a construir a Baylight: folhas de obra digitais, feitas para o chão da oficina e não para o escritório.
 >
 > Três decisões que tomei e porquê:
 >
@@ -58,7 +58,7 @@
 >
 > 🚦 O quadro é o tablier de um carro. Uma luz por estado (aberta, em curso, a aguardar peças, pronta), legível a dois metros, com as mãos ocupadas. Tocar numa luz mostra esses carros.
 >
-> 🧮 As contas batem certo ao cêntimo. Totais e IVA calculados no servidor, com decimais exatos, nunca no browser. A Bancada não emite faturas (em Portugal isso exige software certificado), mas deixa tudo pronto para as emitir.
+> 🧮 As contas batem certo ao cêntimo. Totais e IVA calculados no servidor, com decimais exatos, nunca no browser. A Baylight não emite faturas (em Portugal isso exige software certificado), mas deixa tudo pronto para as emitir.
 >
 > Está em desenvolvimento e ainda não foi usada com dados reais. O próximo passo é um ensaio na oficina com os mecânicos, e depois levá-la para o meu servidor com PostgreSQL, isolamento entre oficinas na própria base de dados e cópias de segurança testadas.
 >

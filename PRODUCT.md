@@ -2,7 +2,7 @@
 
 <!-- impeccable:product-schema 1 -->
 
-> **Bancada**: folhas de obra digitais para oficinas.
+> **Baylight**: folhas de obra digitais para oficinas.
 >
 > Este ficheiro descreve o produto: para quem é, que problema resolve, o que faz, como se usa e o que ainda não faz. Serve pessoas e agentes de IA. Os títulos das secções ficam em inglês porque a skill de design impeccable os lê; o conteúdo está em português.
 
@@ -23,7 +23,7 @@ web
   - gerir a equipa (acessos e PINs);
   - acompanhar os valores com IVA.
 - **Oficinas novas**, que se registam sozinhas na plataforma (a oficina e o primeiro gestor), sem falar com ninguém.
-- **Clientes das oficinas** (indiretamente). Não usam a Bancada, mas beneficiam dela: contas certas, histórico do carro e conselhos de manutenção. O telefone de cada cliente está na folha, para ser avisado quando o carro fica pronto.
+- **Clientes das oficinas** (indiretamente). Não usam a Baylight, mas beneficiam dela: contas certas, histórico do carro e conselhos de manutenção. O telefone de cada cliente está na folha, para ser avisado quando o carro fica pronto.
 
 ## Product Purpose
 
@@ -33,7 +33,7 @@ web
 - no fim da reparação faz-se as contas à mão para passar a fatura;
 - nem sempre se sabe quem fez o quê.
 
-**A solução.** A Bancada substitui a folha de papel por uma folha digital, feita para ser usada no próprio chão da oficina:
+**A solução.** A Baylight substitui a folha de papel por uma folha digital, feita para ser usada no próprio chão da oficina:
 - cada entrada de um veículo abre uma folha;
 - os mecânicos acrescentam peças, mão de obra e outros custos enquanto trabalham, e cada linha fica em nome de quem a registou;
 - os totais e o IVA são calculados ao cêntimo;
@@ -52,17 +52,17 @@ web
 - **Nasceu de folhas de obra reais** de uma oficina de mecânica, eletricidade e autocaravanas.
   - Trata as autocaravanas como veículos complexos: separa a marca e o modelo do chassis (a mecânica) da marca da célula habitacional.
   - Aceita clientes estrangeiros: matrículas e contribuintes de outros países.
-- **Faz uma coisa bem feita.** Não é um ERP nem um programa de faturação: é a folha de obra. A fatura continua a ser emitida no programa certificado da oficina, com os totais que a Bancada já calculou.
+- **Faz uma coisa bem feita.** Não é um ERP nem um programa de faturação: é a folha de obra. A fatura continua a ser emitida no programa certificado da oficina, com os totais que a Baylight já calculou.
 - **Quem fez fica registado.** A autoria de cada folha e de cada linha vem da sessão de quem está a trabalhar, nunca de um campo que se possa escolher.
 - **Várias oficinas, dados separados.** Cada oficina só vê o que é seu. O isolamento é garantido na API, na própria base de dados e em testes automáticos.
 
 ## Operating Context
 
-O percurso de um carro pela oficina, na Bancada:
+O percurso de um carro pela oficina, na Baylight:
 
 1. **Entrada.**
    - Escreve-se a matrícula, num campo com a forma da própria chapa.
-   - Se o veículo já cá esteve, aparece logo. Se já está na oficina, a Bancada diz em que folha.
+   - Se o veículo já cá esteve, aparece logo. Se já está na oficina, a Baylight diz em que folha.
    - Se é novo, regista-se o veículo e o dono no mesmo passo.
    - Abre-se a folha com os quilómetros e o que o cliente pediu.
 2. **Trabalho.**
@@ -76,7 +76,7 @@ O percurso de um carro pela oficina, na Bancada:
 5. **Entregue.**
    - Entregar pede um segundo toque no botão, para não fechar uma folha por engano.
    - A folha fecha: só um gestor a pode reabrir, e também com dois toques (reabrir limpa a data de entrega).
-   - A fatura é emitida no programa de faturação da oficina, com os totais da Bancada.
+   - A fatura é emitida no programa de faturação da oficina, com os totais da Baylight.
 6. **Gestão**, no computador:
    - valores do mês;
    - equipa (criar colaboradores, definir PINs, tirar acessos);
@@ -93,7 +93,7 @@ O percurso de um carro pela oficina, na Bancada:
 
 ## Capabilities and Constraints
 
-### O que a Bancada faz hoje
+### O que a Baylight faz hoje
 
 - **Registo público** de oficinas (a oficina e o primeiro gestor) e entrada com email e password.
 - **Modo bancada**:
@@ -119,7 +119,7 @@ O percurso de um carro pela oficina, na Bancada:
 
 ### Restrições
 
-- **Não emite faturas.** Em Portugal, as faturas têm de ser emitidas por software certificado pela Autoridade Tributária (Portaria n.º 363/2010). A Bancada calcula e prepara; a fatura sai do programa de faturação da oficina.
+- **Não emite faturas.** Em Portugal, as faturas têm de ser emitidas por software certificado pela Autoridade Tributária (Portaria n.º 363/2010). A Baylight calcula e prepara; a fatura sai do programa de faturação da oficina.
 - **Nada se apaga a sério.** Clientes, veículos, colaboradores e folhas são arquivados, por causa do histórico e das obrigações fiscais. Só as linhas de uma folha ainda aberta se podem remover.
 - **Cada oficina só vê os seus dados.**
 - **Precisa de rede.** A app fica guardada no dispositivo, mas os dados vêm do servidor.
@@ -145,7 +145,7 @@ Por decidir ou por fazer. Nada disto deve ser apresentado como feito:
 
 ## Brand Commitments
 
-- **Nome:** a plataforma chama-se **Bancada**, escolhido pelo autor.
+- **Nome:** a plataforma chama-se **Baylight** (desde 20/11/2026; antes chamava-se Bancada), escolhido pelo autor. O domínio é `baylight.dev`. "Bancada" continua a ser a palavra para o conceito do tablet partilhado da oficina (o modo bancada).
 - **Identidade visual:** manter e elevar a identidade que já existia.
   - Grafite + âmbar, e a "luz indicadora" do login original.
   - O tablier de um carro como ideia central, com pictogramas próprios para cada estado: carro, chave de bocas, pistão, bandeira de xadrez e chave.

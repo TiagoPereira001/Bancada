@@ -1,6 +1,6 @@
-# Infraestrutura e publicação da Bancada
+# Infraestrutura e publicação da Baylight
 
-**Bancada**, ramo `dev` no commit `b185a60` mais as alterações desta tarefa · 28 de setembro de 2026
+**Baylight**, ramo `dev` no commit `b185a60` mais as alterações desta tarefa · 28 de setembro de 2026
 
 Este documento foi escrito pelo Claude Code (assistente de programação com IA), a pedido do autor, seguindo o guião de arquitetura de cloud e DevOps que ele forneceu. Cumpre à letra o que o guião pede:
 - perceber a aplicação antes de desenhar a infraestrutura;
@@ -9,7 +9,7 @@ Este documento foi escrito pelo Claude Code (assistente de programação com IA)
 - não afirmar sucesso sem provas, nem inventar recursos de nuvem;
 - pensar na falha, nas cópias de segurança e no retrocesso desde o princípio.
 
-> **A Bancada não está publicada em lado nenhum.** Hoje só corre em computadores: o do autor, o CI e as sessões do Claude Code. O que aqui é "recomendado" foi **validado numa cópia, em `localhost`**, com o SQL Server Express e o Caddy a sério, mas sem servidor, sem domínio e sem conta de nenhum fornecedor. O que depende disso está marcado **NÃO VERIFICADO**, com o teste que falta.
+> **A Baylight não está publicada em lado nenhum.** Hoje só corre em computadores: o do autor, o CI e as sessões do Claude Code. O que aqui é "recomendado" foi **validado numa cópia, em `localhost`**, com o SQL Server Express e o Caddy a sério, mas sem servidor, sem domínio e sem conta de nenhum fornecedor. O que depende disso está marcado **NÃO VERIFICADO**, com o teste que falta.
 
 ## Como ler
 
@@ -108,7 +108,7 @@ Os ficheiros propostos estão no repositório, mas **ainda não estão em uso**:
 
 | Ambiente | Existe? | Finalidade | Configuração | Dados | Acesso | Como se publica |
 |---|---|---|---|---|---|---|
-| **Local** | sim | desenvolver e experimentar | `docker-compose.yml` (só a BD) e `npm`; ou `Iniciar Bancada.command` (tudo em containers) | fictícios (`db:seed`) | só o próprio: portas em `127.0.0.1` | `npm run dev` ou duplo clique |
+| **Local** | sim | desenvolver e experimentar | `docker-compose.yml` (só a BD) e `npm`; ou `Iniciar Baylight.command` (tudo em containers) | fictícios (`db:seed`) | só o próprio: portas em `127.0.0.1` | `npm run dev` ou duplo clique |
 | **Testes (CI)** | sim, efémero | validar cada PR | GitHub Actions com um SQL Server num container; passwords geradas na hora | fictícios, base `Bancada_Teste` recriada em cada corrida | GitHub | automático em cada PR |
 | **Desenvolvimento** | é o ramo `dev`, não um servidor | integração | | | | PR com o CI verde |
 | **Staging** | **não**, e recomendo não ter um permanente | ensaiar a pilha de produção | a mesma `docker-compose.prod.yml` num computador, com `DOMINIO=localhost` e o Caddy a usar a sua autoridade local. Foi exatamente o que se fez nesta tarefa | fictícios | só o próprio | `infra/deploy.sh` |
@@ -273,7 +273,7 @@ Para evitar sobre-engenharia, **não** recomendo: Kubernetes, balanceador de car
 | Registo de auditoria | **ATUAL, incompleto**: autoria de folhas e linhas; não há registo completo de quem alterou o quê | |
 | Acesso ao servidor | **RECOMENDADO**: SSH só com chave, conta do fornecedor com autenticação em dois passos, atualizações automáticas de segurança do sistema. NÃO VERIFICADO | |
 
-**RGPD** (não é aconselhamento jurídico). A Bancada guarda dados pessoais dos clientes das oficinas. Alojar na UE é o caminho mais simples, e o fornecedor deve ser subcontratante com contrato. As cópias de segurança **também** têm dados pessoais: um pedido de apagamento resolve-se na base ativa, e nas cópias só quando elas expirarem (2 dias, 30 dias, 90 dias). Isso deve constar da política de privacidade.
+**RGPD** (não é aconselhamento jurídico). A Baylight guarda dados pessoais dos clientes das oficinas. Alojar na UE é o caminho mais simples, e o fornecedor deve ser subcontratante com contrato. As cópias de segurança **também** têm dados pessoais: um pedido de apagamento resolve-se na base ativa, e nas cópias só quando elas expirarem (2 dias, 30 dias, 90 dias). Isso deve constar da política de privacidade.
 
 ---
 
@@ -416,7 +416,7 @@ Cada cenário: o que falha, como se deteta, resposta imediata, recuperação, pr
 - Com `SIMPLE`, a perda máxima é o intervalo entre cópias. Restaura-se a última cópia boa para uma base temporária e copiam-se as linhas de volta (não automatizado). Com `FULL` e cópias do registo dava para restaurar até um instante (testado).
 - As folhas, clientes, veículos e colaboradores têm soft delete e a API não os apaga.
 
-**7. Falha do fornecedor ou da região.** *Não provocado.* Sem segunda região, a Bancada fica em baixo até haver um servidor novo noutro sítio (é o cenário 4, com o DNS a apontar para o novo). Custo de uma segunda região: NÃO justificado por nenhum requisito conhecido.
+**7. Falha do fornecedor ou da região.** *Não provocado.* Sem segunda região, a Baylight fica em baixo até haver um servidor novo noutro sítio (é o cenário 4, com o DNS a apontar para o novo). Custo de uma segunda região: NÃO justificado por nenhum requisito conhecido.
 
 **8. Fuga de credenciais.** *Rotações validadas.* Há um precedente neste repositório: a password do `sa` e o `JWT_SECRET` estiveram num repositório público.
 - Resposta: mudar `JWT_SECRET` (termina todas as sessões), mudar `DB_PASSWORD` e o `sa` (secção 11), ver os registos.
@@ -456,7 +456,7 @@ Cada cenário: o que falha, como se deteta, resposta imediata, recuperação, pr
 | **Rotação** | **validado**: 3 × 10 MB por container |
 | **Saúde** | `/api/saude` faz de "pronto" e verifica a BD. O `healthcheck` do container usa-a. "Vivo" é o processo a correr (o Docker reinicia-o) |
 | **Métricas** | não há coletor. Valores de referência medidos: API 86 a 149 MB, SQL Express 0,5 a 1,0 GiB, CPU do SQL até 238% de 400% sob 10 pedidos em simultâneo |
-| **Alertas** | **RECOMENDADO, só três**: (1) a Bancada não responde há mais de 2 minutos; (2) uma cópia deixou de correr (o sinal de vida não chegou em 90 minutos); (3) o disco passou de 80%. Mais do que isto é ruído |
+| **Alertas** | **RECOMENDADO, só três**: (1) a Baylight não responde há mais de 2 minutos; (2) uma cópia deixou de correr (o sinal de vida não chegou em 90 minutos); (3) o disco passou de 80%. Mais do que isto é ruído |
 
 Prometheus, Grafana e agregadores de registos são sobre-engenharia para um servidor: `docker compose logs` chega.
 
@@ -516,7 +516,7 @@ git clone <repositório> /opt/bancada && cd /opt/bancada && git checkout <etique
 node backend/scripts/criar-env.js          # ou, sem Node: docker run --rm --user "$(id -u):$(id -g)" -v "$PWD":/app -w /app node:22-bookworm-slim node backend/scripts/criar-env.js
 cat >> .env <<'EOF'
 COMPOSE_FILE=docker-compose.prod.yml
-DOMINIO=bancada.exemplo.pt
+DOMINIO=baylight.exemplo.pt
 AGE_DESTINATARIO=age1...                   # a chave PÚBLICA, gerada no teu computador com age-keygen
 EOF
 infra/deploy.sh                            # 42 s no ensaio local

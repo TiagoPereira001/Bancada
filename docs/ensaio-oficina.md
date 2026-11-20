@@ -4,16 +4,16 @@
 
 ## 1. O que é, e o que não é
 
-- **O que é:** meio dia na Duarte & Raposo, com 2 ou 3 mecânicos, o tablet Android deles e a Bancada a correr no teu Mac, ligado ao Wi-Fi da oficina. O tablet abre-a pelo Chrome, pelo endereço do Mac.
-- **Para quê:** ver se a Bancada se usa no chão da oficina. Quanto tempo leva uma entrada, onde hesitam, como se vê o quadro de pé, o que acontece quando o diagnóstico (Bluetooth) e o Wi-Fi entram na conversa. É um teste de utilização, não de infraestrutura.
+- **O que é:** meio dia na Duarte & Raposo, com 2 ou 3 mecânicos, o tablet Android deles e a Baylight a correr no teu Mac, ligado ao Wi-Fi da oficina. O tablet abre-a pelo Chrome, pelo endereço do Mac.
+- **Para quê:** ver se a Baylight se usa no chão da oficina. Quanto tempo leva uma entrada, onde hesitam, como se vê o quadro de pé, o que acontece quando o diagnóstico (Bluetooth) e o Wi-Fi entram na conversa. É um teste de utilização, não de infraestrutura.
 - **Só dados fictícios** (os do `db:seed`). Por isso não há RGPD, nem servidor, nem HTTPS: é o que torna possível fazê-lo já. Avisa o dono e pede-lhe licença para o fazer.
 - **O que não é:** o piloto. O piloto (dados reais, servidor na UE, cópias de segurança) vem depois, e depende do que este ensaio mostrar. Está em [`infraestrutura.md`](infraestrutura.md).
-- **Um limite do ensaio:** sem HTTPS, o Chrome não instala a Bancada como app. Vai num separador, com a barra do endereço, e isso tira ecrã. Anota-o: o ecrã útil real é menor do que o dos nossos testes.
+- **Um limite do ensaio:** sem HTTPS, o Chrome não instala a Baylight como app. Vai num separador, com a barra do endereço, e isso tira ecrã. Anota-o: o ecrã útil real é menor do que o dos nossos testes.
 
 ## 2. Antes de ires (em casa, na véspera)
 
-- [ ] Docker Desktop instalado e a Bancada já arrancada uma vez com internet (`Iniciar Bancada.command`). Da primeira vez descarrega o SQL Server e prepara a aplicação, o que demora vários minutos: não o faças na oficina.
-- [ ] **Ensaia o modo oficina com o teu telemóvel:** duplo clique em **`Iniciar Bancada na oficina.command`**, escreve no Chrome do telemóvel (no mesmo Wi-Fi) o endereço que a janela mostra, entra como gestor, ativa a bancada e entra com um PIN. Se aqui não abrir, na oficina também não.
+- [ ] Docker Desktop instalado e a Baylight já arrancada uma vez com internet (`Iniciar Baylight.command`). Da primeira vez descarrega o SQL Server e prepara a aplicação, o que demora vários minutos: não o faças na oficina.
+- [ ] **Ensaia o modo oficina com o teu telemóvel:** duplo clique em **`Iniciar Baylight na oficina.command`**, escreve no Chrome do telemóvel (no mesmo Wi-Fi) o endereço que a janela mostra, entra como gestor, ativa a bancada e entra com um PIN. Se aqui não abrir, na oficina também não.
 - [ ] Mac, tablet e telemóvel carregados; carregador do Mac.
 - [ ] Esta folha e a [folha de observação](#4-o-guião) impressas, e uma caneta.
 - [ ] Duas ou três folhas de obra em papel da oficina, para medires o papel.
@@ -22,8 +22,8 @@
 ## 3. Montar (10 a 15 minutos na oficina)
 
 1. Liga o Mac ao Wi-Fi da oficina: o **mesmo** do tablet, não a rede de convidados. Deixa-o ligado à corrente.
-2. Duplo clique em **`Iniciar Bancada na oficina.command`**. Se o macOS perguntar se o Docker pode aceitar ligações da rede, escolhe **Permitir**.
-3. Espera pelo "5/5  Pronto". Se a janela disser que os dados de demonstração já existem e não tiveres a password, escreve **N** e Enter nos 20 segundos: cria dados novos, com uma password nova. **Não feches a janela**: fechá-la, ou carregar em Enter, pára a Bancada. O lançador pede ao Mac que não adormeça enquanto ela estiver aberta (não feches a tampa).
+2. Duplo clique em **`Iniciar Baylight na oficina.command`**. Se o macOS perguntar se o Docker pode aceitar ligações da rede, escolhe **Permitir**.
+3. Espera pelo "5/5  Pronto". Se a janela disser que os dados de demonstração já existem e não tiveres a password, escreve **N** e Enter nos 20 segundos: cria dados novos, com uma password nova. **Não feches a janela**: fechá-la, ou carregar em Enter, pára a Baylight. O lançador pede ao Mac que não adormeça enquanto ela estiver aberta (não feches a tampa).
 4. A janela mostra o **endereço para o tablet** (`http://192.168...:3000`), o email e a password do gestor e os PINs dos mecânicos de demonstração. Anota-os: só aparecem uma vez.
 5. No tablet, abre o Chrome e escreve o endereço, **com o `http://`**. Um aviso de "ligação não segura" é esperado: é HTTP na rede local.
 6. Entra com o email e a password do gestor.
@@ -61,8 +61,8 @@ Imprime uma folha por mecânico:
 | 6 | **Mudar o estado:** Em curso, A aguardar peças, Pronta. Depois tentar Entregue | por mudança | | | |
 | 7 | **Encontrar um carro** pela matrícula, no quadro | até abrir a folha | | | |
 | 8 | **Passar a vez:** sair do tablet e entrar outro mecânico | do toque em «Sair do tablet» até o outro ver o quadro | | | |
-| 9 | **Diagnóstico:** abrir a aplicação de diagnóstico, ligá-la ao carro por Bluetooth e, uns 6 minutos depois, voltar à Bancada | | | | |
-| 10 | **Sem Wi-Fi:** com a Bancada aberta, modo avião durante 1 minuto e voltar a ligar | | | | |
+| 9 | **Diagnóstico:** abrir a aplicação de diagnóstico, ligá-la ao carro por Bluetooth e, uns 6 minutos depois, voltar à Baylight | | | | |
+| 10 | **Sem Wi-Fi:** com a Baylight aberta, modo avião durante 1 minuto e voltar a ligar | | | | |
 
 O que ver em cada uma:
 - **1:** engana-se no PIN? as teclas servem com as mãos como estão (ou com luvas)?
@@ -70,7 +70,7 @@ O que ver em cada uma:
 - **3 e 4:** onde hesita, na matrícula, no cliente ou no veículo? O teclado do Android tapa o campo?
 - **5:** consegue escrever o preço com vírgula? o teclado tapa o botão?
 - **6:** percebe sozinho que «Entregue» pede um segundo toque?
-- **9:** a Bancada continua a atualizar com o Bluetooth do diagnóstico ligado? Ao voltar, pede o PIN, ou o Chrome recarregou a página? Anota o que aconteceu e o tempo que passou.
+- **9:** a Baylight continua a atualizar com o Bluetooth do diagnóstico ligado? Ao voltar, pede o PIN, ou o Chrome recarregou a página? Anota o que aconteceu e o tempo que passou.
 - **10:** o que diz o ecrã? Recupera sozinho quando o Wi-Fi volta? Se fechares e abrires a página sem rede, o que mostra?
 
 E, se houver uma porta com sol, vê o tema claro e o escuro lá fora.
@@ -80,7 +80,7 @@ E, se houver uma porta com sol, vê o tema claro e o escuro lá fora.
 - Sem rede, o quadro mostra "Sem ligação ao servidor" e esbate os números. Mas se a página for **recarregada** sem rede, aparece o ecrã de entrada (REL-003, por corrigir).
 - O bloqueio aos 5 minutos de inatividade existe só no ecrã. Se o Android descartar a página em segundo plano e a recarregar, a sessão continua em nome do mecânico anterior, até 12 horas.
 - Se dois aparelhos gravarem as notas da mesma folha, o último a gravar apaga o que o outro escreveu (BUG-01, por corrigir). Não testes as notas com dois aparelhos ao mesmo tempo.
-- A Bancada não tem modo offline: sem rede, não grava.
+- A Baylight não tem modo offline: sem rede, não grava.
 
 ## 6. Perguntas no fim
 
@@ -95,9 +95,9 @@ Ao dono: **o que tem de acontecer para experimentarem com carros a sério?**
 
 ## 7. Como se arruma
 
-1. Carrega em **Enter** na janela do lançador: pára a Bancada. Os dados ficam no Mac.
-2. Para apagar tudo, incluindo os mecânicos que criaste: na pasta do projeto, `docker compose --profile app down -v` (apaga o volume da base de dados). O duplo clique normal (`Iniciar Bancada.command`) volta a deixar a Bancada só no teu Mac.
-3. Se a janela se fechar à força (o Mac desligou, por exemplo), a Bancada pode ficar a correr aberta à rede. Abre o duplo clique **normal** e carrega em Enter: volta a fechar a porta e pára.
+1. Carrega em **Enter** na janela do lançador: pára a Baylight. Os dados ficam no Mac.
+2. Para apagar tudo, incluindo os mecânicos que criaste: na pasta do projeto, `docker compose --profile app down -v` (apaga o volume da base de dados). O duplo clique normal (`Iniciar Baylight.command`) volta a deixar a Baylight só no teu Mac.
+3. Se a janela se fechar à força (o Mac desligou, por exemplo), a Baylight pode ficar a correr aberta à rede. Abre o duplo clique **normal** e carrega em Enter: volta a fechar a porta e pára.
 
 ## 8. Depois do ensaio
 
@@ -112,7 +112,7 @@ Desempenho e fiabilidade num servidor real, HTTPS e a instalação como app, as 
 
 ## 10. O que foi verificado no modo oficina, e o que não foi
 
-Verificado a 01/10/2026, num ambiente Linux sem tablet nem Mac: o lançador arranca em modo oficina, a Bancada responde pelo endereço da rede e a base de dados continua só no computador; o Chromium (contexto inseguro, como o tablet) abre a Bancada por esse endereço, o gestor entra, ativa a bancada e um mecânico entra com o PIN; a verificação de origem aceita o endereço da rede e recusa uma origem alheia; o duplo clique normal volta a fechar a porta; e, sem endereço de rede, o lançador pára com uma mensagem (12 verificações, sem falhas).
+Verificado a 01/10/2026, num ambiente Linux sem tablet nem Mac: o lançador arranca em modo oficina, a Baylight responde pelo endereço da rede e a base de dados continua só no computador; o Chromium (contexto inseguro, como o tablet) abre a Baylight por esse endereço, o gestor entra, ativa a bancada e um mecânico entra com o PIN; a verificação de origem aceita o endereço da rede e recusa uma origem alheia; o duplo clique normal volta a fechar a porta; e, sem endereço de rede, o lançador pára com uma mensagem (12 verificações, sem falhas).
 
 **Revisto a 18/11/2026 contra o código da `dev`** (depois de o trabalho do PR #19 ter sido trazido para lá): os dois lançadores passam no `bash -n`; o modo oficina continua a passar por `BANCADA_REDE=1`, que define `BANCADA_PUBLICAR_EM=0.0.0.0` e `BANCADA_ORIGENS` só para essa corrida, e o `docker-compose.yml` lê-as com `127.0.0.1` e `localhost` por omissão; o lançador ainda mostra "5/5  Pronto", pede o N nos 20 segundos e mantém o Mac acordado com o `caffeinate`; os textos do guia existem no ecrã ("Usar este dispositivo como bancada", "Quem vai trabalhar?", "Entrar com email", "Sair do tablet", "Nova entrada", "Sem ligação ao servidor"); o bloqueio do ecrã é aos 5 minutos (`Moldura.jsx`); a sessão dura até 12 horas (`sessao.js`); o PIN bloqueia ao fim de 5 falhas, **durante 5 minutos** (`routes/auth.js`). O BUG-01 continua por corrigir (as notas ainda enviam os três campos, não só os que mudaram) e o REL-003 também. O guia está certo; não precisa de mudanças. Não foi possível correr o `shellcheck` (não está instalado) nem testar num Mac com Docker Desktop e num tablet.
 
